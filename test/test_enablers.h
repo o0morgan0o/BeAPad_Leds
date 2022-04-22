@@ -1,0 +1,1 @@
+#define INCLUDE_HELPER_TEST

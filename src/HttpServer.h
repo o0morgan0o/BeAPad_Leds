@@ -1,0 +1,6 @@
+class HttpServer{
+    public:
+    HttpServer(){
+
+    }
+};

@@ -1,0 +1,13 @@
+//
+// Created by morgan on 4/21/2022.
+//
+
+#ifndef GONZYPROJECT_LIGHTCOMMANDS_H
+#define GONZYPROJECT_LIGHTCOMMANDS_H
+
+enum class LightCommands {
+    LIGHT_ON , LIGHT_OFF
+
+};
+
+#endif //GONZYPROJECT_LIGHTCOMMANDS_H
