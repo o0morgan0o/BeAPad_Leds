@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#define IN_TESTING
 
 int main(int argc, char **argv){
     ::testing::InitGoogleTest(&argc, argv);

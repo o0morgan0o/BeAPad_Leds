@@ -6,32 +6,43 @@
 #include <Arduino.h>
 #include "AccessPoint.h"
 #include "MyColors.h"
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <WiFiUdp.h>
+
+//#define NO_SESSION_NAME
+#define ONE_PARTICIPANT
+#include <AppleMidi.h>
+
+#include <ESPmDNS.h>
 
 
 #define colorSaturation 128
 #define NUM_LEDS_PER_STRIP 9
 #define NUMBER_OF_BOARDS 8
-
 AccessPoint *accessPoint;
 MyColors *myColors;
-ILedBoardsManager* ledBoardsManager;
-std::vector<ILedBoard*> ledBoards;
+ILedBoardsManager *ledBoardsManager;
+std::vector<ILedBoard *> ledBoards;
 
+APPLEMIDI_CREATE_DEFAULTSESSION_INSTANCE();
 
 void setup() {
 
     // **************************
     // SERIAL
-    Serial.begin(115200);
-    while (!Serial); // wait for serial attach
-    Serial.println();
-    Serial.println("Initializing...");
-    Serial.flush();
+    //    Serial.begin(115200);
+    //    while (!Serial); // wait for serial attach
+    //    Serial.println();
+    //    Serial.println("Initializing...");
+    //    Serial.flush();
+
+
 
     // **************************
     // INITIALIZE BOARDS
     ledBoards.reserve(NUMBER_OF_BOARDS);
-    for(uint8_t i=0; i< NUMBER_OF_BOARDS; i++){
+    for (uint8_t i = 0; i < NUMBER_OF_BOARDS; i++) {
         ledBoards.emplace_back(new ConcreteLedBoard());
     }
 
@@ -42,22 +53,54 @@ void setup() {
     ledBoardsManager = new ConcreteLedBoardsManager(ledBoards);
     ledBoardsManager->init();
     ledBoardsManager->setRandomColorForEachBoard();
-    ledBoardsManager->lightAll();
+    ledBoardsManager->lightAll(60, 60, 60);
     ledBoardsManager->show();
-
-    // init colors
-//    myColors = new MyColors();
+    delay(1000);
+    ledBoardsManager->forceLightOff();
+    ledBoardsManager->show();
+    delay(1000);
 
     // *************************
     // ACCESS POINT
-    accessPoint = new AccessPoint("gonzyProject", "password");
+    accessPoint = new AccessPoint("gonzyProject", "password", ledBoardsManager);
     accessPoint->init();
+
+    // **************************
+    // RTP_MIDI
+    if (!MDNS.begin(AppleMIDI.getName()))
+            DBG(F("Error setting up MDNS responder!"));
+    char str[128] = "";
+    strcat(str, AppleMIDI.getName());
+    strcat(str, ".local");
+    MDNS.addService("apple-midi", "udp", AppleMIDI.getPort());
+    MIDI.begin(MIDI_CHANNEL_OMNI);
+
+
+    AppleMIDI.setHandleConnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc, const char *name) {
+        ledBoardsManager->showSuccessSignal();
+        //        isConnected++;
+        //        DBG(F("Connected to session"), ssrc, name);
+    });
+    AppleMIDI.setHandleDisconnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc) {
+        ledBoardsManager->showErrorSignal();
+        //        isConnected--;
+        //        DBG(F("Disconnected"), ssrc);
+    });
+    MIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
+        ledBoardsManager->lightAll(120, 120, 120);
+        ledBoardsManager->show();
+    });
+    MIDI.setHandleNoteOff([](byte channel, byte note, byte velocity) {
+        ledBoardsManager->forceLightOff();
+        ledBoardsManager->show();
+    });
 
 }
 
 void loop() {
-    ledBoardsManager->update(millis());
-    ledBoardsManager->show();
+    MIDI.read();
+//    ledBoardsManager->update(millis());
+//    ledBoardsManager->show();
 //    gettimerMi
 //    Serial.println("OK...");
 //    ledBoardsManager->lightAll();
@@ -79,5 +122,7 @@ void loop() {
 //    }
 //    strip.Show();
 //    delay(1000);
+
+    accessPoint->loop();
 
 }

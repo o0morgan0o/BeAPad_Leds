@@ -7,7 +7,9 @@
 
 #include "ILedBoard.h"
 #include <vector>
+#ifndef IN_TESTING
 #include <FastLED.h>
+#endif
 
 class ILedBoardsManager {
 public:
@@ -17,13 +19,21 @@ public:
 
     virtual void init() = 0;
 
-    virtual void lightAll() = 0;
+    virtual void lightAll(uint8_t r, uint8_t g, uint8_t b) = 0;
+
+    virtual void forceLightOff() = 0;
 
     virtual void show() = 0;
 
     virtual void update(unsigned long currentTime) = 0;
 
     virtual void setRandomColorForEachBoard() = 0;
+
+    virtual const CRGB &getCurrentGlobalColor()  =0;
+
+    virtual void showSuccessSignal() = 0;
+
+    virtual void showErrorSignal() = 0;
 
 protected:
     std::vector<ILedBoard *> _ledBoards;

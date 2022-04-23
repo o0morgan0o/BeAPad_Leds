@@ -4,7 +4,7 @@
 
 #include "ConcreteLedBoardsManager.h"
 
-ConcreteLedBoardsManager::ConcreteLedBoardsManager(const std::vector<ILedBoard*>& ledBoards) : ILedBoardsManager(ledBoards) {
+ConcreteLedBoardsManager::ConcreteLedBoardsManager(const std::vector<ILedBoard *> &ledBoards) : ILedBoardsManager(ledBoards) {
 
 }
 
@@ -21,39 +21,81 @@ void ConcreteLedBoardsManager::init() {
     //
     // we pass for each ledstrip (board) its part of the array
     // numbers should be the same than above
-    _ledBoards.at(0)->init(ledStrip1, 13);
-    _ledBoards.at(1)->init(ledStrip2, 12);
-    _ledBoards.at(2)->init(ledStrip3, 14);
-    _ledBoards.at(3)->init(ledStrip4, 27);
-    _ledBoards.at(4)->init(ledStrip5, 26);
-    _ledBoards.at(5)->init(ledStrip6, 25);
-    _ledBoards.at(6)->init(ledStrip7, 33);
-    _ledBoards.at(7)->init(ledStrip8, 32);
+    _ledBoards.at(0)->init(ledStrip1, 13, this);
+    _ledBoards.at(1)->init(ledStrip2, 12, this);
+    _ledBoards.at(2)->init(ledStrip3, 14, this);
+    _ledBoards.at(3)->init(ledStrip4, 27, this);
+    _ledBoards.at(4)->init(ledStrip5, 26, this);
+    _ledBoards.at(5)->init(ledStrip6, 25, this);
+    _ledBoards.at(6)->init(ledStrip7, 33, this);
+    _ledBoards.at(7)->init(ledStrip8, 32, this);
 
 }
 
-void ConcreteLedBoardsManager::lightAll() {
-    for(auto ledBoard : _ledBoards){
+void ConcreteLedBoardsManager::lightAll(uint8_t r, uint8_t g, uint8_t b) {
+    for (auto ledBoard: _ledBoards) {
+        currentGlobalColor.setRGB(r,g,b);
         ledBoard->command(LightCommands::LIGHT_ON);
-
     }
-
 }
 
 void ConcreteLedBoardsManager::update(unsigned long currentTime) {
-    for(auto ledBoard : _ledBoards){
+    for (auto ledBoard: _ledBoards) {
         ledBoard->update(currentTime);
     }
 
 }
 
 void ConcreteLedBoardsManager::show() {
-    for(auto ledBoard: _ledBoards){
+    for (auto ledBoard: _ledBoards) {
         ledBoard->show();
     }
 
 }
 
 void ConcreteLedBoardsManager::setRandomColorForEachBoard() {
+
+}
+
+void ConcreteLedBoardsManager::forceLightOff() {
+    for (auto ledBoard: _ledBoards) {
+        ledBoard->command(LightCommands::LIGHT_OFF);
+    }
+
+}
+
+const CRGB &ConcreteLedBoardsManager::getCurrentGlobalColor() {
+    return currentGlobalColor;
+}
+
+void ConcreteLedBoardsManager::showSuccessSignal() {
+    for (uint8_t i = 0; i < 4; i++) {
+        for (auto ledBoard: _ledBoards) {
+            ledBoard->command(LightCommands::LIGHT_SUCCESS);
+        }
+        show();
+        delay(200);
+        for(auto ledBoard: _ledBoards){
+            ledBoard->command(LightCommands::LIGHT_OFF);
+        }
+        show();
+        delay(200);
+    }
+
+}
+
+void ConcreteLedBoardsManager::showErrorSignal() {
+    for (uint8_t i = 0; i < 4; i++) {
+        for (auto ledBoard: _ledBoards) {
+            ledBoard->command(LightCommands::LIGHT_ERROR);
+        }
+        show();
+        delay(200);
+        for (auto ledBoard: _ledBoards) {
+            ledBoard->command(LightCommands::LIGHT_OFF);
+        }
+        show();
+        delay(200);
+    }
 
 }

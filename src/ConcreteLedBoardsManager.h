@@ -15,7 +15,9 @@ public:
 
     void init() override;
 
-    void lightAll() override;
+    void forceLightOff() override;
+
+    void lightAll(uint8_t r, uint8_t g, uint8_t b) override;
 
     void show() override;
 
@@ -23,7 +25,14 @@ public:
 
     void setRandomColorForEachBoard() override;
 
+    void showSuccessSignal() override;
+
+    const CRGB &getCurrentGlobalColor() override;
+
+    void showErrorSignal() override;
+
 private:
+    CRGB currentGlobalColor{0, 0, 120};
 };
 
 #endif //GONZYPROJECT_CONCRETELEDBOARDSMANAGER_H

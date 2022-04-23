@@ -5,14 +5,13 @@
 #ifndef GONZYPROJECT_CONCRETELEDBOARD_H
 #define GONZYPROJECT_CONCRETELEDBOARD_H
 
-#include <cstdint>
 #include "ILedBoard.h"
 
 class ConcreteLedBoard : public ILedBoard {
 public:
     explicit ConcreteLedBoard();
 
-    void init(CRGB* leds, uint8_t pixelPin) override;
+    void init(CRGB* leds, uint8_t pixelPin, ILedBoardsManager* manager) override;
 
     void show() override;
 
@@ -20,10 +19,13 @@ public:
 
     void update(unsigned long newTime) override;
 
-private:
-//    RgbColor red{127, 100, 0};
-//    NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip{PixelCount, _pixelPin};
 
+    void setBoardColor(CRGB color) override;
+
+private:
+    ILedBoardsManager* _manager;
+    CRGB* _leds{};
+    CRGB _boardColor{0,80,0};
 };
 
 #endif //GONZYPROJECT_CONCRETELEDBOARD_H
