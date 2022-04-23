@@ -45,18 +45,23 @@ void ConcreteLedBoard::command(LightCommands lightCommand) {
             isOn = false;
             break;
         }
-        case LightCommands::LIGHT_SUCCESS:{
+        case LightCommands::LIGHT_SUCCESS: {
             for (uint8_t i = 0; i < PixelCount; i++) {
                 _leds[i] = CRGB::Green;
             }
             break;
         }
-        case LightCommands::LIGHT_ERROR:{
+        case LightCommands::LIGHT_ERROR: {
             for (uint8_t i = 0; i < PixelCount; i++) {
                 _leds[i] = CRGB::Red;
             }
             break;
-
+        }
+        case LightCommands::LIGHT_WHITE: {
+            for (uint8_t i = 0; i < PixelCount; i++) {
+                _leds[i] = CRGB::White;
+            }
+            break;
         }
         default:
             // should not be here
@@ -67,15 +72,15 @@ void ConcreteLedBoard::command(LightCommands lightCommand) {
 }
 
 void ConcreteLedBoard::update(unsigned long newTime) {
-    if (newTime - _previousTime > 1000.0) {
-        _previousTime = newTime;
-        if (isOn) {
-            command(LightCommands::LIGHT_OFF);
-        } else {
-            command(LightCommands::LIGHT_ON);
-        }
-
-    }
+//    if (newTime - _previousTime > 1000.0) {
+//        _previousTime = newTime;
+//        if (isOn) {
+//            command(LightCommands::LIGHT_OFF);
+//        } else {
+//            command(LightCommands::LIGHT_ON);
+//        }
+//
+//    }
 
 }
 

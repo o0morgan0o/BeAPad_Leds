@@ -6,6 +6,7 @@
 #define GONZYPROJECT_ILEDBOARDSMANAGER_H
 
 #include "ILedBoard.h"
+#include "LedStrip_Holder_Interface.h"
 #include <vector>
 #ifndef IN_TESTING
 #include <FastLED.h>
@@ -18,6 +19,8 @@ public:
     }
 
     virtual void init() = 0;
+
+    virtual void lightWhite() = 0;
 
     virtual void lightAll(uint8_t r, uint8_t g, uint8_t b) = 0;
 
@@ -37,6 +40,7 @@ public:
 
 protected:
     std::vector<ILedBoard *> _ledBoards;
+//    LedStrip_Holder_Interface ledStrip1[9]{};
     CRGB ledStrip1[9]{};
     CRGB ledStrip2[9]{};
     CRGB ledStrip3[9]{};

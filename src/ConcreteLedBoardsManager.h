@@ -31,6 +31,8 @@ public:
 
     void showErrorSignal() override;
 
+    void lightWhite() override;
+
 private:
     CRGB currentGlobalColor{0, 0, 120};
 };

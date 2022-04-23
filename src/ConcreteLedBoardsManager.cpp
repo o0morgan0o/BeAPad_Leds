@@ -99,3 +99,11 @@ void ConcreteLedBoardsManager::showErrorSignal() {
     }
 
 }
+
+void ConcreteLedBoardsManager::lightWhite() {
+    for(auto ledBoard: _ledBoards){
+        ledBoard->command(LightCommands::LIGHT_WHITE);
+    }
+    show();
+
+}

@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include "AccessPoint.h"
 #include "MyColors.h"
+#include "Debug_Helper.h"
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <WiFiUdp.h>
@@ -25,9 +26,16 @@ MyColors *myColors;
 ILedBoardsManager *ledBoardsManager;
 std::vector<ILedBoard *> ledBoards;
 
+Debug_Helper* debugHelper;
+
 APPLEMIDI_CREATE_DEFAULTSESSION_INSTANCE();
 
 void setup() {
+
+
+    // **************************
+    // DEBUG HELPER
+    debugHelper = new Debug_Helper();
 
     // **************************
     // SERIAL
@@ -55,14 +63,14 @@ void setup() {
     ledBoardsManager->setRandomColorForEachBoard();
     ledBoardsManager->lightAll(60, 60, 60);
     ledBoardsManager->show();
-    delay(1000);
+    delay(300);
     ledBoardsManager->forceLightOff();
     ledBoardsManager->show();
-    delay(1000);
+    delay(300);
 
     // *************************
     // ACCESS POINT
-    accessPoint = new AccessPoint("gonzyProject", "password", ledBoardsManager);
+    accessPoint = new AccessPoint("gonzyProject", "password", ledBoardsManager, debugHelper);
     accessPoint->init();
 
     // **************************
@@ -99,8 +107,8 @@ void setup() {
 
 void loop() {
     MIDI.read();
-//    ledBoardsManager->update(millis());
-//    ledBoardsManager->show();
+    ledBoardsManager->update(millis());
+    ledBoardsManager->show();
 //    gettimerMi
 //    Serial.println("OK...");
 //    ledBoardsManager->lightAll();

@@ -4,7 +4,6 @@ add_subdirectory(googletest-release)
 include_directories(googletest-release)
 
 enable_testing()
-add_definitions(IN_TESTING)
 
 #find_package(Thread REQUIRED)
 list(FILTER SOURCES_CPP_FILES EXCLUDE REGEX ${PROJECT_SOURCE_DIR}/*_Test.cpp)
@@ -14,10 +13,10 @@ message("${SOURCES_CPP_FILES}")
 
 set(TEST_SOURCES ${TEST_FILES})
 set(SOURCE_FILES
-        FakeBoard.h FakeBoard.cpp
-        FakeConcreteLedBoardManager.h FakeConcreteLedBoardManager.cpp
-        Fake_CRGB.h Fake_CRGB.cpp
-        "../src/ConcreteLedBoardsManager.h" "../src/ConcreteLedBoardsManager.cpp"
+#        FakeBoard.h FakeBoard.cpp
+#        FakeConcreteLedBoardManager.h FakeConcreteLedBoardManager.cpp
+#        Fake_CRGB.h Fake_CRGB.cpp
+#        "../src/ConcreteLedBoardsManager.h" "../src/ConcreteLedBoardsManager.cpp"
         )
 
 
