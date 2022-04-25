@@ -3,5 +3,3 @@
 //
 
 #include "Debug_Helper.h"
-
- String Debug_Helper::_debugString = "DEBUG_STRING<br/>";
