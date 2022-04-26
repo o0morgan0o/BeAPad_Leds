@@ -4,13 +4,19 @@
 
 #ifndef GONZY_PROJECT_TEST_FAKELEDBOARD_H
 #define GONZY_PROJECT_TEST_FAKELEDBOARD_H
-
 #define IN_TESTING
+
 #include "../src/LedBoard.h"
 
-class FakeLedBoard : public LedBoard{
+class FakeLedBoard : public LedBoard {
 public:
-    void show() override{};
+    explicit FakeLedBoard(LightStrategy_Factory *factory) : LedBoard(factory) {}
+
+    void show() override {};
+
+    LightStrategy_Factory* getLightStrategyFactory(){ return _lightStrategyFactory;}
+
+    LightStrategy * getLightStrategy() { return _lightStrategy; }
 
 };
 

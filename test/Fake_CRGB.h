@@ -12,21 +12,21 @@ public:
     CRGB() = default;
 
 //    CRGB(CRGB &a) {
-//        _r = a._r;
-//        _g = a._g;
-//        _b = a._b;
+//        r = a.r;
+//        g = a.g;
+//        b = a.b;
 //    }
 
     CRGB(const CRGB &a) {
-        _r = a._r;
-        _g = a._g;
-        _b = a._b;
+        r = a.r;
+        g = a.g;
+        b = a.b;
     }
 
     CRGB(uint8_t r, uint8_t g, uint8_t b) {
-        _r = r;
-        _g = g;
-        _b = b;
+        r = r;
+        g = g;
+        b = b;
 
     }
 
@@ -34,9 +34,21 @@ public:
 //
 //    }
 
-    uint8_t _r{};
-    uint8_t _g{};
-    uint8_t _b{};
+    uint8_t r{};
+    uint8_t g{};
+    uint8_t b{};
+
+    static CRGB Black;
+    static CRGB Green;
+    static CRGB Red;
+    static CRGB White;
+
+    void setRGB(uint8_t _r, uint8_t _g, uint8_t _b) {
+        r = _r;
+        g = _g;
+        b = _b;
+
+    }
 
 };
 

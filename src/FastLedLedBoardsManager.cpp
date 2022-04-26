@@ -4,9 +4,11 @@
 
 #include "FastLedLedBoardsManager.h"
 
-FastLedLedBoardsManager::FastLedLedBoardsManager(LedBoard_Store_Interface *ledBoardStore)
-        : LedBoardsManager(ledBoardStore) {
-    _ledBoards = _ledBoardStore->getLedBoards();
+FastLedLedBoardsManager::FastLedLedBoardsManager(
+        LedBoard_Store_Interface *ledBoardStore,
+        LightStrategy_Factory *lightStrategyFactory
+)
+        : LedBoardsManager(ledBoardStore, lightStrategyFactory) {
 }
 
 //
@@ -36,13 +38,6 @@ void FastLedLedBoardsManager::show() {
 
 
 
-//
-//void FastLedLedBoardsManager::lightAll(uint8_t r, uint8_t g, uint8_t b) {
-//    for (auto ledBoard: _ledBoards) {
-//        currentGlobalColor.setRGB(r,g,b);
-//        ledBoard->command(LightCommands::LIGHT_ON);
-//    }
-//}
 //
 //void FastLedLedBoardsManager::update(unsigned long currentTime) {
 //    for (auto ledBoard: _ledBoards) {

@@ -11,7 +11,10 @@
 
 class FastLedLedBoardsManager : public LedBoardsManager {
 public:
-    explicit FastLedLedBoardsManager(LedBoard_Store_Interface* ledBoardStore);
+    explicit FastLedLedBoardsManager(
+            LedBoard_Store_Interface* ledBoardStore,
+            LightStrategy_Factory* lightStrategyFactory
+            );
 //
     void init() override;
 

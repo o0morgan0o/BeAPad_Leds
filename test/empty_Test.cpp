@@ -2,26 +2,27 @@
 #define  IN_TESTING
 #include <vector>
 #include <memory>
+#include "../src/LightStrategy_Factory.h"
+#include "FakeLedBoard.h"
+#include "FakeLedBoardManager.h"
+#include "FakeLedBoardStore.h"
 
 TEST(myTest, testFirst){
     EXPECT_EQ(1,1);
-//    FakeBoard fakeBoard;
-
-//    Board board{};
-//    EXPECT_EQ(board._var, 10);
+    auto factory = std::make_unique<LightStrategy_Factory>();
+    FakeLedBoard fakeBoard{factory.get()};
 }
 
 TEST(BoardCreation, testManagerGetAllCreatedBoards){
-//    auto ledboards = std::vector<ILedBoard*>();
-//    ledboards.emplace_back(new FakeBoard());
-//    ledboards.emplace_back(new FakeBoard());
-//    ledboards.emplace_back(new FakeBoard());
-//    ledboards.emplace_back(new FakeBoard());
-//    ledboards.emplace_back(new FakeBoard());
-//    ledboards.emplace_back(new FakeBoard());
-//    ledboards.emplace_back(new FakeBoard());
-//    ledboards.emplace_back(new FakeBoard());
-//    auto fakeLedBoardsManager = std::make_unique<FakeConcreteLedBoardManager>(ledboards);
-    //
-//    EXPECT_EQ(fakeLedBoardsManager->getLedBoardsVector().size(), 8);
+    auto factory = std::make_unique<LightStrategy_Factory>();
+    auto store = std::make_unique<FakeLedBoardStore>();
+    store->addBoard(new FakeLedBoard(factory.get()));
+    store->addBoard(new FakeLedBoard(factory.get()));
+    store->addBoard(new FakeLedBoard(factory.get()));
+    store->addBoard(new FakeLedBoard(factory.get()));
+    store->addBoard(new FakeLedBoard(factory.get()));
+    store->addBoard(new FakeLedBoard(factory.get()));
+    store->addBoard(new FakeLedBoard(factory.get()));
+    store->addBoard(new FakeLedBoard(factory.get()));
+    EXPECT_EQ(store->getLedBoards().size(), 8);
 }

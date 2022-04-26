@@ -3,8 +3,29 @@
 //
 
 #include "LightStrategy.h"
+#include "LedBoard.h"
 
-LightStrategy::LightStrategy(LedBoard *context, unsigned long lifeSpan) {
+LightStrategy::LightStrategy(LedBoard *context) {
     _context = context;
-    _lifeSpan = lifeSpan;
+    _boardLeds = _context->getBoardLeds();
+    //
+    _birthTime = _context->getCurrentTime();
+    //
+    _crgbStrategyColor = CRGB{
+        _context->getBoardBaseColor().r,
+        _context->getBoardBaseColor().g,
+        _context->getBoardBaseColor().b
+    };
+
+}
+
+void LightStrategy::reinit() {
+    _birthTime = _context->getCurrentTime();
+    //
+    _crgbStrategyColor = CRGB{
+            _context->getBoardBaseColor().r,
+            _context->getBoardBaseColor().g,
+            _context->getBoardBaseColor().b
+    };
+
 }

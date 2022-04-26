@@ -9,8 +9,9 @@
 
 class NoLightStrategy : public LightStrategy {
 public:
-    NoLightStrategy(LedBoard *context, unsigned long
-    lifeSpan) : LightStrategy(context, lifeSpan) {}
+    explicit NoLightStrategy(LedBoard *context) : LightStrategy(context) {}
+
+    void trigger() override;
 
     void reset() override;
 

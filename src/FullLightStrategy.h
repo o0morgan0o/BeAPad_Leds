@@ -7,12 +7,12 @@
 
 #include "LightStrategy.h"
 
-class FullLightStrategy: public LightStrategy {
+class FullLightStrategy : public LightStrategy {
 public:
-    FullLightStrategy(LedBoard* context, unsigned long lifeSpan) : LightStrategy(context, lifeSpan){
+    explicit FullLightStrategy(LedBoard *context);
 
+    void trigger() override;
 
-    }
     void reset() override;
 
     void update() override;

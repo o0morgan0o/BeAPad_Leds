@@ -5,9 +5,7 @@
 #include "FastLedLedBoard.h"
 #include "LedBoardsManager.h"
 
-FastLedLedBoard::FastLedLedBoard() : LedBoard() {
-    _lightStrategy = new FullLightStrategy(this, 2000);
-    _currentTime = 0.0;
+FastLedLedBoard::FastLedLedBoard(LightStrategy_Factory *lightStrategyFactory) : LedBoard(lightStrategyFactory) {
 }
 
 void FastLedLedBoard::show() {

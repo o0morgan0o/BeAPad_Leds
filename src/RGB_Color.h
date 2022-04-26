@@ -5,18 +5,19 @@
 #ifndef PLATFORMIO_PROGRAM_RGB_COLOR_H
 #define PLATFORMIO_PROGRAM_RGB_COLOR_H
 
-#include "Arduino.h"
+#include <cstring>
 
 struct RGB_Color {
-    RGB_Color(uint8_t r, uint8_t g, uint8_t b) {
-        _r = r;
-        _g = g;
-        _b = b;
+    RGB_Color(uint8_t _r, uint8_t _g, uint8_t _b) {
+        r = _r;
+        g = _g;
+        b = _b;
     }
 
-    uint8_t _r;
-    uint8_t _g;
-    uint8_t _b;
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+
 
 };
 

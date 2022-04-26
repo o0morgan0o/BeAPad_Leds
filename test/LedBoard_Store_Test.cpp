@@ -14,13 +14,14 @@ struct LedBoardStore_Fixture : public testing::Test {
 
     };
 
-protected:
+public:
+    std::unique_ptr<LightStrategy_Factory> factory;
+
     void SetUp() override {
-        Test::SetUp();
+        factory = std::make_unique<LightStrategy_Factory>();
     }
 
     void TearDown() override {
-        Test::TearDown();
     }
 
 };
@@ -33,9 +34,23 @@ TEST_F(LedBoardStore_Fixture, checkEmptyStateOfLedBoardStore) {
 TEST_F(LedBoardStore_Fixture, checkAddOfBoards){
     FakeLedBoardStore ledBoardStore{};
     for (uint8_t i = 0; i < 8; i++){
-        ledBoardStore.addBoard(new FakeLedBoard());
+        ledBoardStore.addBoard(new FakeLedBoard(factory.get()));
     }
     EXPECT_EQ(ledBoardStore.getLedBoards().size(), 8);
+}
 
-
+TEST_F(LedBoardStore_Fixture, checkBoardShouldHaveAFactoryAndALightStrategy) {
+    FakeLedBoardStore ledBoardStore{};
+    ledBoardStore.addBoard(new FakeLedBoard(factory.get()));
+    EXPECT_EQ(ledBoardStore.getLedBoards().size(), 1);
+    auto board = ledBoardStore.getLedBoards().at(0);
+    EXPECT_NE(board, nullptr);
+    auto fakeBoard = dynamic_cast<FakeLedBoard*>(board);
+    auto boardStrategyFactory = fakeBoard->getLightStrategyFactory();
+    //
+    EXPECT_EQ(factory.get(), boardStrategyFactory); // address of factory should be the same
+    //
+    auto boardStrategy = fakeBoard->getLightStrategy();
+    EXPECT_NE(boardStrategy,nullptr);
+    EXPECT_NE(dynamic_cast<NoLightStrategy*>(boardStrategy), nullptr);
 }

@@ -11,3 +11,7 @@ void NoLightStrategy::reset() {
 void NoLightStrategy::update() {
 
 }
+
+void NoLightStrategy::trigger() {
+
+}

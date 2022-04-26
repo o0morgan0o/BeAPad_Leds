@@ -10,10 +10,9 @@
 
 class FastLedLedBoard : public LedBoard {
 public:
-    explicit FastLedLedBoard();
+    explicit FastLedLedBoard(LightStrategy_Factory *lightStrategyFactory);
 
     void show() override;
-
 
 private:
 };
