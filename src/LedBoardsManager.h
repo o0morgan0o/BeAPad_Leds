@@ -59,6 +59,7 @@ public:
     };
 
     virtual void simulateTriggerOnBoard(uint8_t boardIndex){
+        // TODO check if boardInde is a correct value
         _ledBoards.at(boardIndex)->trigger();
 
     }

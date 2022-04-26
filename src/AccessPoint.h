@@ -5,8 +5,8 @@
 #include <WiFiClient.h>
 #include "LedBoardsManager.h"
 #include "Debug_Helper.h"
-#include <AsyncTCP.h>
-#include <ESPAsyncWebServer.h>
+//#include <WiFiServer.h>
+#include <WebServer.h>
 
 struct AccessPoint {
 public:
@@ -16,11 +16,12 @@ public:
 
     void loop();
 
+
     String getHomepage() {
-        String page = "<div>";
+        String page = "<!DOCTYPE>\r\n<html>\r\n<div>";
         page += _debugHelper->getString().c_str();
         page += homePage;
-        page += "</div>";
+        page += "</div>\r\n</html>";
         return page;
     }
 
@@ -31,7 +32,7 @@ private:
     const char *_password = "password";
 
     // set server port number to 80
-    AsyncWebServer server{80};
+    WebServer server{80};
 
     String homePage =
             "<h1>BeAPad</h1><br/>"
