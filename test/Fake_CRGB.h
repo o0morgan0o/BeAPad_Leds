@@ -47,7 +47,15 @@ public:
         r = _r;
         g = _g;
         b = _b;
+    }
 
+    void fadeToBlackBy(uint8_t f) {
+        r -= f;
+        g -= f;
+        b -= b;
+        if (r < 0) r = 0;
+        if (g < 0) g = 0;
+        if (b < 0) b = 0;
     }
 
 };

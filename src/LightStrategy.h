@@ -20,13 +20,16 @@ class LedBoard;
 enum class LIGHT_STRATEGIES {
     NO_LIGHT_STRATEGY,
     STRATEGY_FULL_LIGHT,
-    STRATEGY_FADE_OUT
+    STRATEGY_FADE_OUT,
+    STRATEGY_FADE_IN_AND_FADE_OUT
 
 };
 
 class LightStrategy {
 public:
     explicit LightStrategy(LedBoard *context);
+
+    virtual ~LightStrategy() =default;
 
     virtual void reset() = 0;
 

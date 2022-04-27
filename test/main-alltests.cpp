@@ -4,7 +4,7 @@
 #include "../src/NoLightStrategy.cpp"
 #include "../src/FullLightStrategy.cpp"
 #include "../src/LightStrategy.cpp"
-#include "../src/FadeOutLightStrategy.h"
+#include "../src/FadeOutLightStrategy.cpp"
 
 #define IN_TESTING
 

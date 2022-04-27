@@ -24,6 +24,7 @@ set(SOURCE_FILES
         FakeLedBoardStore.h FakeLedBoardStore.cpp
         Fake_CRGB.h Fake_CRGB.cpp
         FakeLedBoardManager.h FakeLedBoardManager.cpp
+        FakeMidiKeyDispatcher.h FakeMidiKeyDispatcher.cpp
         )
 
 

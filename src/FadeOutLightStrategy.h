@@ -7,11 +7,12 @@
 
 #include "LightStrategy.h"
 
-class FadeOutLightStrategy : public LightStrategy{
+class FadeOutLightStrategy : public LightStrategy {
 public:
+    explicit FadeOutLightStrategy(LedBoard *context);;
+
     void trigger() override;
 
-    explicit FadeOutLightStrategy(LedBoard* context);;
     void reset() override;
 
     void update() override;

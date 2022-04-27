@@ -38,11 +38,6 @@ public:
         }
     }
 
-
-//    virtual void lightBoard(uint8_t boardIndex, LightStrategy _lightStrategy){
-//
-//    }
-
     virtual void lightCommandOnBoard(uint8_t boardIndex, LightCommands command) {
         _ledBoards.at(boardIndex)->command(command);
     }
@@ -58,8 +53,8 @@ public:
         }
     };
 
-    virtual void simulateTriggerOnBoard(uint8_t boardIndex){
-        // TODO check if boardInde is a correct value
+    virtual void triggerBoard(uint8_t boardIndex) {
+        // TODO check if boardIndex is a correct value
         _ledBoards.at(boardIndex)->trigger();
 
     }

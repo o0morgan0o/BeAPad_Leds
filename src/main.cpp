@@ -4,22 +4,15 @@
 #include "LedBoard_Store_FastLedStore.h"
 #include "FastLedLedBoardsManager.h"
 #include "LightStrategy_Factory.h"
+#include "MidiKeyDispatcher.h"
 
-//#include <WiFi.h>
-//#include <WiFiClient.h>
-//#include <WiFiUdp.h>
-//
-////#define NO_SESSION_NAME
-//#define ONE_PARTICIPANT
-//#include <AppleMidi.h>
-//
-//#include <ESPmDNS.h>
-//
-//
-//#define colorSaturation 128
-//#define NUM_LEDS_PER_STRIP 9
+#define ONE_PARTICIPANT
+
+#include <AppleMidi.h>
+#include <ESPmDNS.h>
+
 #define NUMBER_OF_BOARDS 8
-//
+
 AccessPoint *accessPoint;
 //MyColors *myColors;
 
@@ -27,8 +20,9 @@ Debug_Helper *debugHelper;
 LedBoard_Store_Interface *ledBoardStore;
 LedBoardsManager *ledBoardsManager;
 LightStrategy_Factory *lightStrategyFactory;
+MidiKeyDispatcher *midiKeyDispatcher;
 //
-//APPLEMIDI_CREATE_DEFAULTSESSION_INSTANCE();
+APPLEMIDI_CREATE_DEFAULTSESSION_INSTANCE();
 
 void setup() {
 
@@ -68,14 +62,14 @@ void setup() {
 
     // *************************
     // DEFINITIONS OF STRATEGY FOR EACH BOARD
-    ledBoardsManager->changeStrategyOnBoard(0, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT);
-    ledBoardsManager->changeStrategyOnBoard(1, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT);
-    ledBoardsManager->changeStrategyOnBoard(2, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT);
-    ledBoardsManager->changeStrategyOnBoard(3, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(4, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(5, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(6, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(7, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(0, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(1, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(2, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(3, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(4, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(5, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(6, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(7, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
 
 
     // ***************************
@@ -88,50 +82,60 @@ void setup() {
     //    ledBoardsManager->lightCommandOnBoard(5, LightCommands::LIGHT_ON);
     //    ledBoardsManager->lightCommandOnBoard(6, LightCommands::LIGHT_ON);
     //    ledBoardsManager->lightCommandOnBoard(7, LightCommands::LIGHT_ON);
-
     //    ledBoardsManager->setRandomColorForEachBoard();
+
+    // ****************************
+    // MIDI KEY DISPATCHER
+    midiKeyDispatcher = new MidiKeyDispatcher(ledBoardsManager, debugHelper);
+    midiKeyDispatcher->connectBoardToMidiKey(0, 60);
+    midiKeyDispatcher->connectBoardToMidiKey(1, 61);
+    midiKeyDispatcher->connectBoardToMidiKey(2, 62);
+    midiKeyDispatcher->connectBoardToMidiKey(3, 63);
+    midiKeyDispatcher->connectBoardToMidiKey(4, 64);
+    midiKeyDispatcher->connectBoardToMidiKey(5, 65);
+    midiKeyDispatcher->connectBoardToMidiKey(6, 66);
+    midiKeyDispatcher->connectBoardToMidiKey(7, 67);
 
     // *************************
     // ACCESS POINT
     accessPoint = new AccessPoint(ledBoardsManager, debugHelper);
     accessPoint->init();
-//
-//    // **************************
-//    // RTP_MIDI
-//    if (!MDNS.begin(AppleMIDI.getName()))
-//            DBG(F("Error setting up MDNS responder!"));
-//    char str[128] = "";
-//    strcat(str, AppleMIDI.getName());
-//    strcat(str, ".local");
-//    MDNS.addService("apple-midi", "udp", AppleMIDI.getPort());
-//    MIDI.begin(MIDI_CHANNEL_OMNI);
-//
-//
-//    AppleMIDI.setHandleConnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc, const char *name) {
-//        ledBoardsManager->showSuccessSignal();
-//        //        isConnected++;
-//        //        DBG(F("Connected to session"), ssrc, name);
-//    });
-//    AppleMIDI.setHandleDisconnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc) {
-//        ledBoardsManager->showErrorSignal();
-//        //        isConnected--;
-//        //        DBG(F("Disconnected"), ssrc);
-//    });
-//    MIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
-//        ledBoardsManager->lightAll(120, 120, 120);
-//        ledBoardsManager->show();
-//    });
-//    MIDI.setHandleNoteOff([](byte channel, byte note, byte velocity) {
-//        ledBoardsManager->forceLightOff();
-//        ledBoardsManager->show();
-//    });
+
+    // **************************
+    // RTP_MIDI
+    if (!MDNS.begin(AppleMIDI.getName()))
+        debugHelper->add("Error setting up MDNS responded !");
+    debugHelper->logRTPMidiInit(AppleMIDI.getName(), String{AppleMIDI.getPort()});
+    MDNS.addService("apple-midi", "udp", AppleMIDI.getPort());
+    MIDI.begin(MIDI_CHANNEL_OMNI);
+    //
+    AppleMIDI.setHandleConnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc, const char *name) {
+        debugHelper->add("RTP_MIDI Connected !");
+    });
+    AppleMIDI.setHandleDisconnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc) {
+        debugHelper->add("ERROR !!! RTP_MIDI DisConnected !");
+    });
+    MIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
+        debugHelper->logMidiMessage("NOTE_ON", channel, note, velocity);
+        midiKeyDispatcher->handleNoteOn(note);
+    });
+    MIDI.setHandleNoteOff([](byte channel, byte note, byte velocity) {
+        debugHelper->logMidiMessage("NOTE_OFF", channel, note, velocity);
+        midiKeyDispatcher->handleNoteOff(note);
+    });
 
 }
 
 void loop() {
-//    MIDI.read();
+    MIDI.read();
     ledBoardsManager->update(millis());
-    ledBoardsManager->show();
+    if (debugHelper->getDebugFullLight()) {
+        ledBoardsManager->showGlobally(CRGB::Red);
+    } else {
+        ledBoardsManager->show();
+    }
+
+    // Deactivate if webServer Not Needed
     accessPoint->loop();
 
 }

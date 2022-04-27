@@ -9,6 +9,7 @@
 #include "NoLightStrategy.h"
 #include "FullLightStrategy.h"
 #include "FadeOutLightStrategy.h"
+#include "FadeInFadeOutLightStrategy.h"
 
 class LightStrategy_Factory {
 
@@ -28,6 +29,10 @@ public:
     }
     LightStrategy* makeFadeOutLightStrategy(LedBoard* context){
        return new FadeOutLightStrategy(context);
+    }
+
+    LightStrategy* makeFadeInAndFadeOutLightStrategy(LedBoard* context){
+       return new FadeInFadeOutLightStrategy(context);
     }
 
 };

@@ -9,29 +9,43 @@ AccessPoint::AccessPoint(LedBoardsManager *manager, Debug_Helper *debugHelper) {
 void AccessPoint::init() {
     WiFiClass::mode(WIFI_AP);
     WiFi.softAP(_ssid, _password);
-    // Print local IP address and start web server
-    //    Serial.println("");
-    //    Serial.println("WiFi started.");
-    //    Serial.println("IP address: ");
-    //    Serial.println(WiFi.softAPIP());
+    _debugHelper->logWifiInit(WiFi.softAPIP().toString());
 
+    // ****************************
+    // BEGIN OF ROUTES
+    // ****************************
 
     server.on("/", HTTP_GET, [this]() {
         server.send(200, "text/html", getHomepage());
     });
+    //
     server.on("/trigger", HTTP_GET, [this]() {
         for (uint8_t i = 0; i < server.args(); i++) {
             if (server.argName(i) == "board") {
                 auto board = server.arg(i).toInt();
-                _manager->simulateTriggerOnBoard(board);
+                _manager->triggerBoard(board);
                 String message = "parameter Board Found ! ";
                 message += board;
                 return server.send(200, "text/plain", message);
             }
         }
         server.send(404, "text/plain", "Board Parameter Not Found !");
-
     });
+    //
+    server.on("/debug_on", HTTP_GET, [this]() {
+        _debugHelper->setDEBUGLights(true);
+        server.send(200, "text/html", getHomepage());
+    });
+    //
+    server.on("/debug_off", HTTP_GET, [this]() {
+        _debugHelper->setDEBUGLights(false);
+        server.send(200, "text/html", getHomepage());
+    });
+
+    // ****************************
+    // END OF ROUTES
+    // ****************************
+
     server.onNotFound([this]() {
         String message = "File Not Found\n\n";
         message += "URI: ";

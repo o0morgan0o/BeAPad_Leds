@@ -1,33 +1,38 @@
 //
-// Created by morgan on 4/26/2022.
+// Created by morgan on 4/27/2022.
 //
 
-#include "FadeOutLightStrategy.h"
+#include "FadeInFadeOutLightStrategy.h"
 #include "LedBoard.h"
 
-FadeOutLightStrategy::FadeOutLightStrategy(LedBoard *context) : LightStrategy(context){}
-
-void FadeOutLightStrategy::reset() {
+void FadeInFadeOutLightStrategy::reset() {
     _birthTime = _context->getCurrentTime();
+    _currentLife = 0;
+    fraction = 0;
 
     _crgbStrategyColor = CRGB{
             _context->getBoardBaseColor().r,
             _context->getBoardBaseColor().g,
             _context->getBoardBaseColor().b
     };
+
 }
 
-void FadeOutLightStrategy::update() {
-
-    _crgbStrategyColor.fadeToBlackBy(1);
+void FadeInFadeOutLightStrategy::update() {
+    fraction+=1;
+    CRGB color = blend(CRGB::AliceBlue, CRGB::Red, fraction) ;
     _lifeSpan = _context->getCurrentTime() - _birthTime;
     for (uint8_t i = 0; i < _context->PixelCount; i++) {
-        _boardLeds[i] = _crgbStrategyColor;
+        _boardLeds[i] = color;
     }
+
 
 }
 
-void FadeOutLightStrategy::trigger() {
+void FadeInFadeOutLightStrategy::trigger() {
+    _currentLife = 0;
+    fraction = 0;
+
     _crgbStrategyColor = CRGB{
             _context->getBoardBaseColor().r,
             _context->getBoardBaseColor().g,

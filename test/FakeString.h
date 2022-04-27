@@ -11,8 +11,13 @@ class String {
 public:
     explicit String(const std::string &mString) {
         standardString = mString;
-
     }
+
+    String(std::byte byte){
+
+        standardString =(char) byte;
+    }
+
 
     String operator+=(const String &b)  {
         this->standardString = this->standardString + b.standardString;

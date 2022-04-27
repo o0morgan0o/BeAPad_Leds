@@ -16,7 +16,6 @@ public:
 
     void loop();
 
-
     String getHomepage() {
         String page = "<!DOCTYPE>\r\n<html>\r\n<div>";
         page += _debugHelper->getString().c_str();
@@ -41,8 +40,10 @@ private:
             "<h2>g</h2><input type='range' id='g' name='g' min='0' max='126' step='1' value='50' /><br/>"
             "<h2>b</h2><input type='range' id='b' name='b' min='0' max='126' step='1' value='50'  /><br/><br/>"
             "</form>"
-            "<a href='/alloff'>TURN OFF</a><br>"
-            "<a href='/allwhite'>TURN WHITE</a><br>";
+            "<a href='/debug_on'>DEBUG ON</a><br>"
+            "<a href='/debug_off'>DEBUG OFF</a><br>"
+            "<a href='/allwhite'>TURN WHITE</a><br>"
+            "<a href='/alloff'>TURN OFF</a><br>";
 
 };
 
