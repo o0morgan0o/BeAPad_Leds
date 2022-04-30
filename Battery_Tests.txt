@@ -1,0 +1,8 @@
+Program:
+Blend -> CRGB:AliceBlue -> CRGB:Red
+
+	ESP32 USB Power
+	Leds : 4 AA lr6 Eco+
+		=> 80 min couleurs deviennents vertes et rougae
+		=> 120 min jaune et rouge. Affaiblissement important
+		=> 140 min leds complétements rouges
