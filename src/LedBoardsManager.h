@@ -53,6 +53,15 @@ public:
         }
     };
 
+    virtual void handleBoardTouched(uint8_t boardIndex){
+//        _ledBoards.at(boardIndex)->trigger();
+        triggerBoard(boardIndex);
+    }
+
+    virtual void handleBoardReleased(uint8_t boardIndex){
+
+    }
+
     virtual void triggerBoard(uint8_t boardIndex) {
         // TODO check if boardIndex is a correct value
         _ledBoards.at(boardIndex)->trigger();
@@ -61,6 +70,7 @@ public:
 
     virtual void setBoardBaseColor(uint8_t boardIndex, uint8_t r, uint8_t g, uint8_t b) {
         _ledBoards.at(boardIndex)->setBoardColor(r, g, b);
+
     }
 
     virtual void setBoardBaseColor(uint8_t boardIndex, CRGB color) {

@@ -18,6 +18,10 @@ public:
         standardString =(char) byte;
     }
 
+    int length(){
+        return standardString.length();
+    }
+
 
     String operator+=(const String &b)  {
         this->standardString = this->standardString + b.standardString;

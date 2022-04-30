@@ -42,6 +42,7 @@ public:
     static CRGB Green;
     static CRGB Red;
     static CRGB White;
+    static CRGB AliceBlue;
 
     void setRGB(uint8_t _r, uint8_t _g, uint8_t _b) {
         r = _r;
@@ -58,6 +59,10 @@ public:
         if (b < 0) b = 0;
     }
 
+
+
 };
+
+CRGB blend(CRGB &p1, CRGB &p2, uint8_t amountOfP2);
 
 #endif //GONZY_PROJECT_TEST_FAKE_CRGB_H

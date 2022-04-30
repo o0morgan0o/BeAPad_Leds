@@ -5,6 +5,7 @@
 #ifndef PLATFORMIO_PROGRAM_FADEINFADEOUTLIGHTSTRATEGY_H
 #define PLATFORMIO_PROGRAM_FADEINFADEOUTLIGHTSTRATEGY_H
 
+
 #include "LightStrategy.h"
 
 class FadeInFadeOutLightStrategy : public LightStrategy {

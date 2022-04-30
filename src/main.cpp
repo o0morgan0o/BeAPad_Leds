@@ -1,34 +1,48 @@
-//#include <Arduino.h>
+
+//#define FASTLED_ALLOW_INTERRUPTS 0
+//#define FASTLED_INTERRUPT_RETRY_COUNT 1
+
+#include <AppleMidi.h>
+#include <WiFiUdp.h>
+
 #include "AccessPoint.h"
 #include "Debug_Helper.h"
 #include "LedBoard_Store_FastLedStore.h"
 #include "FastLedLedBoardsManager.h"
 #include "LightStrategy_Factory.h"
 #include "MidiKeyDispatcher.h"
+#include "CapacitiveTouch_RealDispatcher.h"
+#include "Midi_Handler.h"
+#include "Debug_Helper_Serial.h"
+#include "Debug_Helper_Inactive.h"
 
-#define ONE_PARTICIPANT
+APPLEMIDI_CREATE_INSTANCE(WiFiUDP, AppleMIDI, "AppleMIDI-ESP32", DEFAULT_CONTROL_PORT);
 
-#include <AppleMidi.h>
-#include <ESPmDNS.h>
-
+#ifndef _BV
+#define _BV(bit) (1 << (bit))
+#endif
 #define NUMBER_OF_BOARDS 8
-
 AccessPoint *accessPoint;
-//MyColors *myColors;
-
+//
 Debug_Helper *debugHelper;
+Debug_Helper *inactiveDebugHelper;
 LedBoard_Store_Interface *ledBoardStore;
 LedBoardsManager *ledBoardsManager;
 LightStrategy_Factory *lightStrategyFactory;
 MidiKeyDispatcher *midiKeyDispatcher;
+CapacitiveTouch_RealDispatcher *capacitiveTouchDispatcher;
+Midi_Handler *midiHandler;
 //
-APPLEMIDI_CREATE_DEFAULTSESSION_INSTANCE();
 
 void setup() {
 
     // **************************
     // DEBUG HELPER
-    debugHelper = new Debug_Helper();
+    //    debugHelper = new Debug_Helper();
+    debugHelper = new Debug_Helper_Serial();
+    inactiveDebugHelper = new Debug_Helper_Inactive();
+
+
 
     // **************************
     // CREATION LOF LIGHT STRATEGY FACTORY
@@ -44,6 +58,7 @@ void setup() {
     // **************************
     // REINIT LEDS
     FastLED.showColor(CRGB::Black);
+
 
 
     // **************************
@@ -86,7 +101,7 @@ void setup() {
 
     // ****************************
     // MIDI KEY DISPATCHER
-    midiKeyDispatcher = new MidiKeyDispatcher(ledBoardsManager, debugHelper);
+    midiKeyDispatcher = new MidiKeyDispatcher(ledBoardsManager, inactiveDebugHelper);
     midiKeyDispatcher->connectBoardToMidiKey(0, 60);
     midiKeyDispatcher->connectBoardToMidiKey(1, 61);
     midiKeyDispatcher->connectBoardToMidiKey(2, 62);
@@ -96,46 +111,54 @@ void setup() {
     midiKeyDispatcher->connectBoardToMidiKey(6, 66);
     midiKeyDispatcher->connectBoardToMidiKey(7, 67);
 
+
     // *************************
     // ACCESS POINT
-    accessPoint = new AccessPoint(ledBoardsManager, debugHelper);
+    accessPoint = new AccessPoint(ledBoardsManager, inactiveDebugHelper);
     accessPoint->init();
+
 
     // **************************
     // RTP_MIDI
-    if (!MDNS.begin(AppleMIDI.getName()))
-        debugHelper->add("Error setting up MDNS responded !");
-    debugHelper->logRTPMidiInit(AppleMIDI.getName(), String{AppleMIDI.getPort()});
-    MDNS.addService("apple-midi", "udp", AppleMIDI.getPort());
-    MIDI.begin(MIDI_CHANNEL_OMNI);
+    midiHandler = new Midi_Handler(midiKeyDispatcher, debugHelper, &AppleMIDI, &AppleAppleMIDI);
+    midiHandler->init();
     //
-    AppleMIDI.setHandleConnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc, const char *name) {
-        debugHelper->add("RTP_MIDI Connected !");
+    AppleMIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
+        midiHandler->handleOn(channel, note, velocity);
     });
-    AppleMIDI.setHandleDisconnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc) {
-        debugHelper->add("ERROR !!! RTP_MIDI DisConnected !");
+    AppleMIDI.setHandleNoteOff([](byte channel, byte note, byte velocity) {
+        midiHandler->handleNoteOff(channel, note, velocity);
     });
-    MIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
-        debugHelper->logMidiMessage("NOTE_ON", channel, note, velocity);
-        midiKeyDispatcher->handleNoteOn(note);
+    AppleAppleMIDI.setHandleConnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc, const char *name) {
+        midiHandler->handleConnected();
     });
-    MIDI.setHandleNoteOff([](byte channel, byte note, byte velocity) {
-        debugHelper->logMidiMessage("NOTE_OFF", channel, note, velocity);
-        midiKeyDispatcher->handleNoteOff(note);
+    AppleAppleMIDI.setHandleDisconnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc) {
+        midiHandler->handleDisconnected();
     });
 
+    // **************************
+    // TOUCH SENSORS INIT
+    capacitiveTouchDispatcher = new CapacitiveTouch_RealDispatcher(midiHandler, debugHelper);
+    capacitiveTouchDispatcher->begin();
 }
 
+
 void loop() {
-    MIDI.read();
+
+    // Deactivate if webServer Not Needed
+    accessPoint->loop();
+
+    // capacitiveTouch loop
+    capacitiveTouchDispatcher->loop();
+
+    // check midi Messages
+    midiHandler->loop();
+
+    // update and show LedBoardManager
     ledBoardsManager->update(millis());
     if (debugHelper->getDebugFullLight()) {
         ledBoardsManager->showGlobally(CRGB::Red);
     } else {
         ledBoardsManager->show();
     }
-
-    // Deactivate if webServer Not Needed
-    accessPoint->loop();
-
 }
