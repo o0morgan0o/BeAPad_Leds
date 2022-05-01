@@ -17,7 +17,10 @@ void FastLedLedBoardsManager::init() {
     // we pass for each ledstrip (board) its part of the array
     // numbers should be the same than above
 
+    // TODO: TESTING !
+//    _ledBoards.at(0)->giveReferenceManager(_ledBoardStore->ledStrip0, 23, this);
     _ledBoards.at(0)->giveReferenceManager(_ledBoardStore->ledStrip0, 13, this);
+    //
     _ledBoards.at(1)->giveReferenceManager(_ledBoardStore->ledStrip1, 12, this);
     _ledBoards.at(2)->giveReferenceManager(_ledBoardStore->ledStrip2, 14, this);
     _ledBoards.at(3)->giveReferenceManager(_ledBoardStore->ledStrip3, 27, this);

@@ -1,14 +1,15 @@
 #include "AccessPoint.h"
 
-AccessPoint::AccessPoint(LedBoardsManager *manager, Debug_Helper *debugHelper) {
-    _debugHelper = debugHelper;
-    _manager = manager;
+AccessPoint::AccessPoint() {
+    WiFiClass::mode(WIFI_AP);
+    WiFi.softAP(_ssid, _password);
 
 }
 
-void AccessPoint::init() {
-    WiFiClass::mode(WIFI_AP);
-    WiFi.softAP(_ssid, _password);
+void AccessPoint::init(LedBoardsManager *manager, Debug_Helper *debugHelper) {
+    _debugHelper = debugHelper;
+    _manager = manager;
+    //
     _debugHelper->logWifiInit(WiFi.softAPIP().toString());
 
     // ****************************

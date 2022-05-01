@@ -44,7 +44,7 @@ private:
     bool _prevPrevReleaseThresholdActivated[12]{};
 
     //
-    uint8_t TOUCH_THRESHOLD = 25;
+    uint8_t TOUCH_THRESHOLD = 35;
     uint8_t RELEASE_THRESHOLD = 40;
     //
     Midi_Handler *_midiHandler;

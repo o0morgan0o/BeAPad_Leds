@@ -10,9 +10,9 @@
 
 struct AccessPoint {
 public:
-    AccessPoint(LedBoardsManager *manager, Debug_Helper *debugHelper);
+    AccessPoint();
 
-    void init();
+    void init(LedBoardsManager *manager, Debug_Helper *debugHelper);
 
     void loop();
 

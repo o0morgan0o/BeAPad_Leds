@@ -1,10 +1,11 @@
 
-//#define FASTLED_ALLOW_INTERRUPTS 0
-//#define FASTLED_INTERRUPT_RETRY_COUNT 1
+#define FASTLED_ALLOW_INTERRUPTS 0
+#define FASTLED_INTERRUPT_RETRY_COUNT 1
 
+
+//
 #include <AppleMidi.h>
 #include <WiFiUdp.h>
-
 #include "AccessPoint.h"
 #include "Debug_Helper.h"
 #include "LedBoard_Store_FastLedStore.h"
@@ -16,9 +17,9 @@
 #include "Debug_Helper_Serial.h"
 #include "Debug_Helper_Inactive.h"
 #include "RTP_Midi_MidiHandler.h"
+#include "DebugHelper_WebSocket.h"
 
 APPLEMIDI_CREATE_INSTANCE(WiFiUDP, AppleMIDI, "AppleMIDI-ESP32", DEFAULT_CONTROL_PORT);
-
 #ifndef _BV
 #define _BV(bit) (1 << (bit))
 #endif
@@ -36,14 +37,16 @@ Midi_Handler *midiHandler;
 //
 
 void setup() {
+    // *************************
+    // ACCESS POINT
+    accessPoint = new AccessPoint();
 
     // **************************
     // DEBUG HELPER
-    //    debugHelper = new Debug_Helper();
-    debugHelper = new Debug_Helper_Serial();
+        debugHelper = new Debug_Helper();
+//    debugHelper = new Debug_Helper_Serial();
     inactiveDebugHelper = new Debug_Helper_Inactive();
-
-
+//    debugHelper = new DebugHelper_WebSocket();
 
     // **************************
     // CREATION LOF LIGHT STRATEGY FACTORY
@@ -59,8 +62,6 @@ void setup() {
     // **************************
     // REINIT LEDS
     FastLED.showColor(CRGB::Black);
-
-
 
     // **************************
     // INITIALIZE BOARD MANAGER
@@ -113,10 +114,6 @@ void setup() {
     midiKeyDispatcher->connectBoardToMidiKey(7, 67);
 
 
-    // *************************
-    // ACCESS POINT
-    accessPoint = new AccessPoint(ledBoardsManager, inactiveDebugHelper);
-    accessPoint->init();
 
 
     // **************************
@@ -141,8 +138,12 @@ void setup() {
     // TOUCH SENSORS INIT
     capacitiveTouchDispatcher = new CapacitiveTouch_RealDispatcher(midiHandler, debugHelper);
     capacitiveTouchDispatcher->begin();
-}
 
+    // ***************************
+    // ACCESS POINT SERVER INIT
+    accessPoint->init(ledBoardsManager, debugHelper);
+
+}
 
 void loop() {
 
@@ -162,4 +163,5 @@ void loop() {
     } else {
         ledBoardsManager->show();
     }
+
 }

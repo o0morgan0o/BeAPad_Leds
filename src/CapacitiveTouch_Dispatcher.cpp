@@ -15,7 +15,17 @@ void CapacitiveTouch_Dispatcher::begin() {
 
     // defines attached pins
     _touchPins[0] = T0;
-    _numberOfTouchPins = 1;
+    _touchPins[1] = T2;
+    _touchPins[2] = T3;
+    _touchPins[3] = T4;
+    _touchPins[4] = T5;
+    _touchPins[5] = T6;
+    _touchPins[6] = T7;
+    _touchPins[7] = T8;
+    _touchPins[8] = T9;
+    //
+    _numberOfTouchPins = 9;
+    //
     String message{"Number of touch Pins: "};
     message += _numberOfTouchPins;
     _debugHelper->add(message);
@@ -42,6 +52,13 @@ void CapacitiveTouch_Dispatcher::loop() {
 
     for (uint8_t i = 0; i < _numberOfTouchPins; i++) {
         auto value = getTouchReadValueOnPin(_touchPins[i]);
+//        if(i == 0 ){
+            String message{"Pin : "};
+            message+= i;
+            message += " Value ";
+            message+= value;
+            _debugHelper->add(message);
+//        }
         switch( _pinStateValidators[i].checkNewValue(value)){
             case CapacitiveTouch_Actions::ACTION_TOUCH_VALIDATED:
                 _midiHandler->sendMidiNoteOn();

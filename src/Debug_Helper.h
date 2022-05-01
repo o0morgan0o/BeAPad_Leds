@@ -75,7 +75,7 @@ public:
         return _debugFullLight;
     }
 
-private:
+protected:
     bool _debugFullLight{false};
     String _logString{"DEBUG_STRING<br/>"};
 };
