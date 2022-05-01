@@ -47,6 +47,7 @@ void CapacitiveTouch_Dispatcher::connectBoardToCapacitiveSensor(uint8_t boardInd
 }
 
 void CapacitiveTouch_Dispatcher::loop() {
+    // master change minor
     // VALUE WHEN TOUCH = 15 approximately
     // VALUE WHEN UNTOUCHED = 60 approximately
 
