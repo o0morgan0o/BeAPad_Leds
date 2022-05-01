@@ -30,6 +30,10 @@ public:
         _logString += "<br/>";
     }
 
+    virtual void add(const char message[]){
+        add(String(message));
+    }
+
     virtual  void reinit() {
         _logString = "DEBUG_STRING<br/>";
     }

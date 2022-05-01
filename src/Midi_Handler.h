@@ -7,26 +7,14 @@
 
 #include "LedBoardsManager.h"
 #include "MidiKeyDispatcher.h"
-
-#define ONE_PARTICIPANT
 //
-#include <Wire.h>
-#include <ESPmDNS.h>
-#include <AppleMidi.h>
-#include <WiFiUdp.h>
 
 class Midi_Handler {
 public:
-    Midi_Handler( MidiKeyDispatcher *dispatcher, Debug_Helper *debugHelper,
-                 MidiInterface<appleMidi::AppleMIDISession<WiFiUDP>, appleMidi::AppleMIDISettings> *_midiSession,
-                 appleMidi::AppleMIDISession<WiFiUDP> *_appleMidi
-    );
+    Midi_Handler( MidiKeyDispatcher *dispatcher, Debug_Helper *debugHelper);
 
-    virtual void connected(const APPLEMIDI_NAMESPACE::ssrc_t &ssrc, const char *name) {
 
-    }
-
-    virtual void init();
+    virtual void init() = 0;
 
     virtual void handleConnected();
 
@@ -36,24 +24,16 @@ public:
 
     virtual void handleNoteOff(byte channel, byte note, byte velocity);
 
-    virtual void sendMidiNoteOn();
+    virtual void sendMidiNoteOn() =0 ;
 
-    MidiInterface<appleMidi::AppleMIDISession<WiFiUDP>, appleMidi::AppleMIDISettings> *getMidiSession() const {
-        return _midiSession;
-    };
+    virtual void sendMidiNoteOff() = 0;
 
-    appleMidi::AppleMIDISession<WiFiUDP> *getAppleMidi() const {
-        return _appleMidi;
-    };
 
-    virtual void loop();
+    virtual void loop() = 0;
 
 public:
-    String _midiSessionName;
-    uint16_t _midiPort;
-    //
-    MidiInterface<appleMidi::AppleMIDISession<WiFiUDP>, appleMidi::AppleMIDISettings> *_midiSession;
-    appleMidi::AppleMIDISession<WiFiUDP> *_appleMidi;
+    String _midiSessionName{};
+    uint16_t _midiPort{};
     //
     MidiKeyDispatcher *_dispatcher;
     Debug_Helper *_debugHelper;

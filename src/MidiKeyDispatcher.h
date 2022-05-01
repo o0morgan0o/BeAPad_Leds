@@ -23,7 +23,7 @@ public:
         _debugHelper = debugHelper;
         //
         // initialization of boardIndexReferences
-        for(unsigned char & _boardIndexReference : _boardIndexReferences){
+        for (unsigned char &_boardIndexReference: _boardIndexReferences) {
             _boardIndexReference = INACTIVE_BOARD_INDEX;
         }
     }
@@ -35,11 +35,11 @@ public:
     }
 
     virtual void handleNoteOn(byte note) {
-        if( _boardIndexReferences[(uint8_t) note] == INACTIVE_BOARD_INDEX){
+        if (_boardIndexReferences[(uint8_t) note] == INACTIVE_BOARD_INDEX) {
             String message{"WARNING : No linked Board to note "};
-            message+= note;
+            message += note;
             _debugHelper->add(message);
-        }else{
+        } else {
             _manager->triggerBoard(_boardIndexReferences[(uint8_t) note]);
         }
 

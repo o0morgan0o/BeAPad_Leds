@@ -19,11 +19,16 @@ void CapacitiveTouch_Dispatcher::begin() {
     String message{"Number of touch Pins: "};
     message += _numberOfTouchPins;
     _debugHelper->add(message);
+    // initialization of PinStateValidators
     for (uint8_t i = 0; i < _numberOfTouchPins; i++) {
-        // we set all states to released at start
-        _currentStates[i] = false;
-        _prevStates[i] = false;
+        _pinStateValidators[i].init(&TOUCH_THRESHOLD, &RELEASE_THRESHOLD);
     }
+//    for (uint8_t i = 0; i < _numberOfTouchPins; i++) {
+//
+//        // we set all states to released at start
+//        _currentAboveTouchThreshold[i] = false;
+//        _prevAboveTouchThreshold[i] = false;
+//    }
 
 }
 
@@ -37,30 +42,43 @@ void CapacitiveTouch_Dispatcher::loop() {
 
     for (uint8_t i = 0; i < _numberOfTouchPins; i++) {
         auto value = getTouchReadValueOnPin(_touchPins[i]);
-        //
-        _debugHelper->add(String{value});
-        if (!_prevStates[i] && value < TOUCH_THRESHOLD) {
-            // if value was 0 and now we are below touch threshold
-            // it means we are at trigger ON
-            String message{"TOUCH PRESSED "};
-            message += value;
-//                _debugHelper->add(message);
-            _currentStates[i] = true;
-            _midiHandler->sendMidiNoteOn();
-
-        } else if (_prevStates[i] && value > RELEASE_THRESHOLD) {
-            // if value was 1 and now we are abouve release threshold
-            // it means we are at trigger RELEASE
-            String message{"TOUCH RELEASED "};
-            message += value;
-//                _debugHelper->add(message);
-            _currentStates[i] = false;
+        switch( _pinStateValidators[i].checkNewValue(value)){
+            case CapacitiveTouch_Actions::ACTION_TOUCH_VALIDATED:
+                _midiHandler->sendMidiNoteOn();
+                break;
+            case CapacitiveTouch_Actions::ACTION_RELEASE_VALIDATED:
+                _midiHandler->sendMidiNoteOff();
+                break;
+            case CapacitiveTouch_Actions::ACTION_STANDBY:
+                break;
+            default:
+                break;
         }
-//            String message{"NO EVENT "};
-//            message += value;
-//            _debugHelper->add(message);
-        _prevStates[i] = _currentStates[i];
     }
+    //
+//        _debugHelper->add(String{value});
+//        if (!_prevAboveTouchThreshold[i] && value < TOUCH_THRESHOLD) {
+//            // if value was 0 and now we are below touch threshold
+//            // it means we are at trigger ON
+//            String message{"TOUCH PRESSED "};
+//            message += value;
+////                _debugHelper->add(message);
+//            _currentAboveTouchThreshold[i] = true;
+//            _midiHandler->sendMidiNoteOn();
+//
+//        } else if (_prevAboveTouchThreshold[i] && value > RELEASE_THRESHOLD) {
+//            // if value was 1 and now we are abouve release threshold
+//            // it means we are at trigger RELEASE
+//            String message{"TOUCH RELEASED "};
+//            message += value;
+////                _debugHelper->add(message);
+//            _currentAboveTouchThreshold[i] = false;
+//        }
+////            String message{"NO EVENT "};
+////            message += value;
+////            _debugHelper->add(message);
+//        _prevAboveTouchThreshold[i] = _currentAboveTouchThreshold[i];
+//    }
 
 
 //        // Get the currently touched pads

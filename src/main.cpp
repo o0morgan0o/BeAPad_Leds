@@ -15,6 +15,7 @@
 #include "Midi_Handler.h"
 #include "Debug_Helper_Serial.h"
 #include "Debug_Helper_Inactive.h"
+#include "RTP_Midi_MidiHandler.h"
 
 APPLEMIDI_CREATE_INSTANCE(WiFiUDP, AppleMIDI, "AppleMIDI-ESP32", DEFAULT_CONTROL_PORT);
 
@@ -120,7 +121,7 @@ void setup() {
 
     // **************************
     // RTP_MIDI
-    midiHandler = new Midi_Handler(midiKeyDispatcher, debugHelper, &AppleMIDI, &AppleAppleMIDI);
+    midiHandler = new RTP_Midi_MidiHandler(midiKeyDispatcher, debugHelper, &AppleMIDI, &AppleAppleMIDI);
     midiHandler->init();
     //
     AppleMIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {

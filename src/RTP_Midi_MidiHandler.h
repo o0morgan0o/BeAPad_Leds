@@ -1,0 +1,70 @@
+//
+// Created by morgan on 5/1/2022.
+//
+
+#ifndef PLATFORMIO_PROGRAM_RTP_MIDI_MIDIHANDLER_H
+#define PLATFORMIO_PROGRAM_RTP_MIDI_MIDIHANDLER_H
+#define ONE_PARTICIPANT
+
+#include "Midi_Handler.h"
+#include <AppleMidi.h>
+#include <WiFiUdp.h>
+#include <Wire.h>
+#include <ESPmDNS.h>
+
+
+class RTP_Midi_MidiHandler : public Midi_Handler {
+public:
+    RTP_Midi_MidiHandler(MidiKeyDispatcher *dispatcher, Debug_Helper *debugHelper,
+                         MidiInterface<appleMidi::AppleMIDISession<WiFiUDP>, appleMidi::AppleMIDISettings> *midiSession,
+                         appleMidi::AppleMIDISession<WiFiUDP> *appleMidi
+    ) : Midi_Handler(dispatcher, debugHelper) {
+        //    APPLEMIDI_CREATE_DEFAULTSESSION_INSTANCE();
+        _midiSession = midiSession;
+        _appleMidi = appleMidi;
+        _midiSessionName = appleMidi->getName();
+        _midiPort = appleMidi->getPort();
+
+    }
+
+    virtual void connected(const APPLEMIDI_NAMESPACE::ssrc_t &ssrc, const char *name) {
+
+    }
+
+
+    void sendMidiNoteOn() override {
+        _midiSession->sendNoteOn(60, 120, 1);
+
+    }
+
+    void sendMidiNoteOff() override {
+        _midiSession->sendNoteOff(60, 120, 1);
+
+    }
+
+    void init() override {
+        if (!MDNS.begin("AppleMIDI-ESP32"))
+            _debugHelper->add("Error setting up MDNS responded !");
+        _debugHelper->logRTPMidiInit("AppleMIDI-ESP32", String{_midiPort});
+        MDNS.addService("apple-midi", "udp", _midiPort);
+        _midiSession->begin(MIDI_CHANNEL_OMNI);
+    }
+
+    void loop() override {
+        _midiSession->read();
+
+    }
+
+    MidiInterface<appleMidi::AppleMIDISession<WiFiUDP>, appleMidi::AppleMIDISettings> *getMidiSession() const {
+        return _midiSession;
+    };
+
+    appleMidi::AppleMIDISession<WiFiUDP> *getAppleMidi() const {
+        return _appleMidi;
+    };
+private:
+    MidiInterface<appleMidi::AppleMIDISession<WiFiUDP>, appleMidi::AppleMIDISettings> *_midiSession;
+    appleMidi::AppleMIDISession<WiFiUDP> *_appleMidi;
+};
+
+#endif //PLATFORMIO_PROGRAM_RTP_MIDI_MIDIHANDLER_H

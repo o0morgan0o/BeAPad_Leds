@@ -13,9 +13,21 @@ public:
         standardString = mString;
     }
 
+    String(){
+        standardString="";
+    }
+
     String(std::byte byte){
 
         standardString =(char) byte;
+    }
+
+    String(uint8_t num){
+        standardString =std::to_string(num);
+    }
+
+    String(uint16_t num) {
+        standardString = std::to_string(num);
     }
 
     int length(){
@@ -28,8 +40,22 @@ public:
         return *this;
     }
 
+//     operator String(){
+//        return ;
+//    }
+
+    String operator+=(const uint8_t num){
+        this->standardString = this->standardString + std::to_string(num);
+        return *this;
+    }
+
     String operator+=(const std::string &b)  {
         this->standardString = this->standardString + b;
+        return *this;
+    }
+
+    String operator+=(const char m[]){
+        this->standardString = this->standardString+ m;
         return *this;
     }
 
