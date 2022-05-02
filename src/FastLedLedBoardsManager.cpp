@@ -15,19 +15,17 @@ FastLedLedBoardsManager::FastLedLedBoardsManager(
 void FastLedLedBoardsManager::init() {
     //
     // we pass for each ledstrip (board) its part of the array
-    // numbers should be the same than above
 
     // TODO: TESTING !
 //    _ledBoards.at(0)->giveReferenceManager(_ledBoardStore->ledStrip0, 23, this);
-    _ledBoards.at(0)->giveReferenceManager(_ledBoardStore->ledStrip0, 13, this);
-    //
-    _ledBoards.at(1)->giveReferenceManager(_ledBoardStore->ledStrip1, 12, this);
-    _ledBoards.at(2)->giveReferenceManager(_ledBoardStore->ledStrip2, 14, this);
-    _ledBoards.at(3)->giveReferenceManager(_ledBoardStore->ledStrip3, 27, this);
-    _ledBoards.at(4)->giveReferenceManager(_ledBoardStore->ledStrip4, 26, this);
-    _ledBoards.at(5)->giveReferenceManager(_ledBoardStore->ledStrip5, 25, this);
-    _ledBoards.at(6)->giveReferenceManager(_ledBoardStore->ledStrip6, 33, this);
-    _ledBoards.at(7)->giveReferenceManager(_ledBoardStore->ledStrip7, 32, this);
+    _ledBoards.at(0)->giveReferenceManager(_ledBoardStore->ledStrip0,  this);
+    _ledBoards.at(1)->giveReferenceManager(_ledBoardStore->ledStrip1, this);
+    _ledBoards.at(2)->giveReferenceManager(_ledBoardStore->ledStrip2, this);
+    _ledBoards.at(3)->giveReferenceManager(_ledBoardStore->ledStrip3, this);
+    _ledBoards.at(4)->giveReferenceManager(_ledBoardStore->ledStrip4, this);
+    _ledBoards.at(5)->giveReferenceManager(_ledBoardStore->ledStrip5, this);
+    _ledBoards.at(6)->giveReferenceManager(_ledBoardStore->ledStrip6, this);
+    _ledBoards.at(7)->giveReferenceManager(_ledBoardStore->ledStrip7, this);
 
 }
 
