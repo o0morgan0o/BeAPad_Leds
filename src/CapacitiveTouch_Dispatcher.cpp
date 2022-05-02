@@ -52,6 +52,7 @@ void CapacitiveTouch_Dispatcher::loop() {
     // VALUE WHEN UNTOUCHED = 60 approximately
 
     for (uint8_t i = 0; i < _numberOfTouchPins; i++) {
+        // another minor change
         auto value = getTouchReadValueOnPin(_touchPins[i]);
 //        if(i == 0 ){
             String message{"Pin : "};
