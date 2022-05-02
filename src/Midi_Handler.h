@@ -6,12 +6,13 @@
 #define PLATFORMIO_PROGRAM_MIDI_HANDLER_H
 
 #include "LedBoardsManager.h"
-#include "MidiKeyDispatcher.h"
+#include "MidiKeyReceiver.h"
+#include "MidiKeySender.h"
 //
 
 class Midi_Handler {
 public:
-    Midi_Handler( MidiKeyDispatcher *dispatcher, Debug_Helper *debugHelper);
+    Midi_Handler(MidiKeyReceiver *receiver,MidiKeySender* sender, Debug_Helper *debugHelper);
 
 
     virtual void init() = 0;
@@ -24,9 +25,9 @@ public:
 
     virtual void handleNoteOff(byte channel, byte note, byte velocity);
 
-    virtual void sendMidiNoteOn() =0 ;
+    virtual void sendMidiNoteOn(uint8_t pinIndex) =0 ;
 
-    virtual void sendMidiNoteOff() = 0;
+    virtual void sendMidiNoteOff(uint8_t pinIndex) = 0;
 
 
     virtual void loop() = 0;
@@ -35,7 +36,8 @@ public:
     String _midiSessionName{};
     uint16_t _midiPort{};
     //
-    MidiKeyDispatcher *_dispatcher;
+    MidiKeyReceiver *_midiReceiver;
+    MidiKeySender *_midiSender;
     Debug_Helper *_debugHelper;
 
 };

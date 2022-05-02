@@ -7,10 +7,10 @@
 
 #define  IN_TESTING
 
-#include "../src/MidiKeyDispatcher.h"
+#include "../src/MidiKeyReceiver.h"
 #include "FakeLedBoardManager.h"
 #include "FakeLedBoardStore.h"
-#include "FakeMidiKeyDispatcher.h"
+#include "FakeMidiKeyReceiver.h"
 #include "FakeLedBoard.h"
 
 struct MidiKeyDispatcher_Fixture : public testing::Test {
@@ -46,7 +46,7 @@ TEST(MidiKeyDispatcherTest, checkInitializationOfInternalArrayOfDispatcher) {
     auto manager = std::make_unique<FakeLedBoardManager>(store.get(), strategyFactory.get());
     auto debugHelper = make_unique<Debug_Helper>();
     //
-    auto dispatcher = make_unique<FakeMidiKeyDispatcher>(manager.get(), debugHelper.get());
+    auto dispatcher = make_unique<FakeMidiKeyReceiver>(manager.get(), debugHelper.get());
     //
     EXPECT_EQ(dispatcher->INACTIVE_BOARD_INDEX, 100);
     auto boardIndexReferences = dispatcher->getBoardIndexReferences();
@@ -54,10 +54,10 @@ TEST(MidiKeyDispatcherTest, checkInitializationOfInternalArrayOfDispatcher) {
     EXPECT_EQ(boardIndexReferences[1], dispatcher->INACTIVE_BOARD_INDEX);
     EXPECT_EQ(boardIndexReferences[127], dispatcher->INACTIVE_BOARD_INDEX);
     //
-    dispatcher->connectBoardToMidiKey(1, byte{80});
+    dispatcher->connectBoardToReceiveMidiKey(1, byte{80});
     EXPECT_EQ(boardIndexReferences[80], 1);
     EXPECT_EQ(boardIndexReferences[1], dispatcher->INACTIVE_BOARD_INDEX); // test just a random other midiKey, should not be set
-    dispatcher->connectBoardToMidiKey(0, byte{90});
+    dispatcher->connectBoardToReceiveMidiKey(0, byte{90});
     EXPECT_EQ(boardIndexReferences[80], 1);
     EXPECT_EQ(boardIndexReferences[90], 0);
 
@@ -73,9 +73,9 @@ TEST_F(MidiKeyDispatcher_Fixture, testThatNonConnectedBoardSendMessageToDebugHel
     auto manager = std::make_unique<Mock_FakeLedBoardsManager>(store.get(), strategyFactory.get());
     auto debugHelper = make_unique<Mock_DebugHelper>();
     //
-    auto dispatcher = make_unique<FakeMidiKeyDispatcher>(manager.get(), debugHelper.get());
-    dispatcher->connectBoardToMidiKey(0, byte{82});
-    dispatcher->connectBoardToMidiKey(1, byte{84});
+    auto dispatcher = make_unique<FakeMidiKeyReceiver>(manager.get(), debugHelper.get());
+    dispatcher->connectBoardToReceiveMidiKey(0, byte{82});
+    dispatcher->connectBoardToReceiveMidiKey(1, byte{84});
     //
     EXPECT_CALL(*debugHelper.get(), add(testing::_)).Times(1);
     dispatcher->handleNoteOn(byte{34});

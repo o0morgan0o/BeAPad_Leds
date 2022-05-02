@@ -12,13 +12,14 @@
 #include <Wire.h>
 #include <ESPmDNS.h>
 
-
 class RTP_Midi_MidiHandler : public Midi_Handler {
 public:
-    RTP_Midi_MidiHandler(MidiKeyDispatcher *dispatcher, Debug_Helper *debugHelper,
+    RTP_Midi_MidiHandler(MidiKeyReceiver *receiver,
+                         MidiKeySender *sender,
+                         Debug_Helper *debugHelper,
                          MidiInterface<appleMidi::AppleMIDISession<WiFiUDP>, appleMidi::AppleMIDISettings> *midiSession,
                          appleMidi::AppleMIDISession<WiFiUDP> *appleMidi
-    ) : Midi_Handler(dispatcher, debugHelper) {
+    ) : Midi_Handler(receiver, sender, debugHelper) {
         //    APPLEMIDI_CREATE_DEFAULTSESSION_INSTANCE();
         _midiSession = midiSession;
         _appleMidi = appleMidi;
@@ -31,14 +32,13 @@ public:
 
     }
 
-
-    void sendMidiNoteOn() override {
-        _midiSession->sendNoteOn(60, 120, 1);
+    void sendMidiNoteOn(const uint8_t pinIndex) override {
+        _midiSession->sendNoteOn(_midiSender->getMidiKeyAssociatedWithPinIndex(pinIndex), 120, 1);
 
     }
 
-    void sendMidiNoteOff() override {
-        _midiSession->sendNoteOff(60, 120, 1);
+    void sendMidiNoteOff(const uint8_t pinIndex) override {
+        _midiSession->sendNoteOff(_midiSender->getMidiKeyAssociatedWithPinIndex(pinIndex), 120, 1);
 
     }
 

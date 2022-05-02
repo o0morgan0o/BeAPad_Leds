@@ -2,8 +2,8 @@
 // Created by morgan on 4/27/2022.
 //
 
-#ifndef PLATFORMIO_PROGRAM_MIDIKEYDISPATCHER_H
-#define PLATFORMIO_PROGRAM_MIDIKEYDISPATCHER_H
+#ifndef PLATFORMIO_PROGRAM_MIDIKEYRECEIVER_H
+#define PLATFORMIO_PROGRAM_MIDIKEYRECEIVER_H
 
 #include "LedBoardsManager.h"
 #include "Debug_Helper.h"
@@ -16,9 +16,9 @@ enum class MIDI_NOTE_TYPE {
  * This class handle the midiEvents and pass it to the Board.
  *
  */
-class MidiKeyDispatcher {
+class MidiKeyReceiver {
 public:
-    MidiKeyDispatcher(LedBoardsManager *manager, Debug_Helper *debugHelper) {
+    MidiKeyReceiver(LedBoardsManager *manager, Debug_Helper *debugHelper) {
         _manager = manager;
         _debugHelper = debugHelper;
         //
@@ -28,7 +28,7 @@ public:
         }
     }
 
-    virtual void connectBoardToMidiKey(uint8_t boardIndex, byte midiKey) {
+    virtual void connectBoardToReceiveMidiKey(uint8_t boardIndex, byte midiKey) {
         // We store at {midiKey} location in the array, the corresponding board
         _boardIndexReferences[(uint8_t) midiKey] = boardIndex;
 
@@ -46,7 +46,7 @@ public:
     }
 
     virtual void handleNoteOff(byte note) {
-//        if (_boardIndexReferences[note] == INACTIVE_BOARD_INDEX) {
+//        if (_boardIndexReferences[note] == INACTIVE_PIN) {
 //            String message{"WARNING : No linked Board to note "};
 //            message += note;
 //            _debugHelper->add(message);
@@ -55,7 +55,7 @@ public:
     }
 
 public:
-    const uint8_t INACTIVE_BOARD_INDEX{100}; // abitrary value for a board without MidiKey Connected.
+    const uint8_t INACTIVE_BOARD_INDEX{100}; // arbitrary value for a board without MidiKey Connected.
     // We can't use 0, because board 0 exists and can be triggered
 
 protected:
@@ -65,4 +65,4 @@ protected:
 
 };
 
-#endif //PLATFORMIO_PROGRAM_MIDIKEYDISPATCHER_H
+#endif //PLATFORMIO_PROGRAM_MIDIKEYRECEIVER_H

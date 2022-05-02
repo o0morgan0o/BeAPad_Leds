@@ -51,10 +51,10 @@ void CapacitiveTouch_Dispatcher::loop() {
         _debugHelper->logTouchMessage(i, value);
         switch (_pinStateValidators[i].checkNewValue(value)) {
             case CapacitiveTouch_Actions::ACTION_TOUCH_VALIDATED:
-                _midiHandler->sendMidiNoteOn();
+                _midiHandler->sendMidiNoteOn(i);
                 break;
             case CapacitiveTouch_Actions::ACTION_RELEASE_VALIDATED:
-                _midiHandler->sendMidiNoteOff();
+                _midiHandler->sendMidiNoteOff(i);
                 break;
             case CapacitiveTouch_Actions::ACTION_STANDBY:
                 break;

@@ -10,7 +10,7 @@
 
 class Fake_MidiHandler  : public Midi_Handler{
 public:
-    Fake_MidiHandler(MidiKeyDispatcher *dispatcher, Debug_Helper *debugHelper): Midi_Handler(dispatcher, debugHelper){
+    Fake_MidiHandler(MidiKeyReceiver *receiver, MidiKeySender* sender, Debug_Helper *debugHelper): Midi_Handler(receiver, sender, debugHelper){
 
     }
 
@@ -18,11 +18,11 @@ public:
 
     }
 
-    void sendMidiNoteOn() override {
+    void sendMidiNoteOn(uint8_t pinIndex) override {
 
     }
 
-    void sendMidiNoteOff() override {
+    void sendMidiNoteOff(uint8_t pinIndex) override {
 
     }
 

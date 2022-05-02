@@ -4,9 +4,10 @@
 
 #include "Midi_Handler.h"
 
-Midi_Handler::Midi_Handler(MidiKeyDispatcher *dispatcher, Debug_Helper *debugHelper) {
+Midi_Handler::Midi_Handler(MidiKeyReceiver *receiver, MidiKeySender* sender,  Debug_Helper *debugHelper) {
 //
-    _dispatcher = dispatcher;
+    _midiReceiver = receiver;
+    _midiSender = sender;
     _debugHelper = debugHelper;
 }
 
@@ -22,10 +23,10 @@ void Midi_Handler::handleDisconnected() {
 
 void Midi_Handler::handleOn(byte channel, byte note, byte velocity) {
     _debugHelper->logMidiMessage(String{"NOTE_ON"}, channel, note, velocity);
-    _dispatcher->handleNoteOn(note);
+    _midiReceiver->handleNoteOn(note);
 }
 
 void Midi_Handler::handleNoteOff(byte channel, byte note, byte velocity) {
     _debugHelper->logMidiMessage(String{"NOTE_OFF"}, channel, note, velocity);
-//        _dispatcher->
+//        _midiReceiver->
 }

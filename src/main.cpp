@@ -11,13 +11,14 @@
 #include "LedBoard_Store_FastLedStore.h"
 #include "FastLedLedBoardsManager.h"
 #include "LightStrategy_Factory.h"
-#include "MidiKeyDispatcher.h"
+#include "MidiKeyReceiver.h"
 #include "CapacitiveTouch_RealDispatcher.h"
 #include "Midi_Handler.h"
 #include "Debug_Helper_Serial.h"
 #include "Debug_Helper_Inactive.h"
 #include "RTP_Midi_MidiHandler.h"
 #include "DebugHelper_WebSocket.h"
+#include "MidiKeySender.h"
 
 APPLEMIDI_CREATE_INSTANCE(WiFiUDP, AppleMIDI, "AppleMIDI-ESP32", DEFAULT_CONTROL_PORT);
 #ifndef _BV
@@ -31,7 +32,8 @@ Debug_Helper *inactiveDebugHelper;
 LedBoard_Store_Interface *ledBoardStore;
 LedBoardsManager *ledBoardsManager;
 LightStrategy_Factory *lightStrategyFactory;
-MidiKeyDispatcher *midiKeyDispatcher;
+MidiKeyReceiver *midiReceiver;
+MidiKeySender* midiSender;
 CapacitiveTouch_RealDispatcher *capacitiveTouchDispatcher;
 Midi_Handler *midiHandler;
 //
@@ -102,23 +104,33 @@ void setup() {
     //    ledBoardsManager->setRandomColorForEachBoard();
 
     // ****************************
-    // MIDI KEY DISPATCHER
-    midiKeyDispatcher = new MidiKeyDispatcher(ledBoardsManager, inactiveDebugHelper);
-    midiKeyDispatcher->connectBoardToMidiKey(0, 60);
-    midiKeyDispatcher->connectBoardToMidiKey(1, 61);
-    midiKeyDispatcher->connectBoardToMidiKey(2, 62);
-    midiKeyDispatcher->connectBoardToMidiKey(3, 63);
-    midiKeyDispatcher->connectBoardToMidiKey(4, 64);
-    midiKeyDispatcher->connectBoardToMidiKey(5, 65);
-    midiKeyDispatcher->connectBoardToMidiKey(6, 66);
-    midiKeyDispatcher->connectBoardToMidiKey(7, 67);
+    // MIDI KEY RECEIVER
+    midiReceiver = new MidiKeyReceiver(ledBoardsManager, inactiveDebugHelper);
+    midiReceiver->connectBoardToReceiveMidiKey(0, 60);
+    midiReceiver->connectBoardToReceiveMidiKey(1, 61);
+    midiReceiver->connectBoardToReceiveMidiKey(2, 62);
+    midiReceiver->connectBoardToReceiveMidiKey(3, 63);
+    midiReceiver->connectBoardToReceiveMidiKey(4, 64);
+    midiReceiver->connectBoardToReceiveMidiKey(5, 65);
+    midiReceiver->connectBoardToReceiveMidiKey(6, 66);
+    midiReceiver->connectBoardToReceiveMidiKey(7, 67);
 
-
+    // ***************************
+    // MIDI KEY SENDER
+    midiSender = new MidiKeySender(ledBoardsManager, debugHelper);
+    midiSender->connectBoardToSendMidiKey(0, 60);
+    midiSender->connectBoardToSendMidiKey(1, 61);
+    midiSender->connectBoardToSendMidiKey(2, 62);
+    midiSender->connectBoardToSendMidiKey(3, 63);
+    midiSender->connectBoardToSendMidiKey(4, 64);
+    midiSender->connectBoardToSendMidiKey(5, 65);
+    midiSender->connectBoardToSendMidiKey(6, 66);
+    midiSender->connectBoardToSendMidiKey(7, 67);
 
 
     // **************************
     // RTP_MIDI
-    midiHandler = new RTP_Midi_MidiHandler(midiKeyDispatcher, debugHelper, &AppleMIDI, &AppleAppleMIDI);
+    midiHandler = new RTP_Midi_MidiHandler(midiReceiver, midiSender, debugHelper, &AppleMIDI, &AppleAppleMIDI);
     midiHandler->init();
     //
     AppleMIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {

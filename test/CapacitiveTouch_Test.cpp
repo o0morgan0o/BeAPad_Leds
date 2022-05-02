@@ -7,23 +7,23 @@
 #include "FakeLedBoardManager.h"
 #include "FakeLedBoardStore.h"
 #include "FakeLedBoard.h"
-#include "FakeMidiKeyDispatcher.h"
+#include "FakeMidiKeyReceiver.h"
 #include "Fake_MidiHandler.h"
 #include "../src/Debug_Helper.h"
 #include "../src/CapacitiveTouch_Dispatcher.h"
 
 struct CapacitiveTest_Fixture : public testing::Test {
-
-    struct Mock_MidiHandler : public Fake_MidiHandler{
+    struct Mock_MidiHandler : public Fake_MidiHandler {
     public:
-        Mock_MidiHandler(MidiKeyDispatcher *dispatcher, Debug_Helper *debugHelper):
-        Fake_MidiHandler(dispatcher,debugHelper){
+        Mock_MidiHandler(MidiKeyReceiver *receiver, MidiKeySender *sender, Debug_Helper *debugHelper) :
+                Fake_MidiHandler(receiver, sender, debugHelper) {
 
         }
+
         void init() override {
         }
 
-        void sendMidiNoteOn() override {
+        void sendMidiNoteOn(uint8_t pinIndex) override {
             // MOCK
         }
 
@@ -31,6 +31,7 @@ struct CapacitiveTest_Fixture : public testing::Test {
             // FAKE
         }
     };
+
     struct CapacitiveTouch_Dispatcher_Mock : public CapacitiveTouch_Dispatcher {
         CapacitiveTouch_Dispatcher_Mock(Midi_Handler *midiHandler, Debug_Helper *debugHelper)
                 : CapacitiveTouch_Dispatcher(midiHandler, debugHelper) {
@@ -61,15 +62,15 @@ TEST_F(CapacitiveTest_Fixture, testBasicRead) {
     store->addBoard(fakeBoard2.get());
     auto manager = std::make_unique<FakeLedBoardManager>(store.get(), strategyFactory.get());
     auto debugHelper = make_unique<Debug_Helper>();
-    auto dispatcher = make_unique<FakeMidiKeyDispatcher>(manager.get(), debugHelper.get());
+    auto midiReceiver = make_unique<FakeMidiKeyReceiver>(manager.get(), debugHelper.get());
+    auto midiSender = make_unique<MidiKeySender>(manager.get(), debugHelper.get());
 
-    auto fakeMidiHandler = std::make_unique<Fake_MidiHandler>(dispatcher.get(), debugHelper.get());
+    auto fakeMidiHandler = std::make_unique<Fake_MidiHandler>(midiReceiver.get(),midiSender.get(), debugHelper.get());
     auto capacitiveTouch = make_unique<CapacitiveTouch_Dispatcher_Mock>(fakeMidiHandler.get(), debugHelper.get());
     //
     capacitiveTouch->setTouchThreshold(83);
     capacitiveTouch->setReleaseThreashold(23);
     EXPECT_EQ(capacitiveTouch->getTouchThreshold(), 83);
     EXPECT_EQ(capacitiveTouch->getReleaseThreashold(), 23);
-
 
 }
