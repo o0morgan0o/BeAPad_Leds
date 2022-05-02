@@ -3,3 +3,4 @@ CMakeListsPrivate.txt
 cmake-build-*/
 test/googletest*
 test/cmake-build-*
+build*

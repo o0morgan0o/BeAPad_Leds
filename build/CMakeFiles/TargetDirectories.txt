@@ -1,0 +1,5 @@
+C:/code/GonzyProject/platformIO-program/build/CMakeFiles/edit_cache.dir
+C:/code/GonzyProject/platformIO-program/build/CMakeFiles/Z_DUMMY_TARGET.dir
+C:/code/GonzyProject/platformIO-program/build/CMakeFiles/Debug.dir
+C:/code/GonzyProject/platformIO-program/build/CMakeFiles/rebuild_cache.dir
+C:/code/GonzyProject/platformIO-program/build/CMakeFiles/Production.dir

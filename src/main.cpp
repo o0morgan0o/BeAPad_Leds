@@ -43,10 +43,10 @@ void setup() {
 
     // **************************
     // DEBUG HELPER
-        debugHelper = new Debug_Helper();
-//    debugHelper = new Debug_Helper_Serial();
+    debugHelper = new Debug_Helper();
+    //    debugHelper = new Debug_Helper_Serial();
+    //    debugHelper = new DebugHelper_WebSocket();
     inactiveDebugHelper = new Debug_Helper_Inactive();
-//    debugHelper = new DebugHelper_WebSocket();
 
     // **************************
     // CREATION LOF LIGHT STRATEGY FACTORY

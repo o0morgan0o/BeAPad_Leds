@@ -31,17 +31,16 @@ public:
         _lightStrategy = _lightStrategyFactory->makeDefaultStrategy(this);
     }
 
-    virtual void giveReferenceManager(CRGB *leds, uint8_t pixelPin, LedBoardsManager *manager) {
+    virtual void giveReferenceManager(CRGB *leds,  LedBoardsManager *manager) {
         _leds = leds;
         _manager = manager;
-        _pixelPin = pixelPin;
     }
 
     virtual void changeLightStrategy(LIGHT_STRATEGIES newStrategy) {
         switch (newStrategy) {
             case LIGHT_STRATEGIES::NO_LIGHT_STRATEGY:
                 delete _lightStrategy;
-                _lightStrategy =_lightStrategyFactory->makeNoLightStrategy(this);
+                _lightStrategy = _lightStrategyFactory->makeNoLightStrategy(this);
                 break;
             case LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT:
                 delete _lightStrategy;
@@ -49,7 +48,7 @@ public:
                 break;
             case LIGHT_STRATEGIES::STRATEGY_FADE_OUT:
                 delete _lightStrategy;
-                _lightStrategy= _lightStrategyFactory->makeFadeOutLightStrategy(this);
+                _lightStrategy = _lightStrategyFactory->makeFadeOutLightStrategy(this);
                 break;
             case LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT:
                 delete _lightStrategy;
@@ -113,7 +112,7 @@ public:
 
     };
 
-    virtual void trigger(){
+    virtual void trigger() {
         _lightStrategy->trigger();
     }
 
@@ -152,7 +151,6 @@ protected:
 protected:
     bool isOn = false;
 
-    uint8_t _pixelPin{}; // we keep information of pixelPin just for debugInfo
     LedBoardsManager *_manager{};
 
 };

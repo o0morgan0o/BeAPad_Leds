@@ -22,30 +22,30 @@ public:
         return _logString;
     }
 
-    virtual  void add(const String &message) {
-        if(_logString.length() > 2000){ // I don't want too much log messages so reset if too big
+    virtual void add(const String &message) {
+        if (_logString.length() > 2000) { // I don't want too much log messages so reset if too big
             reinit();
         }
         _logString += message;
         _logString += "<br/>";
     }
 
-    virtual void add(const char message[]){
+    virtual void add(const char message[]) {
         add(String(message));
     }
 
-    virtual  void reinit() {
+    virtual void reinit() {
         _logString = "DEBUG_STRING<br/>";
     }
 
-    virtual void logWifiInit(const String& ip ){
+    virtual void logWifiInit(const String &ip) {
         String logMessage{"WifiStarted"};
         logMessage += "IP address: ";
         logMessage += ip;
         add(logMessage);
     }
 
-    virtual void logRTPMidiInit(const String& appleMidiName, const String& appleMidiPort){
+    virtual void logRTPMidiInit(const String &appleMidiName, const String &appleMidiPort) {
         String logMessage{"Adding RTP_MIDI "};
         logMessage += appleMidiName;
         logMessage += " PORT: ";
@@ -66,10 +66,17 @@ public:
         add(logMessage);
     }
 
+    virtual void logTouchMessage(const uint8_t pinIndex, const uint16_t pinValue) {
+        String logMessage{"Touch PIN "};
+        logMessage += pinIndex;
+        logMessage += " Value: ";
+        logMessage += pinValue;
+        add(logMessage);
+    }
+
     virtual void setDEBUGLights(bool newDebugState) {
         _debugFullLight = newDebugState;
     }
-
 
     virtual bool getDebugFullLight() const {
         return _debugFullLight;
