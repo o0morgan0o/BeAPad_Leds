@@ -10,7 +10,19 @@
 
 class FakeLedBoard : public LedBoard {
 public:
-    explicit FakeLedBoard(LightStrategy_Factory *factory) : LedBoard(factory) {}
+    explicit FakeLedBoard(uint8_t pin, uint8_t nb_pixels, LightStrategy_Factory *factory) : LedBoard(pin, nb_pixels,factory) {}
+
+    void showBaseColor() override {
+
+    }
+
+    void updateLedColorInBoard(uint8_t ledIndexInBoard, CRGB updatedColor) override {
+
+    }
+
+    void updateLedColorInBoard(uint8_t ledIndexInBoard, uint8_t r, uint8_t g, uint8_t b) override {
+
+    }
 
     void show() override {};
 

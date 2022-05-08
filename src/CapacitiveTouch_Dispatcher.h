@@ -20,31 +20,19 @@ public:
 
     virtual void loop() = 0;
 
-
-    virtual void connectBoardToCapacitiveSensor(uint8_t boardIndex, uint8_t capacitiveSensorIndex) = 0;
-
     virtual void setTouchThreshold(uint8_t newThreshold) = 0;
 
-    virtual void setReleaseThreashold(uint8_t newThreshold) = 0;
+    virtual void setReleaseThreshold(uint8_t newThreshold) = 0;
 
     virtual uint8_t getTouchThreshold() const = 0;
 
-    virtual uint8_t getReleaseThreashold() const = 0;
+    virtual uint8_t getReleaseThreshold() const = 0;
 
 protected:
     uint8_t _numberOfTouchPins = 12;
     uint8_t _touchPins[12]{};
 
     PinStateValidator _pinStateValidators[12]{};
-
-    bool _currentTouchThresholdActivated[12]{};
-    bool _prevTouchThresholdActivated[12]{};
-    bool _prevPrevTouchThresholdActivated[12]{};
-    //
-    bool _currentReleaseThresholdActivated[12]{};
-    bool _prevReleaseThresholdActivated[12]{};
-    bool _prevPrevReleaseThresholdActivated[12]{};
-
     //
     uint8_t TOUCH_THRESHOLD = 35;
     uint8_t RELEASE_THRESHOLD = 40;

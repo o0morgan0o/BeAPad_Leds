@@ -32,10 +32,6 @@ public:
 
     }
 
-//    void sendMidiNoteOn(const uint8_t pinIndex) override {
-//        _midiSession->sendNoteOn(_midiSender->getMidiKeyAssociatedWithPinIndex(pinIndex), 120, 1);
-//    }
-
     void sendMidiNoteOn(const uint8_t midiNote) override {
         _midiSession->sendNoteOn(midiNote, 120, 1);
     }
@@ -54,15 +50,6 @@ public:
         _midiSession->sendNoteOff(midiNoteToSend, 120, 1);
     }
 
-    uint8_t getBoardAssociatedWithTouchPin(uint8_t touchPin) override {
-        return _midiSender->getBoardAssociatedWithPinIndex(touchPin);
-    }
-
-
-//    void sendMidiNoteOff(const uint8_t pinIndex) override {
-//        _midiSession->sendNoteOff(_midiSender->getMidiKeyAssociatedWithPinIndex(pinIndex), 120, 1);
-//    }
-
     void init() override {
         if (!MDNS.begin("AppleMIDI-ESP32"))
             _debugHelper->add("Error setting up MDNS responded !");
@@ -73,7 +60,6 @@ public:
 
     void loop() override {
         _midiSession->read();
-
     }
 
     MidiInterface<appleMidi::AppleMIDISession<WiFiUDP>, appleMidi::AppleMIDISettings> *getMidiSession() const {

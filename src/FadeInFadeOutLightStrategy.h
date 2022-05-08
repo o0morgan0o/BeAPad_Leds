@@ -10,7 +10,7 @@
 
 class FadeInFadeOutLightStrategy : public LightStrategy {
 public:
-    FadeInFadeOutLightStrategy(LedBoard *context) : LightStrategy(context) {}
+    explicit FadeInFadeOutLightStrategy(LedBoard *context) : LightStrategy(context) {}
 
     void reset() override;
 

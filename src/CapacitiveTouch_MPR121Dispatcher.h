@@ -19,12 +19,22 @@ public:
 
     void begin() override {
         String mprConnectionResult{};
-        // TODO don't block here make many tries and show signal if no touch connection
-        if (!_cap->begin(0x5A)) {
+        // We don't block here after many tries
+        uint8_t mprConnectionRetries = 0;
+        uint8_t MAX_RETRIES = 5;
+        while (!_cap->begin(0x5A)) {
+            mprConnectionRetries++;
             mprConnectionResult += "ERROR ! MPR Connection Failed";
-            while (1);
+            mprConnectionResult += "Retrying in 2 second...";
+            delay(2000);
+            if (mprConnectionRetries >= MAX_RETRIES) {
+                mprConnectionResult += "ERROR : Still no connection with MPR21, resume anyway ...";
+                // Because of many errors, to show the user we produce a special blink signal on all leds
+                _manager->showBlinkHighPriorityMessage(BlinkHighPriorityMessages::MPR121_SENSOR_NOT_FOUND);
+                break;
+            }
         }
-        mprConnectionResult += "MPR Connection Success";
+        mprConnectionResult += "MPR Connection check done";
         _debugHelper->add(mprConnectionResult);
     }
 
@@ -53,15 +63,11 @@ public:
         lasttouched = currtouched;
     }
 
-    void connectBoardToCapacitiveSensor(uint8_t boardIndex, uint8_t capacitiveSensorIndex) override {
-
-    }
-
     void setTouchThreshold(uint8_t newThreshold) override {
 
     }
 
-    void setReleaseThreashold(uint8_t newThreshold) override {
+    void setReleaseThreshold(uint8_t newThreshold) override {
 
     }
 
@@ -69,7 +75,7 @@ public:
         return 0;
     }
 
-    uint8_t getReleaseThreashold() const override {
+    uint8_t getReleaseThreshold() const override {
         return 0;
     }
 

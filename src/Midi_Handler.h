@@ -33,7 +33,7 @@ public:
 
     virtual void sendMidiOffByTouchPin(uint8_t boardIndex) = 0;
 
-    virtual uint8_t getBoardAssociatedWithTouchPin(uint8_t touchPin) = 0;
+    virtual uint8_t getBoardAssociatedWithTouchPin(uint8_t touchPin);;
 
     virtual void loop() = 0;
 

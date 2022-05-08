@@ -9,6 +9,7 @@
 #include "LedStrip_Holder_Interface.h"
 #include "LedBoard_Store_Interface.h"
 #include "LightStrategy_Factory.h"
+#include "BlinkHighPriorityMessages.h"
 #include <vector>
 
 #ifndef IN_TESTING
@@ -23,7 +24,6 @@ public:
         _ledBoardStore = ledBoardStore;
         _ledBoards = _ledBoardStore->getLedBoards();
         _lightStrategyFactory = lightStrategyFactory;
-
     }
 
     virtual void init() = 0;
@@ -46,7 +46,6 @@ public:
         _ledBoards.at(boardIndex)->changeLightStrategy(strategy);
     }
 
-    //
     virtual void update(unsigned long currentTime) {
         for (auto ledBoard: _ledBoards) {
             ledBoard->update(currentTime);
@@ -54,7 +53,6 @@ public:
     };
 
     virtual void handleBoardTouched(uint8_t boardIndex) {
-//        _ledBoards.at(boardIndex)->triggerOn();
         triggerOnBoard(boardIndex);
     }
 
@@ -63,33 +61,65 @@ public:
     }
 
     virtual void triggerOnBoard(uint8_t boardIndex) {
-        // TODO check if boardIndex is a correct value
-        _ledBoards.at(boardIndex)->triggerOn();
+        try {
+            _ledBoards.at(boardIndex)->triggerOn();
+        } catch (std::exception &e) {
+            showBlinkHighPriorityMessage(BlinkHighPriorityMessages::TRIGGER_BOARD_ERROR);
+        }
     }
 
     virtual void triggerOffBoard(uint8_t boardIndex) {
-        _ledBoards.at(boardIndex)->triggerOff();
+        try {
+            _ledBoards.at(boardIndex)->triggerOff();
+        } catch (std::exception &e) {
+            showBlinkHighPriorityMessage(BlinkHighPriorityMessages::TRIGGER_BOARD_ERROR);
+        }
     }
 
     virtual void setBoardBaseColor(uint8_t boardIndex, uint8_t r, uint8_t g, uint8_t b) {
         _ledBoards.at(boardIndex)->setBoardColor(r, g, b);
-
     }
 
     virtual void setBoardBaseColor(uint8_t boardIndex, CRGB color) {
         _ledBoards.at(boardIndex)->setBoardColor(color);
     }
 
+    virtual void showBlinkHighPriorityMessage(BlinkHighPriorityMessages errorMessage) {
+        switch (errorMessage) {
+            case BlinkHighPriorityMessages::MPR121_SENSOR_NOT_FOUND:
+                showIntermittentBlink(CRGB::Red);
+                break;
+            case BlinkHighPriorityMessages::TRIGGER_BOARD_ERROR:
+                showIntermittentBlink(CRGB::Orange);
+                break;
+            case BlinkHighPriorityMessages::RTP_CONNECTION_SUCCESS:
+                showIntermittentBlink(CRGB::Green);
+                break;
+            case BlinkHighPriorityMessages::RTP_CONNECTION_LOST:
+                showIntermittentBlink(CRGB::Yellow);
+                break;
+            default:
+                break;
+        }
+    }
+
+    virtual void showIntermittentBlink(CRGB color) {
+        uint8_t LOOPS = 4;
+        for (int i = 0; i < LOOPS; i++) {
+            showGlobally(color);
+            delay(500);
+            showGlobally(CRGB::Black);
+            delay(500);
+        }
+    }
+
     virtual void showBaseColor() = 0;
-//
+
 //    virtual void setRandomColorForEachBoard() = 0;
-//
+
 //    virtual const CRGB &getCurrentGlobalColor() = 0;
-//
-//    virtual void showSuccessSignal() = 0;
-//
-//    virtual void showErrorSignal() = 0;
-//
+
+
 protected:
     LedBoard_Store_Interface *_ledBoardStore;
     std::vector<LedBoard *> _ledBoards;

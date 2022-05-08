@@ -23,9 +23,12 @@ struct CapacitiveTest_Fixture : public testing::Test {
         void init() override {
         }
 
-        void sendMidiNoteOn(uint8_t pinIndex) override {
-            // MOCK
-        }
+        MOCK_METHOD((void), sendMidiNoteOn, (uint8_t), (override));
+
+
+//        void sendMidiNoteOn(uint8_t pinIndex) override {
+//            // MOCK
+//        }
 
         void loop() override {
             // FAKE
@@ -33,13 +36,36 @@ struct CapacitiveTest_Fixture : public testing::Test {
     };
 
     struct CapacitiveTouch_Dispatcher_Mock : public CapacitiveTouch_Dispatcher {
-        CapacitiveTouch_Dispatcher_Mock(Midi_Handler *midiHandler, Debug_Helper *debugHelper)
-                : CapacitiveTouch_Dispatcher(midiHandler, debugHelper) {
+        CapacitiveTouch_Dispatcher_Mock(LedBoardsManager *manager, Midi_Handler *midiHandler, Debug_Helper *debugHelper)
+                : CapacitiveTouch_Dispatcher(manager, midiHandler, debugHelper) {
 
         }
 
-        uint16_t getTouchReadValueOnPin(uint8_t pin) override {
-            // MOCK
+        void begin() override {
+
+        }
+
+        void loop() override {
+
+        }
+
+        void connectBoardToCapacitiveSensor(uint8_t boardIndex, uint8_t capacitiveSensorIndex) override {
+
+        }
+
+        void setTouchThreshold(uint8_t newThreshold) override {
+
+        }
+
+        void setReleaseThreashold(uint8_t newThreshold) override {
+
+        }
+
+        uint8_t getTouchThreshold() const override {
+            return 0;
+        }
+
+        uint8_t getReleaseThreashold() const override {
             return 0;
         }
 
@@ -53,24 +79,47 @@ protected:
     }
 };
 
-TEST_F(CapacitiveTest_Fixture, testBasicRead) {
+TEST_F(CapacitiveTest_Fixture, testConnectionPinToBoard) {
     auto store = std::make_unique<FakeLedBoardStore>();
     auto strategyFactory = std::make_unique<LightStrategy_Factory>();
-    auto fakeBoard = std::make_unique<FakeLedBoard>(strategyFactory.get());
-    auto fakeBoard2 = std::make_unique<FakeLedBoard>(strategyFactory.get());
+    auto fakeBoard = std::make_unique<FakeLedBoard>(0, 9, strategyFactory.get());
+    auto fakeBoard2 = std::make_unique<FakeLedBoard>(1, 9, strategyFactory.get());
     store->addBoard(fakeBoard.get());
     store->addBoard(fakeBoard2.get());
     auto manager = std::make_unique<FakeLedBoardManager>(store.get(), strategyFactory.get());
     auto debugHelper = make_unique<Debug_Helper>();
+    //
     auto midiReceiver = make_unique<FakeMidiKeyReceiver>(manager.get(), debugHelper.get());
     auto midiSender = make_unique<MidiKeySender>(manager.get(), debugHelper.get());
-
-    auto fakeMidiHandler = std::make_unique<Fake_MidiHandler>(midiReceiver.get(),midiSender.get(), debugHelper.get());
-    auto capacitiveTouch = make_unique<CapacitiveTouch_Dispatcher_Mock>(fakeMidiHandler.get(), debugHelper.get());
+    midiSender->connectBoardToSendMidiKey(1, 0, 60);
+    midiSender->connectBoardToSendMidiKey(2, 1, 61);
     //
-    capacitiveTouch->setTouchThreshold(83);
-    capacitiveTouch->setReleaseThreashold(23);
-    EXPECT_EQ(capacitiveTouch->getTouchThreshold(), 83);
-    EXPECT_EQ(capacitiveTouch->getReleaseThreashold(), 23);
+    EXPECT_EQ(midiSender->getBoardAssociatedWithPinIndex(1), 0);
+    EXPECT_EQ(midiSender->getBoardAssociatedWithPinIndex(2), 1);
+    //
+    auto fakeMidiHandler = std::make_unique<Fake_MidiHandler>(midiReceiver.get(), midiSender.get(), debugHelper.get());
+    EXPECT_EQ(fakeMidiHandler->getBoardAssociatedWithTouchPin(1), 0); // PIN 1 should be associated with board 0
+    EXPECT_EQ(fakeMidiHandler->getBoardAssociatedWithTouchPin(2), 1); // PIN 1 should be associated with board 0
+
+
+}
+
+TEST_F(CapacitiveTest_Fixture, testMidihandlerSendMidiFromPinToCorrectNote){
+    auto store = std::make_unique<FakeLedBoardStore>();
+    auto strategyFactory = std::make_unique<LightStrategy_Factory>();
+    auto fakeBoard = std::make_unique<FakeLedBoard>(0, 9, strategyFactory.get());
+    auto fakeBoard2 = std::make_unique<FakeLedBoard>(1, 9, strategyFactory.get());
+    store->addBoard(fakeBoard.get());
+    store->addBoard(fakeBoard2.get());
+    auto manager = std::make_unique<FakeLedBoardManager>(store.get(), strategyFactory.get());
+    auto debugHelper = make_unique<Debug_Helper>();
+    //
+    auto midiReceiver = make_unique<FakeMidiKeyReceiver>(manager.get(), debugHelper.get());
+    auto midiSender = make_unique<MidiKeySender>(manager.get(), debugHelper.get());
+    midiSender->connectBoardToSendMidiKey(1, 0, 60);
+    midiSender->connectBoardToSendMidiKey(2, 1, 61);
+    //
+    EXPECT_EQ(midiSender->getMidiKeyAssociatedWithPinIndex(1), 60);
+    EXPECT_EQ(midiSender->getMidiKeyAssociatedWithPinIndex(2), 61);
 
 }

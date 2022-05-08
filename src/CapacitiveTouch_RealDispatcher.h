@@ -69,17 +69,11 @@ public:
         }
     }
 
-
-
-    void connectBoardToCapacitiveSensor(uint8_t boardIndex, uint8_t capacitiveSensorIndex) override {
-        _boardIndexReferences[capacitiveSensorIndex] = boardIndex;
-    }
-
     void setTouchThreshold(uint8_t newThreshold) override {
         TOUCH_THRESHOLD = newThreshold;
     }
 
-    void setReleaseThreashold(uint8_t newThreshold) override {
+    void setReleaseThreshold(uint8_t newThreshold) override {
         RELEASE_THRESHOLD = newThreshold;
     }
 
@@ -87,7 +81,7 @@ public:
         return TOUCH_THRESHOLD;
     }
 
-    uint8_t getReleaseThreashold() const override {
+    uint8_t getReleaseThreshold() const override {
         return RELEASE_THRESHOLD;
     }
 

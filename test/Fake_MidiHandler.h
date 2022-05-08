@@ -4,13 +4,14 @@
 
 #ifndef GONZY_PROJECT_TEST_FAKE_MIDIHANDLER_H
 #define GONZY_PROJECT_TEST_FAKE_MIDIHANDLER_H
-
 #define IN_TESTING
+
 #include "../src/Midi_Handler.h"
 
-class Fake_MidiHandler  : public Midi_Handler{
+class Fake_MidiHandler : public Midi_Handler {
 public:
-    Fake_MidiHandler(MidiKeyReceiver *receiver, MidiKeySender* sender, Debug_Helper *debugHelper): Midi_Handler(receiver, sender, debugHelper){
+    Fake_MidiHandler(MidiKeyReceiver *receiver, MidiKeySender *sender, Debug_Helper *debugHelper)
+            : Midi_Handler(receiver, sender, debugHelper) {
 
     }
 
@@ -23,6 +24,14 @@ public:
     }
 
     void sendMidiNoteOff(uint8_t pinIndex) override {
+
+    }
+
+    void sendMidiOnByTouchPin(uint8_t boardIndex) override {
+
+    }
+
+    void sendMidiOffByTouchPin(uint8_t boardIndex) override {
 
     }
 

@@ -13,6 +13,9 @@ public:
     explicit FakeLedBoardManager(LedBoard_Store_Interface *store, LightStrategy_Factory* factory): LedBoardsManager(store, factory){
 
     }
+
+    void showBaseColor() override;
+
     void init() override;
 
 private:

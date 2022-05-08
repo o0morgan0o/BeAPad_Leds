@@ -69,6 +69,12 @@ public:
 
     virtual void showBaseColor() = 0;
 
+    /**
+     * This should be used only for display high-priority messages (like error messages)
+     * @param color
+     */
+    virtual void showGlobalColor(CRGB color) = 0;
+
     virtual void show() = 0;
 
     virtual void command(LightCommands lightCommand) {

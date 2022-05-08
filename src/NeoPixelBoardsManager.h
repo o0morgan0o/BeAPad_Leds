@@ -32,16 +32,13 @@ public:
             ledBoard->showBaseColor();
             ledBoard->show();
         }
-
     }
 
     void showGlobally(CRGB color) override {
         for (auto board: _ledBoards) {
-            board->showBaseColor();
+            board->showGlobalColor(color);
         }
-
     }
-
 };
 
 #endif //PLATFORMIO_PROGRAM_NEOPIXELBOARDSMANAGER_H

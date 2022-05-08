@@ -11,25 +11,13 @@
 class LedBoard_Store_NeoPixelStore : public LedBoard_Store_Interface {
 public:
     LedBoard_Store_NeoPixelStore() : LedBoard_Store_Interface() {
-//        _strips.emplace_back(new Adafruit_NeoPixel{NUM_PIXELS_PER_BOARD, 25, NEO_GRB + NEO_KHZ800});
-
-//        // TODO move initialization in another class
-//        for (auto strip: _strips) {
-//            strip->begin();
-//        }
-
     }
 
     void initAllBoards() override {
-        for(auto board: _ledBoards){
+        for (auto board: _ledBoards) {
             board->initBoard();
         }
     }
-
-private:
-    uint8_t NUM_PIXELS_PER_BOARD = 9;
-
-
 
 };
 

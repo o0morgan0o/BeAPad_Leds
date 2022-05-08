@@ -15,3 +15,7 @@ void FakeLedBoardManager::showGlobally(CRGB color) {
 void FakeLedBoardManager::show() {
 
 }
+
+void FakeLedBoardManager::showBaseColor() {
+
+}

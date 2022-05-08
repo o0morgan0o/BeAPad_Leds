@@ -22,6 +22,13 @@ public:
         }
     }
 
+    void showGlobalColor(CRGB color) override {
+        for(uint8_t i = 0; i < NUM_PIXELS; i++){
+            _strip->setPixelColor(i, color.r, color.g, color.b);
+        }
+        show();
+    }
+
     void updateLedColorInBoard(uint8_t ledIndexInBoard, CRGB updatedColor) override{
         _strip->setPixelColor(ledIndexInBoard, updatedColor.r, updatedColor.g, updatedColor.b);
     }

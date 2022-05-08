@@ -7,7 +7,6 @@
 
 #include <vector>
 #include "LedBoard.h"
-#include "Adafruit_NeoPixel.h"
 
 class LedBoard_Store_Interface {
 public:
