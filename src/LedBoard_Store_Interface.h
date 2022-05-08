@@ -7,6 +7,7 @@
 
 #include <vector>
 #include "LedBoard.h"
+#include "Adafruit_NeoPixel.h"
 
 class LedBoard_Store_Interface {
 public:
@@ -15,6 +16,8 @@ public:
     virtual void addBoard(LedBoard *ledBoard) { _ledBoards.emplace_back(ledBoard); };
 
     std::vector<LedBoard *> getLedBoards() { return _ledBoards; }
+
+    virtual void initAllBoards(){}
 
 public:
     CRGB ledStrip0[9]{};

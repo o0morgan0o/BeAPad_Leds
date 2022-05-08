@@ -32,15 +32,36 @@ public:
 
     }
 
-    void sendMidiNoteOn(const uint8_t pinIndex) override {
-        _midiSession->sendNoteOn(_midiSender->getMidiKeyAssociatedWithPinIndex(pinIndex), 120, 1);
+//    void sendMidiNoteOn(const uint8_t pinIndex) override {
+//        _midiSession->sendNoteOn(_midiSender->getMidiKeyAssociatedWithPinIndex(pinIndex), 120, 1);
+//    }
 
+    void sendMidiNoteOn(const uint8_t midiNote) override {
+        _midiSession->sendNoteOn(midiNote, 120, 1);
     }
 
-    void sendMidiNoteOff(const uint8_t pinIndex) override {
-        _midiSession->sendNoteOff(_midiSender->getMidiKeyAssociatedWithPinIndex(pinIndex), 120, 1);
-
+    void sendMidiNoteOff(const uint8_t midiNote) override {
+        _midiSession->sendNoteOff(midiNote, 120, 1);
     }
+
+    void sendMidiOnByTouchPin(uint8_t touchPin) override {
+        auto midiNoteToSend = _midiSender->getMidiKeyAssociatedWithPinIndex(touchPin);
+        _midiSession->sendNoteOn(midiNoteToSend, 120, 1);
+    }
+
+    void sendMidiOffByTouchPin(uint8_t touchPin) override {
+        auto midiNoteToSend = _midiSender->getMidiKeyAssociatedWithPinIndex(touchPin);
+        _midiSession->sendNoteOff(midiNoteToSend, 120, 1);
+    }
+
+    uint8_t getBoardAssociatedWithTouchPin(uint8_t touchPin) override {
+        return _midiSender->getBoardAssociatedWithPinIndex(touchPin);
+    }
+
+
+//    void sendMidiNoteOff(const uint8_t pinIndex) override {
+//        _midiSession->sendNoteOff(_midiSender->getMidiKeyAssociatedWithPinIndex(pinIndex), 120, 1);
+//    }
 
     void init() override {
         if (!MDNS.begin("AppleMIDI-ESP32"))

@@ -37,6 +37,9 @@ void FastLedLedBoardsManager::show() {
     FastLED.show();
 }
 
+void FastLedLedBoardsManager::showBaseColor() {
+
+}
 
 
 //

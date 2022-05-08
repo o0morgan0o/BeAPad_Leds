@@ -40,7 +40,7 @@ public:
             message += note;
             _debugHelper->add(message);
         } else {
-            _manager->triggerBoard(_boardIndexReferences[(uint8_t) note]);
+            _manager->triggerOnBoard(_boardIndexReferences[(uint8_t) note]);
         }
 
     }

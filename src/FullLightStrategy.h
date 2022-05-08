@@ -11,11 +11,13 @@ class FullLightStrategy : public LightStrategy {
 public:
     explicit FullLightStrategy(LedBoard *context);
 
-    void trigger() override;
+    void triggerOn() override;
 
     void reset() override;
 
     void update() override;
+
+    void triggerOff() override;
 
 };
 

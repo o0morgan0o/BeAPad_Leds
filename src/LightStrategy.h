@@ -35,7 +35,9 @@ public:
 
     virtual void update() = 0;
 
-    virtual void trigger() = 0;
+    virtual void triggerOn() = 0;
+
+    virtual void triggerOff() = 0;
 
     virtual void reinit();
 
@@ -53,6 +55,8 @@ protected:
     CRGB *_boardLeds{};
     CRGB _crgbStrategyColor{0, 0, 0};
     LedBoard *_context{};
+    //
+    bool isTouched = false;
 
 };
 

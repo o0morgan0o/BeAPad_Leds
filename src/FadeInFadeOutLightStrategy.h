@@ -16,7 +16,9 @@ public:
 
     void update() override;
 
-    void trigger() override;
+    void triggerOn() override;
+
+    void triggerOff() override;
 
     uint8_t fraction = 0;
 

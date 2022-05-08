@@ -26,12 +26,14 @@ class LedBoardsManager;
 
 class LedBoard {
 public:
-    explicit LedBoard(LightStrategy_Factory *lightStrategyFactory) {
+    explicit LedBoard(uint8_t pin, uint8_t nb_pixels, LightStrategy_Factory *lightStrategyFactory) {
+        _pin = pin;
+        NUM_PIXELS = nb_pixels;
         _lightStrategyFactory = lightStrategyFactory;
         _lightStrategy = _lightStrategyFactory->makeDefaultStrategy(this);
     }
 
-    virtual void giveReferenceManager(CRGB *leds,  LedBoardsManager *manager) {
+    virtual void giveReferenceManager(CRGB *leds, LedBoardsManager *manager) {
         _leds = leds;
         _manager = manager;
     }
@@ -65,6 +67,8 @@ public:
         _lightStrategy->reinit();
     }
 
+    virtual void showBaseColor() = 0;
+
     virtual void show() = 0;
 
     virtual void command(LightCommands lightCommand) {
@@ -72,7 +76,7 @@ public:
             case LightCommands::LIGHT_ON: {
 //                auto newBoardColor = _manager->getCurrentGlobalColor();
 //                setBoardColor(newBoardColor);
-                for (uint8_t i = 0; i < PixelCount; i++) {
+                for (uint8_t i = 0; i < NUM_PIXELS; i++) {
 //                    _leds[i] = _boardBaseColor;
                     _leds[i].setRGB(_boardBaseColor.r, _boardBaseColor.g, _boardBaseColor.b);
 //                    = _boardBaseColor;
@@ -81,25 +85,25 @@ public:
                 break;
             }
             case LightCommands::LIGHT_OFF: {
-                for (uint8_t i = 0; i < PixelCount; i++) {
+                for (uint8_t i = 0; i < NUM_PIXELS; i++) {
                     _leds[i] = CRGB::Black;
                 }
                 break;
             }
             case LightCommands::LIGHT_SUCCESS: {
-                for (uint8_t i = 0; i < PixelCount; i++) {
+                for (uint8_t i = 0; i < NUM_PIXELS; i++) {
                     _leds[i] = CRGB::Green;
                 }
                 break;
             }
             case LightCommands::LIGHT_ERROR: {
-                for (uint8_t i = 0; i < PixelCount; i++) {
+                for (uint8_t i = 0; i < NUM_PIXELS; i++) {
                     _leds[i] = CRGB::Red;
                 }
                 break;
             }
             case LightCommands::LIGHT_WHITE: {
-                for (uint8_t i = 0; i < PixelCount; i++) {
+                for (uint8_t i = 0; i < NUM_PIXELS; i++) {
                     _leds[i] = CRGB::White;
                 }
                 break;
@@ -112,9 +116,17 @@ public:
 
     };
 
-    virtual void trigger() {
-        _lightStrategy->trigger();
+    virtual void triggerOn() {
+        _lightStrategy->triggerOn();
     }
+
+    virtual void triggerOff() {
+        _lightStrategy->triggerOff();
+    }
+
+    virtual void updateLedColorInBoard(uint8_t ledIndexInBoard, CRGB updatedColor) = 0;
+
+    virtual void updateLedColorInBoard(uint8_t ledIndexInBoard, uint8_t r, uint8_t g, uint8_t b) = 0;
 
     virtual void update(unsigned long newTime) {
         _currentTime = newTime;
@@ -140,17 +152,19 @@ public:
 
     virtual RGB_Color getBoardBaseColor() { return _boardBaseColor; }
 
+    virtual void initBoard() {}
+
+    uint8_t NUM_PIXELS;
 public:
     CRGB *_leds{};
-    RGB_Color _boardBaseColor{100, 0, 0};
+    RGB_Color _boardBaseColor{255, 255, 0};
     unsigned long _currentTime{0};
-    const uint16_t PixelCount = 9; // 9 leds per board
 protected:
     LightStrategy_Factory *_lightStrategyFactory;
     LightStrategy *_lightStrategy;
 protected:
+    uint8_t _pin{};
     bool isOn = false;
-
     LedBoardsManager *_manager{};
 
 };

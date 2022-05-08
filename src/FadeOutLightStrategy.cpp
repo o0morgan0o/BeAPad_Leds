@@ -21,17 +21,21 @@ void FadeOutLightStrategy::update() {
 
     _crgbStrategyColor.fadeToBlackBy(1);
     _lifeSpan = _context->getCurrentTime() - _birthTime;
-    for (uint8_t i = 0; i < _context->PixelCount; i++) {
+    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
         _boardLeds[i] = _crgbStrategyColor;
     }
 
 }
 
-void FadeOutLightStrategy::trigger() {
+void FadeOutLightStrategy::triggerOn() {
     _crgbStrategyColor = CRGB{
             _context->getBoardBaseColor().r,
             _context->getBoardBaseColor().g,
             _context->getBoardBaseColor().b
     };
+
+}
+
+void FadeOutLightStrategy::triggerOff() {
 
 }

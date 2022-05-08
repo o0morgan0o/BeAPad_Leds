@@ -15,14 +15,14 @@ public:
     LedBoard_Store_FastLedStore() : LedBoard_Store_Interface() {
         // Creation of FastLed multiple arrays
         // TODO : TESTING !
-        FastLED.addLeds<NEOPIXEL, 25>(ledStrip0, 9);
-        FastLED.addLeds<NEOPIXEL, 26>(ledStrip0, 9);
-        FastLED.addLeds<NEOPIXEL, 23>(ledStrip0, 9);
-        FastLED.addLeds<NEOPIXEL, 22>(ledStrip0, 9);
-        FastLED.addLeds<NEOPIXEL, 19>(ledStrip0, 9);
-        FastLED.addLeds<NEOPIXEL, 18>(ledStrip0, 9);
-        FastLED.addLeds<NEOPIXEL, 5>(ledStrip0, 9);
-        FastLED.addLeds<NEOPIXEL, 17>(ledStrip0, 9);
+        FastLED.addLeds<WS2812, 25>(ledStrip0, 9);
+        FastLED.addLeds<WS2812, 26>(ledStrip0, 9);
+        FastLED.addLeds<WS2812, 23>(ledStrip0, 9);
+        FastLED.addLeds<WS2812, 22>(ledStrip0, 9);
+        FastLED.addLeds<WS2812, 19>(ledStrip0, 9);
+        FastLED.addLeds<WS2812, 18>(ledStrip0, 9);
+        FastLED.addLeds<WS2812, 5>(ledStrip0, 9);
+        FastLED.addLeds<WS2812, 17>(ledStrip0, 9);
 
 //        FastLED.addLeds<NEOPIXEL, 13>(ledStrip0, 9);
 //        FastLED.addLeds<NEOPIXEL, 12>(ledStrip1, 9);

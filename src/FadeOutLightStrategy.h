@@ -11,11 +11,13 @@ class FadeOutLightStrategy : public LightStrategy {
 public:
     explicit FadeOutLightStrategy(LedBoard *context);;
 
-    void trigger() override;
+    void triggerOn() override;
 
     void reset() override;
 
     void update() override;
+
+    void triggerOff() override;
 
 };
 

@@ -12,6 +12,10 @@ void NoLightStrategy::update() {
 
 }
 
-void NoLightStrategy::trigger() {
+void NoLightStrategy::triggerOn() {
+
+}
+
+void NoLightStrategy::triggerOff() {
 
 }

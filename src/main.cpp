@@ -1,15 +1,8 @@
 
-#define FASTLED_ALLOW_INTERRUPTS 0
-#define FASTLED_INTERRUPT_RETRY_COUNT 1
-
-
-//
 #include <AppleMidi.h>
 #include <WiFiUdp.h>
 #include "AccessPoint.h"
 #include "Debug_Helper.h"
-#include "LedBoard_Store_FastLedStore.h"
-#include "FastLedLedBoardsManager.h"
 #include "LightStrategy_Factory.h"
 #include "MidiKeyReceiver.h"
 #include "CapacitiveTouch_RealDispatcher.h"
@@ -19,6 +12,11 @@
 #include "RTP_Midi_MidiHandler.h"
 #include "DebugHelper_WebSocket.h"
 #include "MidiKeySender.h"
+#include <Wire.h>
+#include "LedBoard_Store_NeoPixelStore.h"
+#include "NeoPixelBoard.h"
+#include "NeoPixelBoardsManager.h"
+#include "CapacitiveTouch_MPR121Dispatcher.h"
 
 APPLEMIDI_CREATE_INSTANCE(WiFiUDP, AppleMIDI, "AppleMIDI-ESP32", DEFAULT_CONTROL_PORT);
 #ifndef _BV
@@ -33,22 +31,31 @@ LedBoard_Store_Interface *ledBoardStore;
 LedBoardsManager *ledBoardsManager;
 LightStrategy_Factory *lightStrategyFactory;
 MidiKeyReceiver *midiReceiver;
-MidiKeySender* midiSender;
-CapacitiveTouch_RealDispatcher *capacitiveTouchDispatcher;
+MidiKeySender *midiSender;
+CapacitiveTouch_Dispatcher *capacitiveTouchDispatcher;
 Midi_Handler *midiHandler;
 //
+//
+uint8_t LED_CONTROLLER_ADDRESS{6};
+//TwoWire i2cWire = TwoWire(0);
 
 void setup() {
+    // ***********************
+    // MPR 121
+
+    // **************************
+    // DEBUG HELPER
+    //    debugHelper = new Debug_Helper();
+    debugHelper = new Debug_Helper_Serial();
+    inactiveDebugHelper = new Debug_Helper_Inactive();
+    //    debugHelper = new Debug_Helper_Inactive();
+    //    debugHelper = new DebugHelper_WebSocket();
+
+
     // *************************
     // ACCESS POINT
     accessPoint = new AccessPoint();
 
-    // **************************
-    // DEBUG HELPER
-    debugHelper = new Debug_Helper();
-    //    debugHelper = new Debug_Helper_Serial();
-    //    debugHelper = new DebugHelper_WebSocket();
-    inactiveDebugHelper = new Debug_Helper_Inactive();
 
     // **************************
     // CREATION LOF LIGHT STRATEGY FACTORY
@@ -56,28 +63,35 @@ void setup() {
 
     // **************************
     // ADD BOARDS TO STORE
-    ledBoardStore = new LedBoard_Store_FastLedStore();
-    for (uint8_t i = 0; i < NUMBER_OF_BOARDS; i++) {
-        ledBoardStore->addBoard(new FastLedLedBoard(lightStrategyFactory));
-    }
-
-    // **************************
-    // REINIT LEDS
-    FastLED.showColor(CRGB::Black);
+    ledBoardStore = new LedBoard_Store_NeoPixelStore();
+    ledBoardStore->addBoard(new NeoPixelBoard(32, 9, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(33, 9, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(25, 9, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(26, 9, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(27, 9, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(14, 9, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(12, 9, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(13, 9, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(23, 9, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(18, 9, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(5, 9, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(17, 9, lightStrategyFactory));
 
     // **************************
     // INITIALIZE BOARD MANAGER
-    ledBoardsManager = new FastLedLedBoardsManager(ledBoardStore, lightStrategyFactory);
+    ledBoardsManager = new NeoPixelBoardsManager(ledBoardStore, lightStrategyFactory);
     ledBoardsManager->init();
-    ledBoardsManager->setBoardBaseColor(0, 200, 0, 0);
-    ledBoardsManager->setBoardBaseColor(1, CRGB::Orange);
-    ledBoardsManager->setBoardBaseColor(2, CRGB::Green);
-    ledBoardsManager->setBoardBaseColor(3, CRGB::Blue);
-    ledBoardsManager->setBoardBaseColor(4, CRGB::Violet);
+    ledBoardsManager->setBoardBaseColor(0, 255, 0, 255);
+    ledBoardsManager->setBoardBaseColor(1, 0, 200, 0);
+    ledBoardsManager->setBoardBaseColor(2, CRGB::Orange);
+    ledBoardsManager->setBoardBaseColor(3, CRGB::Green);
+    ledBoardsManager->setBoardBaseColor(4, CRGB::Blue);
     ledBoardsManager->setBoardBaseColor(5, 255, 255, 255);
     ledBoardsManager->setBoardBaseColor(6, CRGB::Yellow);
     ledBoardsManager->setBoardBaseColor(7, CRGB::Pink);
-    ledBoardsManager->reinitBoardsLightStrategies();
+    //
+    ledBoardsManager->showBaseColor();
+//    ledBoardsManager->reinitBoardsLightStrategies();
 
     // *************************
     // DEFINITIONS OF STRATEGY FOR EACH BOARD
@@ -93,14 +107,14 @@ void setup() {
 
     // ***************************
     // DEBUG FUNCTION TO CHECK LIGHT OF BOARD
-    //    ledBoardsManager->lightCommandOnBoard(0, LightCommands::LIGHT_ON);
-    //    ledBoardsManager->lightCommandOnBoard(1, LightCommands::LIGHT_ON);
-    //    ledBoardsManager->lightCommandOnBoard(2, LightCommands::LIGHT_ON);
-    //    ledBoardsManager->lightCommandOnBoard(3, LightCommands::LIGHT_ON);
-    //    ledBoardsManager->lightCommandOnBoard(4, LightCommands::LIGHT_ON);
-    //    ledBoardsManager->lightCommandOnBoard(5, LightCommands::LIGHT_ON);
-    //    ledBoardsManager->lightCommandOnBoard(6, LightCommands::LIGHT_ON);
-    //    ledBoardsManager->lightCommandOnBoard(7, LightCommands::LIGHT_ON);
+//        ledBoardsManager->lightCommandOnBoard(0, LightCommands::LIGHT_ON);
+//        ledBoardsManager->lightCommandOnBoard(1, LightCommands::LIGHT_ON);
+//        ledBoardsManager->lightCommandOnBoard(2, LightCommands::LIGHT_ON);
+//        ledBoardsManager->lightCommandOnBoard(3, LightCommands::LIGHT_ON);
+//        ledBoardsManager->lightCommandOnBoard(4, LightCommands::LIGHT_ON);
+//        ledBoardsManager->lightCommandOnBoard(5, LightCommands::LIGHT_ON);
+//        ledBoardsManager->lightCommandOnBoard(6, LightCommands::LIGHT_ON);
+//        ledBoardsManager->lightCommandOnBoard(7, LightCommands::LIGHT_ON);
     //    ledBoardsManager->setRandomColorForEachBoard();
 
     // ****************************
@@ -118,14 +132,14 @@ void setup() {
     // ***************************
     // MIDI KEY SENDER
     midiSender = new MidiKeySender(ledBoardsManager, debugHelper);
-    midiSender->connectBoardToSendMidiKey(0, 60);
-    midiSender->connectBoardToSendMidiKey(1, 61);
-    midiSender->connectBoardToSendMidiKey(2, 62);
-    midiSender->connectBoardToSendMidiKey(3, 63);
-    midiSender->connectBoardToSendMidiKey(4, 64);
-    midiSender->connectBoardToSendMidiKey(5, 65);
-    midiSender->connectBoardToSendMidiKey(6, 66);
-    midiSender->connectBoardToSendMidiKey(7, 67);
+    midiSender->connectBoardToSendMidiKey(0,0, 60);
+    midiSender->connectBoardToSendMidiKey(1,0, 61);
+    midiSender->connectBoardToSendMidiKey(2,0, 62);
+    midiSender->connectBoardToSendMidiKey(3,0, 63);
+    midiSender->connectBoardToSendMidiKey(4,2, 64);
+    midiSender->connectBoardToSendMidiKey(5,0, 65);
+    midiSender->connectBoardToSendMidiKey(6,0, 66);
+    midiSender->connectBoardToSendMidiKey(7,0, 67);
 
 
     // **************************
@@ -148,7 +162,7 @@ void setup() {
 
     // **************************
     // TOUCH SENSORS INIT
-    capacitiveTouchDispatcher = new CapacitiveTouch_RealDispatcher(midiHandler, debugHelper);
+    capacitiveTouchDispatcher = new CapacitiveTouch_MPR121Dispatcher(ledBoardsManager, midiHandler, debugHelper);
     capacitiveTouchDispatcher->begin();
 
     // ***************************
@@ -162,18 +176,21 @@ void loop() {
     // Deactivate if webServer Not Needed
     accessPoint->loop();
 
-    // capacitiveTouch loop
-    capacitiveTouchDispatcher->loop();
-
     // check midi Messages
     midiHandler->loop();
 
+    // capacitiveTouch loop
+    capacitiveTouchDispatcher->loop();
+
     // update and show LedBoardManager
     ledBoardsManager->update(millis());
-    if (debugHelper->getDebugFullLight()) {
-        ledBoardsManager->showGlobally(CRGB::Red);
-    } else {
-        ledBoardsManager->show();
-    }
+    ledBoardsManager->show();
+
+//    if (debugHelper->getDebugFullLight()) {
+//        ledBoardsManager->showGlobally(CRGB::Red);
+//    } else {
+//        ledBoardsManager->show();
+//    }
+//    ledBoardsManager->showBaseColor();
 
 }

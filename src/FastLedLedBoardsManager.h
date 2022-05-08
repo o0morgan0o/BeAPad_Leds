@@ -25,6 +25,8 @@ public:
 //    void lightAll(uint8_t r, uint8_t g, uint8_t b) override;
 //
     void show() override;
+
+    void showBaseColor() override;
 //
 //    void update(unsigned long currentTime) override;
 //

@@ -20,11 +20,11 @@ void AccessPoint::init(LedBoardsManager *manager, Debug_Helper *debugHelper) {
         server.send(200, "text/html", getHomepage());
     });
     //
-    server.on("/trigger", HTTP_GET, [this]() {
+    server.on("/triggerOn", HTTP_GET, [this]() {
         for (uint8_t i = 0; i < server.args(); i++) {
             if (server.argName(i) == "board") {
                 auto board = server.arg(i).toInt();
-                _manager->triggerBoard(board);
+                _manager->triggerOnBoard(board);
                 String message = "parameter Board Found ! ";
                 message += board;
                 return server.send(200, "text/plain", message);

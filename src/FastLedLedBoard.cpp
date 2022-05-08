@@ -4,10 +4,3 @@
 
 #include "FastLedLedBoard.h"
 #include "LedBoardsManager.h"
-
-FastLedLedBoard::FastLedLedBoard(LightStrategy_Factory *lightStrategyFactory) : LedBoard(lightStrategyFactory) {
-}
-
-void FastLedLedBoard::show() {
-
-}

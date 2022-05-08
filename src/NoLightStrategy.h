@@ -11,11 +11,13 @@ class NoLightStrategy : public LightStrategy {
 public:
     explicit NoLightStrategy(LedBoard *context) : LightStrategy(context) {}
 
-    void trigger() override;
+    void triggerOn() override;
 
     void reset() override;
 
     void update() override;
+
+    void triggerOff() override;
 };
 
 #endif //PLATFORMIO_PROGRAM_NOLIGHTSTRATEGY_H
