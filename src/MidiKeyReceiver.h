@@ -21,7 +21,7 @@ public:
     MidiKeyReceiver(LedBoardsManager *manager, Debug_Helper *debugHelper) {
         _manager = manager;
         _debugHelper = debugHelper;
-        //
+
         // initialization of boardIndexReferences
         for (unsigned char &_boardIndexReference: _boardIndexReferences) {
             _boardIndexReference = INACTIVE_BOARD_INDEX;
@@ -35,6 +35,8 @@ public:
     }
 
     virtual void handleNoteOn(byte note) {
+        // TODO Try to handle things differently so that we can send a midi Message to multiple boards
+        // So store vector of bytes
         if (_boardIndexReferences[(uint8_t) note] == INACTIVE_BOARD_INDEX) {
             String message{"WARNING : No linked Board to note "};
             message += note;

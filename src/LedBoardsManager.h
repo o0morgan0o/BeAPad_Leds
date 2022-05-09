@@ -38,10 +38,6 @@ public:
         }
     }
 
-    virtual void lightCommandOnBoard(uint8_t boardIndex, LightCommands command) {
-        _ledBoards.at(boardIndex)->command(command);
-    }
-
     virtual void changeStrategyOnBoard(uint8_t boardIndex, LIGHT_STRATEGIES strategy) {
         _ledBoards.at(boardIndex)->changeLightStrategy(strategy);
     }

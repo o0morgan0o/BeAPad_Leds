@@ -74,14 +74,14 @@ void setup() {
     // INITIALIZE BOARD MANAGER
     ledBoardsManager = new NeoPixelBoardsManager(ledBoardStore, lightStrategyFactory);
     ledBoardsManager->init();
-    ledBoardsManager->setBoardBaseColor(0, 255, 0, 255);
-    ledBoardsManager->setBoardBaseColor(1, 0, 200, 0);
-    ledBoardsManager->setBoardBaseColor(2, CRGB::Orange);
-    ledBoardsManager->setBoardBaseColor(3, CRGB::Green);
-    ledBoardsManager->setBoardBaseColor(4, CRGB::Blue);
-    ledBoardsManager->setBoardBaseColor(5, 255, 255, 255);
+    ledBoardsManager->setBoardBaseColor(0, CRGB::Yellow);
+    ledBoardsManager->setBoardBaseColor(1, CRGB::Yellow);
+    ledBoardsManager->setBoardBaseColor(2, CRGB::Yellow);
+    ledBoardsManager->setBoardBaseColor(3, CRGB::Yellow);
+    ledBoardsManager->setBoardBaseColor(4, CRGB::Yellow);
+    ledBoardsManager->setBoardBaseColor(5, CRGB::Yellow);
     ledBoardsManager->setBoardBaseColor(6, CRGB::Yellow);
-    ledBoardsManager->setBoardBaseColor(7, CRGB::Pink);
+    ledBoardsManager->setBoardBaseColor(7, CRGB::Yellow);
     ledBoardsManager->showBaseColor();
     //    ledBoardsManager->reinitBoardsLightStrategies();
 
@@ -104,6 +104,7 @@ void setup() {
     // MIDI KEY RECEIVER
     // explanations: connectBoardToReceiveMidiKey(60, 0);
     // it means when MidiNote 60 is received a triggerOnSignalIsSendOn board 0
+    // TODO Try to handle things differently so that we can send a midi Message to multiple boards
     midiReceiver = new MidiKeyReceiver(ledBoardsManager, inactiveDebugHelper);
     midiReceiver->connectBoardToReceiveMidiKey(0, 60);
     midiReceiver->connectBoardToReceiveMidiKey(1, 61);
@@ -135,6 +136,7 @@ void setup() {
     midiHandler = new RTP_Midi_MidiHandler(midiReceiver, midiSender, debugHelper, &AppleMIDI, &AppleAppleMIDI);
     midiHandler->init();
     // set eventListeners
+    // TODO implements MIDI_CC change (maybe for controlling the colors)
     AppleMIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
         midiHandler->handleOn(channel, note, velocity);
     });

@@ -75,52 +75,7 @@ public:
      */
     virtual void showGlobalColor(CRGB color) = 0;
 
-    virtual void show() = 0;
-
-    virtual void command(LightCommands lightCommand) {
-        switch (lightCommand) {
-            case LightCommands::LIGHT_ON: {
-//                auto newBoardColor = _manager->getCurrentGlobalColor();
-//                setBoardColor(newBoardColor);
-                for (uint8_t i = 0; i < NUM_PIXELS; i++) {
-//                    _leds[i] = _boardBaseColor;
-                    _leds[i].setRGB(_boardBaseColor.r, _boardBaseColor.g, _boardBaseColor.b);
-//                    = _boardBaseColor;
-//                    _leds[i] = 0x00FF88;
-                }
-                break;
-            }
-            case LightCommands::LIGHT_OFF: {
-                for (uint8_t i = 0; i < NUM_PIXELS; i++) {
-                    _leds[i] = CRGB::Black;
-                }
-                break;
-            }
-            case LightCommands::LIGHT_SUCCESS: {
-                for (uint8_t i = 0; i < NUM_PIXELS; i++) {
-                    _leds[i] = CRGB::Green;
-                }
-                break;
-            }
-            case LightCommands::LIGHT_ERROR: {
-                for (uint8_t i = 0; i < NUM_PIXELS; i++) {
-                    _leds[i] = CRGB::Red;
-                }
-                break;
-            }
-            case LightCommands::LIGHT_WHITE: {
-                for (uint8_t i = 0; i < NUM_PIXELS; i++) {
-                    _leds[i] = CRGB::White;
-                }
-                break;
-            }
-            default:
-                // should not be here
-                break;
-
-        }
-
-    };
+    virtual void show() = 0;;
 
     virtual void triggerOn() {
         _lightStrategy->triggerOn();
