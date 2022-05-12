@@ -10,6 +10,7 @@
 #include "FullLightStrategy.h"
 #include "FadeOutLightStrategy.h"
 #include "FadeInFadeOutLightStrategy.h"
+#include "ShiftKeyLightStrategy.h"
 
 class LightStrategy_Factory {
 
@@ -33,6 +34,10 @@ public:
 
     LightStrategy* makeFadeInAndFadeOutLightStrategy(LedBoard* context){
        return new FadeInFadeOutLightStrategy(context);
+    }
+
+    LightStrategy* makeShiftKeyLightStrategy(LedBoard* context){
+        return new ShiftKeyLightStrategy(context);
     }
 
 };

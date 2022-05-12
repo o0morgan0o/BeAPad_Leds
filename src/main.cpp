@@ -18,6 +18,19 @@
 #include "NeoPixelBoardsManager.h"
 #include "CapacitiveTouch_MPR121Dispatcher.h"
 
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_0 2
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_1 1
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_2 0
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_3 3
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_4 4
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_5 5
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_6 6
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_7 7
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_8 8
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_9 11
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_10 10
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11 9
+
 APPLEMIDI_CREATE_INSTANCE(WiFiUDP, AppleMIDI, "AppleMIDI-ESP32", DEFAULT_CONTROL_PORT);
 #ifndef _BV
 #define _BV(bit) (1 << (bit))
@@ -57,18 +70,19 @@ void setup() {
     // NeoPixelBoard 1st param = GPIO Pin
     ledBoardStore = new LedBoard_Store_NeoPixelStore();
     uint8_t NUM_PIXELS_PER_BOARD = 9;
+    // NOTE : VERY IMPORTANT TO KEEP THE SAME ORDER OF THE PCB
     ledBoardStore->addBoard(new NeoPixelBoard(32, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
     ledBoardStore->addBoard(new NeoPixelBoard(33, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
     ledBoardStore->addBoard(new NeoPixelBoard(25, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(23, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(3, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(19, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
+    ledBoardStore->addBoard(new NeoPixelBoard(4, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
     ledBoardStore->addBoard(new NeoPixelBoard(26, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
     ledBoardStore->addBoard(new NeoPixelBoard(27, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
     ledBoardStore->addBoard(new NeoPixelBoard(14, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
     ledBoardStore->addBoard(new NeoPixelBoard(12, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
     ledBoardStore->addBoard(new NeoPixelBoard(13, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
-    ledBoardStore->addBoard(new NeoPixelBoard(23, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
-    ledBoardStore->addBoard(new NeoPixelBoard(3, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
-    ledBoardStore->addBoard(new NeoPixelBoard(19, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
-    ledBoardStore->addBoard(new NeoPixelBoard(4, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
 
     // **************************
     // INITIALIZE BOARD MANAGER
@@ -84,21 +98,22 @@ void setup() {
     ledBoardsManager->setBoardBaseColor(7, CRGB::Yellow);
     ledBoardsManager->showBaseColor();
     //    ledBoardsManager->reinitBoardsLightStrategies();
+    ledBoardsManager->giveAllBoardsReferenceOfManager();
 
     // *************************
     // DEFINITIONS OF STRATEGY FOR EACH BOARD
-    ledBoardsManager->changeStrategyOnBoard(0, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(1, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(2, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(3, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(4, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(5, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(6, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(7, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(8, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(9, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(10, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-    ledBoardsManager->changeStrategyOnBoard(11, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(0, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(1, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(3, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(4, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(5, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(6, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(7, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(8, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(9, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(10, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->changeStrategyOnBoard(11, LIGHT_STRATEGIES::STRATEGY_SHIFT_KEY_STRATEGY);
 
     // ****************************
     // MIDI KEY RECEIVER
@@ -114,6 +129,10 @@ void setup() {
     midiReceiver->connectBoardToReceiveMidiKey(5, 65);
     midiReceiver->connectBoardToReceiveMidiKey(6, 66);
     midiReceiver->connectBoardToReceiveMidiKey(7, 67);
+    midiReceiver->connectBoardToReceiveMidiKey(8, 68);
+    midiReceiver->connectBoardToReceiveMidiKey(9, 69);
+    midiReceiver->connectBoardToReceiveMidiKey(10, 70);
+    midiReceiver->connectBoardToReceiveMidiKey(11, 71);
 
     // ***************************
     // MIDI KEY SENDER
@@ -121,15 +140,20 @@ void setup() {
     // it means that touchPin1 (in MPR121) is connected to board 4
     // ,and it will send midiNote 87 when touched
     midiSender = new MidiKeySender(ledBoardsManager, debugHelper);
-    midiSender->connectBoardToSendMidiKey(0, 0, 60);
-    midiSender->connectBoardToSendMidiKey(1, 0, 61);
-    midiSender->connectBoardToSendMidiKey(2, 0, 62);
-    midiSender->connectBoardToSendMidiKey(3, 0, 63);
-    midiSender->connectBoardToSendMidiKey(4, 2, 64);
-    midiSender->connectBoardToSendMidiKey(5, 0, 65);
-    midiSender->connectBoardToSendMidiKey(6, 0, 66);
-    midiSender->connectBoardToSendMidiKey(7, 0, 67);
-
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_0, 0, 60);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_1, 1, 61);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_2, 2, 62);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_3, 3, 63);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_4, 4, 64);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_5, 5, 65);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_6, 6, 66);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_7, 7, 67);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_8, 8, 68);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_9, 9, 69);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_10, 10, 70);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11, 11, 71);
+    // NOTE:
+    // Last board (11 from index 0) is not connected to midiSend or touchPin because it acts as a shift button
 
     // **************************
     // RTP_MIDI
@@ -161,7 +185,7 @@ void setup() {
     // ACCESS POINT SERVER INIT
     accessPoint->init(ledBoardsManager, debugHelper);
 
-    //ledBoardsManager->showBlinkHighPriorityMessage(BlinkHighPriorityMessages::MPR121_SENSOR_NOT_FOUND);
+    ledBoardsManager->showBlinkHighPriorityMessage(BlinkHighPriorityMessages::SHOW_END_OF_SETUP_MESSAGE);
 
 }
 

@@ -38,6 +38,14 @@ public:
         _manager = manager;
     }
 
+    virtual void giveReferenceManager(LedBoardsManager* manager){
+        _manager=manager;
+    }
+
+    virtual LedBoardsManager* getManager(){
+        return _manager;
+    }
+
     virtual void changeLightStrategy(LIGHT_STRATEGIES newStrategy) {
         switch (newStrategy) {
             case LIGHT_STRATEGIES::NO_LIGHT_STRATEGY:
@@ -55,6 +63,10 @@ public:
             case LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT:
                 delete _lightStrategy;
                 _lightStrategy = _lightStrategyFactory->makeFadeInAndFadeOutLightStrategy(this);
+                break;
+            case LIGHT_STRATEGIES::STRATEGY_SHIFT_KEY_STRATEGY:
+                delete _lightStrategy;
+                _lightStrategy = _lightStrategyFactory->makeShiftKeyLightStrategy(this);
                 break;
             default:
                 break;
