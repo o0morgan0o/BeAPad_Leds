@@ -13,31 +13,10 @@
 #include "../src/CapacitiveTouch_Dispatcher.h"
 
 struct CapacitiveTest_Fixture : public testing::Test {
-    struct Mock_MidiHandler : public Fake_MidiHandler {
-    public:
-        Mock_MidiHandler(MidiKeyReceiver *receiver, MidiKeySender *sender, Debug_Helper *debugHelper) :
-                Fake_MidiHandler(receiver, sender, debugHelper) {
-
-        }
-
-        void init() override {
-        }
-
-        MOCK_METHOD((void), sendMidiNoteOn, (uint8_t), (override));
-
-
-//        void sendMidiNoteOn(uint8_t pinIndex) override {
-//            // MOCK
-//        }
-
-        void loop() override {
-            // FAKE
-        }
-    };
 
     struct CapacitiveTouch_Dispatcher_Mock : public CapacitiveTouch_Dispatcher {
-        CapacitiveTouch_Dispatcher_Mock(LedBoardsManager *manager, Midi_Handler *midiHandler, Debug_Helper *debugHelper)
-                : CapacitiveTouch_Dispatcher(manager, midiHandler, debugHelper) {
+        CapacitiveTouch_Dispatcher_Mock(LedBoardsManager *manager, Midi_Handler *midiHandler, Debug_Helper *debugHelper, Capacitive_Sensor* touchSensor)
+                : CapacitiveTouch_Dispatcher(manager, midiHandler, debugHelper, touchSensor) {
 
         }
 
@@ -49,26 +28,23 @@ struct CapacitiveTest_Fixture : public testing::Test {
 
         }
 
-        void connectBoardToCapacitiveSensor(uint8_t boardIndex, uint8_t capacitiveSensorIndex) override {
-
-        }
 
         void setTouchThreshold(uint8_t newThreshold) override {
 
         }
 
-        void setReleaseThreashold(uint8_t newThreshold) override {
-
-        }
 
         uint8_t getTouchThreshold() const override {
             return 0;
         }
 
-        uint8_t getReleaseThreashold() const override {
-            return 0;
+        void setReleaseThreshold(uint8_t newThreshold) override {
+
         }
 
+        uint8_t getReleaseThreshold() const override {
+            return 0;
+        }
     };
 
 protected:
@@ -91,8 +67,8 @@ TEST_F(CapacitiveTest_Fixture, testConnectionPinToBoard) {
     //
     auto midiReceiver = make_unique<FakeMidiKeyReceiver>(manager.get(), debugHelper.get());
     auto midiSender = make_unique<MidiKeySender>(manager.get(), debugHelper.get());
-    midiSender->connectBoardToSendMidiKey(1, 0, 60);
-    midiSender->connectBoardToSendMidiKey(2, 1, 61);
+    midiSender->connectBoardToSendMidiKey(1, 0, 60, 80);
+    midiSender->connectBoardToSendMidiKey(2, 1, 61, 81);
     //
     EXPECT_EQ(midiSender->getBoardAssociatedWithPinIndex(1), 0);
     EXPECT_EQ(midiSender->getBoardAssociatedWithPinIndex(2), 1);
@@ -100,8 +76,6 @@ TEST_F(CapacitiveTest_Fixture, testConnectionPinToBoard) {
     auto fakeMidiHandler = std::make_unique<Fake_MidiHandler>(midiReceiver.get(), midiSender.get(), debugHelper.get());
     EXPECT_EQ(fakeMidiHandler->getBoardAssociatedWithTouchPin(1), 0); // PIN 1 should be associated with board 0
     EXPECT_EQ(fakeMidiHandler->getBoardAssociatedWithTouchPin(2), 1); // PIN 1 should be associated with board 0
-
-
 }
 
 TEST_F(CapacitiveTest_Fixture, testMidihandlerSendMidiFromPinToCorrectNote){
@@ -116,8 +90,8 @@ TEST_F(CapacitiveTest_Fixture, testMidihandlerSendMidiFromPinToCorrectNote){
     //
     auto midiReceiver = make_unique<FakeMidiKeyReceiver>(manager.get(), debugHelper.get());
     auto midiSender = make_unique<MidiKeySender>(manager.get(), debugHelper.get());
-    midiSender->connectBoardToSendMidiKey(1, 0, 60);
-    midiSender->connectBoardToSendMidiKey(2, 1, 61);
+    midiSender->connectBoardToSendMidiKey(1, 0, 60, 80);
+    midiSender->connectBoardToSendMidiKey(2, 1, 61, 81);
     //
     EXPECT_EQ(midiSender->getMidiKeyAssociatedWithPinIndex(1), 60);
     EXPECT_EQ(midiSender->getMidiKeyAssociatedWithPinIndex(2), 61);

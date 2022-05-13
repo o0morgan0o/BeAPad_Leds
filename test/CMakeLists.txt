@@ -26,6 +26,8 @@ set(SOURCE_FILES
         FakeLedBoardManager.h FakeLedBoardManager.cpp
         FakeMidiKeyReceiver.h FakeMidiKeyReceiver.cpp
         Fake_MidiHandler.h Fake_MidiHandler.cpp
+        Fake_Arduino.h Fake_Arduino.cpp
+        Fake_Sensor.h Fake_Sensor.cpp
         )
 
 

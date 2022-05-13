@@ -23,6 +23,7 @@ public:
 
     void show() override {
         for (auto board: _ledBoards) {
+            board->selectStrategyToShow();
             board->show();
         }
 

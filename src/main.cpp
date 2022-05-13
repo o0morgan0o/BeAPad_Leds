@@ -5,7 +5,6 @@
 #include "Debug_Helper.h"
 #include "LightStrategy_Factory.h"
 #include "MidiKeyReceiver.h"
-#include "CapacitiveTouch_RealDispatcher.h"
 #include "Midi_Handler.h"
 #include "Debug_Helper_Serial.h"
 #include "Debug_Helper_Inactive.h"
@@ -16,7 +15,9 @@
 #include "LedBoard_Store_NeoPixelStore.h"
 #include "NeoPixelBoard.h"
 #include "NeoPixelBoardsManager.h"
-#include "CapacitiveTouch_MPR121Dispatcher.h"
+#include "CapacitiveTouch_Dispatcher.h"
+#include "Capacitive_Sensor.h"
+#include "MPR121_Sensor.h"
 
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_0 2
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_1 1
@@ -29,7 +30,6 @@
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_8 8
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_9 11
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_10 10
-#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11 9
 
 APPLEMIDI_CREATE_INSTANCE(WiFiUDP, AppleMIDI, "AppleMIDI-ESP32", DEFAULT_CONTROL_PORT);
 #ifndef _BV
@@ -44,8 +44,9 @@ LedBoardsManager *ledBoardsManager;
 LightStrategy_Factory *lightStrategyFactory;
 MidiKeyReceiver *midiReceiver;
 MidiKeySender *midiSender;
-CapacitiveTouch_Dispatcher *capacitiveTouchDispatcher;
+ICapacitiveTouch_Dispatcher *capacitiveTouchDispatcher;
 Midi_Handler *midiHandler;
+Capacitive_Sensor *touchSensor;
 
 void setup() {
 
@@ -96,6 +97,10 @@ void setup() {
     ledBoardsManager->setBoardBaseColor(5, CRGB::Yellow);
     ledBoardsManager->setBoardBaseColor(6, CRGB::Yellow);
     ledBoardsManager->setBoardBaseColor(7, CRGB::Yellow);
+    ledBoardsManager->setBoardBaseColor(8, CRGB::Yellow);
+    ledBoardsManager->setBoardBaseColor(9, CRGB::Yellow);
+    ledBoardsManager->setBoardBaseColor(10, CRGB::Yellow);
+    ledBoardsManager->setBoardBaseColor(11, CRGB::Yellow);
     ledBoardsManager->showBaseColor();
     //    ledBoardsManager->reinitBoardsLightStrategies();
     ledBoardsManager->giveAllBoardsReferenceOfManager();
@@ -114,6 +119,7 @@ void setup() {
     ledBoardsManager->changeStrategyOnBoard(9, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
     ledBoardsManager->changeStrategyOnBoard(10, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
     ledBoardsManager->changeStrategyOnBoard(11, LIGHT_STRATEGIES::STRATEGY_SHIFT_KEY_STRATEGY);
+    ledBoardsManager->reinitBoardsLightStrategies();
 
     // ****************************
     // MIDI KEY RECEIVER
@@ -139,21 +145,21 @@ void setup() {
     // explanations : connectBoardToSendMidiKey(1, 4 ,87)
     // it means that touchPin1 (in MPR121) is connected to board 4
     // ,and it will send midiNote 87 when touched
-    midiSender = new MidiKeySender(ledBoardsManager, debugHelper);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_0, 0, 60);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_1, 1, 61);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_2, 2, 62);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_3, 3, 63);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_4, 4, 64);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_5, 5, 65);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_6, 6, 66);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_7, 7, 67);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_8, 8, 68);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_9, 9, 69);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_10, 10, 70);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11, 11, 71);
     // NOTE:
     // Last board (11 from index 0) is not connected to midiSend or touchPin because it acts as a shift button
+    midiSender = new MidiKeySender(ledBoardsManager, debugHelper);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_0, 0, 60, 80);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_1, 1, 61, 81);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_2, 2, 62, 82);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_3, 3, 63, 83);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_4, 4, 64, 84);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_5, 5, 65, 85);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_6, 6, 66, 86);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_7, 7, 67, 87);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_8, 8, 68, 88);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_9, 9, 69, 89);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_10, 10, 70, 90);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11_SHIFT_PIN, 11, NO_MIDI_TRIGGER_FOR_BOARD, NO_MIDI_TRIGGER_FOR_BOARD);
 
     // **************************
     // RTP_MIDI
@@ -178,13 +184,13 @@ void setup() {
 
     // **************************
     // TOUCH SENSORS INIT (MPR121)
-    capacitiveTouchDispatcher = new CapacitiveTouch_MPR121Dispatcher(ledBoardsManager, midiHandler, debugHelper);
+    touchSensor = new MPR121_Sensor();
+    capacitiveTouchDispatcher = new CapacitiveTouch_Dispatcher(ledBoardsManager, midiHandler, debugHelper, touchSensor);
     capacitiveTouchDispatcher->begin();
 
     // ***************************
     // ACCESS POINT SERVER INIT
     accessPoint->init(ledBoardsManager, debugHelper);
-
     ledBoardsManager->showBlinkHighPriorityMessage(BlinkHighPriorityMessages::SHOW_END_OF_SETUP_MESSAGE);
 
 }
@@ -200,7 +206,7 @@ void loop() {
     // capacitiveTouch loop
     capacitiveTouchDispatcher->loop();
 
-    // update and show LedBoardManager
+    // updateValues and show LedBoardManager
     ledBoardsManager->update(millis());
     ledBoardsManager->show();
 

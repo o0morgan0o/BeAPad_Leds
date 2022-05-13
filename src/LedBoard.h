@@ -26,58 +26,17 @@ class LedBoardsManager;
 
 class LedBoard {
 public:
-    explicit LedBoard(uint8_t pin, uint8_t nb_pixels, LightStrategy_Factory *lightStrategyFactory) {
-        _pin = pin;
-        NUM_PIXELS = nb_pixels;
-        _lightStrategyFactory = lightStrategyFactory;
-        _lightStrategy = _lightStrategyFactory->makeDefaultStrategy(this);
-    }
+    explicit LedBoard(uint8_t pin, uint8_t nb_pixels, LightStrategy_Factory *lightStrategyFactory);
 
-    virtual void giveReferenceManager(CRGB *leds, LedBoardsManager *manager) {
-        _leds = leds;
-        _manager = manager;
-    }
+    virtual void giveReferenceManager(CRGB *leds, LedBoardsManager *manager);
 
-    virtual void giveReferenceManager(LedBoardsManager* manager){
-        _manager=manager;
-    }
+    virtual void giveReferenceManager(LedBoardsManager* manager);
 
-    virtual LedBoardsManager* getManager(){
-        return _manager;
-    }
+    virtual LedBoardsManager* getManager();
 
-    virtual void changeLightStrategy(LIGHT_STRATEGIES newStrategy) {
-        switch (newStrategy) {
-            case LIGHT_STRATEGIES::NO_LIGHT_STRATEGY:
-                delete _lightStrategy;
-                _lightStrategy = _lightStrategyFactory->makeNoLightStrategy(this);
-                break;
-            case LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT:
-                delete _lightStrategy;
-                _lightStrategy = _lightStrategyFactory->makeFullLightStrategy(this);
-                break;
-            case LIGHT_STRATEGIES::STRATEGY_FADE_OUT:
-                delete _lightStrategy;
-                _lightStrategy = _lightStrategyFactory->makeFadeOutLightStrategy(this);
-                break;
-            case LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT:
-                delete _lightStrategy;
-                _lightStrategy = _lightStrategyFactory->makeFadeInAndFadeOutLightStrategy(this);
-                break;
-            case LIGHT_STRATEGIES::STRATEGY_SHIFT_KEY_STRATEGY:
-                delete _lightStrategy;
-                _lightStrategy = _lightStrategyFactory->makeShiftKeyLightStrategy(this);
-                break;
-            default:
-                break;
+    virtual void changeLightStrategy(LIGHT_STRATEGIES newStrategy);
 
-        }
-
-    }
-
-    virtual void reinitLightStrategy() {
-        _lightStrategy->reinit();
-    }
+    virtual void reinitLightStrategy();
 
     virtual void showBaseColor() = 0;
 
@@ -89,43 +48,29 @@ public:
 
     virtual void show() = 0;;
 
-    virtual void triggerOn() {
-        _lightStrategy->triggerOn();
-    }
+    virtual void triggerOn();
 
-    virtual void triggerOff() {
-        _lightStrategy->triggerOff();
-    }
+    virtual void triggerOff();
 
     virtual void updateLedColorInBoard(uint8_t ledIndexInBoard, CRGB updatedColor) = 0;
 
     virtual void updateLedColorInBoard(uint8_t ledIndexInBoard, uint8_t r, uint8_t g, uint8_t b) = 0;
 
-    virtual void update(unsigned long newTime) {
-        _currentTime = newTime;
-        _lightStrategy->update();
-    };
+    virtual void updateValues(unsigned long newTime);;
 
-    virtual void setBoardColor(uint8_t r, uint8_t g, uint8_t b) {
-//        _boardBaseColor.setRGB(r,g,b);
-        _boardBaseColor.r = r;
-        _boardBaseColor.g = g;
-        _boardBaseColor.b = b;
-    };
+    virtual void setBoardColor(uint8_t r, uint8_t g, uint8_t b);;
 
-    virtual void setBoardColor(CRGB color) {
-        _boardBaseColor.r = color.r;
-        _boardBaseColor.g = color.g;
-        _boardBaseColor.b = color.b;
-    };
+    virtual void setBoardColor(CRGB color);;
 
-    virtual unsigned long getCurrentTime() { return _currentTime; }
+    virtual unsigned long getCurrentTime();
 
-    virtual CRGB *getBoardLeds() { return _leds; }
+    virtual CRGB *getBoardLeds();
 
-    virtual RGB_Color getBoardBaseColor() { return _boardBaseColor; }
+    virtual RGB_Color getBoardBaseColor();
 
     virtual void initBoard() {}
+
+    virtual void selectStrategyToShow();
 
     uint8_t NUM_PIXELS;
 public:
@@ -134,10 +79,9 @@ public:
     unsigned long _currentTime{0};
 protected:
     LightStrategy_Factory *_lightStrategyFactory;
-    LightStrategy *_lightStrategy;
+    LightStrategy *_mainLightStrategy;
+    LightStrategy *_shiftLightStrategy;
 protected:
-    uint8_t _pin{};
-    bool isOn = false;
     LedBoardsManager *_manager{};
 
 };

@@ -27,13 +27,14 @@ public:
 
     }
 
-    void sendMidiOnByTouchPin(uint8_t boardIndex) override {
+    void sendMidiOnByTouchPin(uint8_t boardIndex, bool isInShiftState) override {
 
     }
 
-    void sendMidiOffByTouchPin(uint8_t boardIndex) override {
+    void sendMidiOffByTouchPin(uint8_t boardIndex, bool isInShiftState) override {
 
     }
+
 
     void loop() override {
 

@@ -17,19 +17,19 @@ void FadeOutLightStrategy::reset() {
     };
 }
 
-void FadeOutLightStrategy::update() {
-    auto manager = _context->getManager();
-    if (manager->getShiftState()) {
-        for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-            _context->updateLedColorInBoard(i, manager->getShiftColor());
-        }
-    } else {
-        _crgbStrategyColor.fadeToBlackBy(1);
-        _lifeSpan = _context->getCurrentTime() - _birthTime;
-        for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-            _context->updateLedColorInBoard(i, _crgbStrategyColor);
-        }
-    }
+void FadeOutLightStrategy::updateValues() {
+    _crgbStrategyColor.fadeToBlackBy(10);
+    _lifeSpan = _context->getCurrentTime() - _birthTime;
+}
+
+void FadeOutLightStrategy::reinit() {
+    _birthTime = _context->getCurrentTime();
+    //
+    _crgbStrategyColor = CRGB{
+            _context->getBoardBaseColor().r,
+            _context->getBoardBaseColor().g,
+            _context->getBoardBaseColor().b
+    };
 
 }
 

@@ -30,17 +30,19 @@ class LightStrategy {
 public:
     explicit LightStrategy(LedBoard *context);
 
-    virtual ~LightStrategy() =default;
+    virtual ~LightStrategy() = default;
 
     virtual void reset() = 0;
 
-    virtual void update() = 0;
+    virtual void updateValues() = 0;
 
     virtual void triggerOn() = 0;
 
     virtual void triggerOff() = 0;
 
-    virtual void reinit();
+    virtual void reinit() = 0;
+
+    virtual void showNowThisStrategyInBoard();
 
 public:
     virtual unsigned long getLifeSpan() { return _lifeSpan; }

@@ -43,6 +43,8 @@ public:
     static CRGB Red;
     static CRGB White;
     static CRGB AliceBlue;
+    static CRGB Blue;
+    static CRGB Yellow;
 
     void setRGB(uint8_t _r, uint8_t _g, uint8_t _b) {
         r = _r;

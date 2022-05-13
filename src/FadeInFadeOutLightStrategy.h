@@ -14,11 +14,13 @@ public:
 
     void reset() override;
 
-    void update() override;
+    void updateValues() override;
 
     void triggerOn() override;
 
     void triggerOff() override;
+
+    void reinit() override;
 
     uint8_t fraction = 0;
 

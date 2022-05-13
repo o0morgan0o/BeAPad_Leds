@@ -13,6 +13,8 @@
 #include <vector>
 
 #ifndef IN_TESTING
+#else
+#include "../test/Fake_Arduino.h"
 #endif
 
 class LedBoardsManager {
@@ -44,7 +46,7 @@ public:
 
     virtual void update(unsigned long currentTime) {
         for (auto ledBoard: _ledBoards) {
-            ledBoard->update(currentTime);
+            ledBoard->updateValues(currentTime);
         }
     };
 

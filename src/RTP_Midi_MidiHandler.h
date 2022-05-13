@@ -4,6 +4,8 @@
 
 #ifndef PLATFORMIO_PROGRAM_RTP_MIDI_MIDIHANDLER_H
 #define PLATFORMIO_PROGRAM_RTP_MIDI_MIDIHANDLER_H
+#define NO_MIDI_TRIGGER_FOR_BOARD 0
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11_SHIFT_PIN 9
 #define ONE_PARTICIPANT
 
 #include "Midi_Handler.h"
@@ -32,21 +34,37 @@ public:
 
     }
 
-    void sendMidiNoteOn(const uint8_t midiNote) override {
-        _midiSession->sendNoteOn(midiNote, 120, 1);
-    }
-
-    void sendMidiNoteOff(const uint8_t midiNote) override {
-        _midiSession->sendNoteOff(midiNote, 120, 1);
-    }
-
-    void sendMidiOnByTouchPin(uint8_t touchPin) override {
-        auto midiNoteToSend = _midiSender->getMidiKeyAssociatedWithPinIndex(touchPin);
+    void sendMidiOnByTouchPin(uint8_t touchPin, bool isInShiftState) override {
+        if (touchPin == MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11_SHIFT_PIN) {
+            return;
+        }
+        uint8_t midiNoteToSend;
+        if (isInShiftState) {
+             midiNoteToSend = _midiSender->getShiftMidiKeyAssociatedWithPinIndex(touchPin);
+        } else {
+             midiNoteToSend = _midiSender->getMidiKeyAssociatedWithPinIndex(touchPin);
+        }
+        // TODO Disable debug if in release mode
+        String message{"=> MIDI NOTE_ON: "};
+        message += midiNoteToSend;
+        _debugHelper->add(message);
         _midiSession->sendNoteOn(midiNoteToSend, 120, 1);
     }
 
-    void sendMidiOffByTouchPin(uint8_t touchPin) override {
-        auto midiNoteToSend = _midiSender->getMidiKeyAssociatedWithPinIndex(touchPin);
+    void sendMidiOffByTouchPin(uint8_t touchPin, bool isInShiftState) override {
+        if (touchPin == MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11_SHIFT_PIN) {
+            return;
+        }
+        uint8_t midiNoteToSend;
+        if (isInShiftState) {
+            midiNoteToSend = _midiSender->getShiftMidiKeyAssociatedWithPinIndex(touchPin);
+        } else {
+            midiNoteToSend = _midiSender->getMidiKeyAssociatedWithPinIndex(touchPin);
+        }
+        // TODO Disable debug if in release mode
+        String message{"=> MIDI NOTE_OFF: "};
+        message += midiNoteToSend;
+        _debugHelper->add(message);
         _midiSession->sendNoteOff(midiNoteToSend, 120, 1);
     }
 

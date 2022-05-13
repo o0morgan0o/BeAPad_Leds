@@ -15,7 +15,9 @@ public:
 
     void reset() override;
 
-    void update() override;
+    void updateValues() override;
+
+    void reinit() override;
 
     void triggerOff() override;
 

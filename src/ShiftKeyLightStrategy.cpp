@@ -13,21 +13,25 @@ void ShiftKeyLightStrategy::reset() {
 
 }
 
-void ShiftKeyLightStrategy::update() {
-    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-        _context->updateLedColorInBoard(i, _crgbStrategyColor);
-    }
+void ShiftKeyLightStrategy::updateValues() {
+}
+
+void ShiftKeyLightStrategy::reinit() {
+    _birthTime = _context->getCurrentTime();
+    //
+    _crgbStrategyColor = CRGB::Blue;
+
 }
 
 void ShiftKeyLightStrategy::triggerOn() {
     auto manager = _context->getManager();
     manager->setShiftState(true);
-    _crgbStrategyColor = manager->getShiftColor();
+//    _crgbStrategyColor = manager->getShiftColor();
 
 }
 
 void ShiftKeyLightStrategy::triggerOff() {
     auto manager = _context->getManager();
     manager->setShiftState(false);
-    _crgbStrategyColor = CRGB::Black;
+//    _crgbStrategyColor = CRGB::Black;
 }

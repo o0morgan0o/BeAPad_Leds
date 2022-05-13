@@ -48,7 +48,7 @@ public:
     }
 
     virtual void handleNoteOff(byte note) {
-//        if (_boardIndexReferences[note] == INACTIVE_PIN) {
+//        if (_boardIndexReferences[note] == UNDEFINED_NOTE) {
 //            String message{"WARNING : No linked Board to note "};
 //            message += note;
 //            _debugHelper->add(message);

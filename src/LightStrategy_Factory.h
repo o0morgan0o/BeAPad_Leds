@@ -13,30 +13,34 @@
 #include "ShiftKeyLightStrategy.h"
 
 class LightStrategy_Factory {
-
 public:
-    LightStrategy_Factory()= default;
+    LightStrategy_Factory() = default;
 
-    LightStrategy* makeDefaultStrategy(LedBoard* context){
+    LightStrategy *makeDefaultStrategy(LedBoard *context) {
         return makeNoLightStrategy(context);
     }
 
-    LightStrategy* makeNoLightStrategy(LedBoard* context){
+    LightStrategy *makeDefaultShiftStrategy(LedBoard *context) {
+        return makeShiftKeyLightStrategy(context);
+    }
+
+    LightStrategy *makeNoLightStrategy(LedBoard *context) {
         return new NoLightStrategy(context);
     }
 
-    LightStrategy* makeFullLightStrategy(LedBoard* context){
+    LightStrategy *makeFullLightStrategy(LedBoard *context) {
         return new FullLightStrategy(context);
     }
-    LightStrategy* makeFadeOutLightStrategy(LedBoard* context){
-       return new FadeOutLightStrategy(context);
+
+    LightStrategy *makeFadeOutLightStrategy(LedBoard *context) {
+        return new FadeOutLightStrategy(context);
     }
 
-    LightStrategy* makeFadeInAndFadeOutLightStrategy(LedBoard* context){
-       return new FadeInFadeOutLightStrategy(context);
+    LightStrategy *makeFadeInAndFadeOutLightStrategy(LedBoard *context) {
+        return new FadeInFadeOutLightStrategy(context);
     }
 
-    LightStrategy* makeShiftKeyLightStrategy(LedBoard* context){
+    LightStrategy *makeShiftKeyLightStrategy(LedBoard *context) {
         return new ShiftKeyLightStrategy(context);
     }
 

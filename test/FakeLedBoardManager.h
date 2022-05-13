@@ -11,7 +11,6 @@
 class FakeLedBoardManager : public LedBoardsManager{
 public:
     explicit FakeLedBoardManager(LedBoard_Store_Interface *store, LightStrategy_Factory* factory): LedBoardsManager(store, factory){
-
     }
 
     void showBaseColor() override;
@@ -24,7 +23,9 @@ private:
 public:
     void showGlobally(CRGB color) override;
 
-    LightStrategy_Factory* getLightStrategyFactory(){return _lightStrategyFactory;}
+    LightStrategy_Factory* getLightStrategyFactory();
+
+    void showQuickBlink(CRGB color) override;
 
 };
 

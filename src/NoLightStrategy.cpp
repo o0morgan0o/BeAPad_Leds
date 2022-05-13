@@ -1,3 +1,4 @@
+
 //
 // Created by morgan on 4/25/2022.
 //
@@ -8,7 +9,7 @@ void NoLightStrategy::reset() {
 
 }
 
-void NoLightStrategy::update() {
+void NoLightStrategy::updateValues() {
 
 }
 
@@ -17,5 +18,9 @@ void NoLightStrategy::triggerOn() {
 }
 
 void NoLightStrategy::triggerOff() {
+
+}
+
+void NoLightStrategy::reinit() {
 
 }
