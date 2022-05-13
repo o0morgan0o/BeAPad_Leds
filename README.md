@@ -5,9 +5,9 @@ Project for touch sensors combined to Neopixels and RTP Midi for controlling Lig
 
 
 ## Materials:
-- ESP32 Microcontroller (WROOM DEVKIT_V1)
-- MPR121 Touch Shield
-- WS2812E leds
+- ESP32 Microcontroller (WROOM DEVKIT_V1) [amazon](https://www.amazon.fr/SP-Cow-ESP-32S-d%C3%A9veloppement-Bluetooth-d%C3%A9nergie/dp/B07VJ34N2Q/ref=sr_1_5?__mk_fr_FR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=2QX1H1678O7M3&keywords=esp32+wroom+devkit&qid=1652459031&sprefix=esp32+wroom+devkit%2Caps%2C51&sr=8-5) [aliexpress](https://fr.aliexpress.com/item/1005001929935550.html?spm=a2g0o.search0304.0.0.a4b41103QWyj6D&algo_pvid=caa6f633-4206-442e-8846-f58ec6503b21&algo_exp_id=caa6f633-4206-442e-8846-f58ec6503b21-0&pdp_ext_f=%7B%22sku_id%22%3A%2212000022802021515%22%7D&pdp_npi=2%40dis%21EUR%21%2127.77%21%21%21%21%21%402100bdca16524589488372088ea014%2112000022802021515%21sea)
+- MPR121 Touch Shield [amazon](https://www.amazon.fr/Adafruit-12-Key-Capacitive-Sensor-Breakout/dp/B00SK8PVNA)
+- WS2812E leds [amazon](https://www.amazon.fr/gp/product/B088BRY2SH/ref=ppx_yo_dt_b_asin_title_o07_s00?ie=UTF8&th=1) **<u>MUST BE 60Leds/m for easy soldering on PCB</u>**
 - Battery 1100 mAh Lithium 1S 3c
 - 1 Capacitor 1000uF
 - Steel plates
