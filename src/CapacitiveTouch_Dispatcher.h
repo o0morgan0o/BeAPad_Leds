@@ -9,10 +9,7 @@
 #include "Debug_Helper.h"
 #include "ICapacitiveTouch_Dispatcher.h"
 #include "Capacitive_Sensor.h"
-
-#ifndef _BV
-#define _BV(bit) (1 << (bit))
-#endif
+#include "main_constants.h"
 
 class CapacitiveTouch_Dispatcher : public ICapacitiveTouch_Dispatcher {
 public:
@@ -53,18 +50,28 @@ public:
                 String message{i};
                 message += " touched";
                 _debugHelper->add(message);
-                _midiHandler->sendMidiOnByTouchPin(i, _manager->getShiftState());
-                auto boardToTrigger = _midiHandler->getBoardAssociatedWithTouchPin(i);
-                _manager->triggerOnBoard(boardToTrigger);
+                // if we are shift pin we just setShiftStateInManager
+                if (i == MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11_SHIFT_PIN) {
+                    _manager->setShiftState(true);
+                } else {
+                    auto boardToTrigger = _midiHandler->getBoardAssociatedWithTouchPin(i);
+                    _manager->triggerOnBoard(boardToTrigger);
+                    _midiHandler->sendMidiOnByTouchPin(i, _manager->getShiftState());
+                }
             }
             // if it *was* touched and now *isnt*, alert!
             if (!(currtouched & _BV(i)) && (lasttouched & _BV(i))) {
                 String message{i};
                 message += " released";
                 _debugHelper->add(message);
-                _midiHandler->sendMidiOffByTouchPin(i, _manager->getShiftState());
-                auto boardToTrigger = _midiHandler->getBoardAssociatedWithTouchPin(i);
-                _manager->triggerOffBoard(boardToTrigger);
+                // if we are shift pin we just setShiftStateInManager
+                if (i == MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11_SHIFT_PIN) {
+                    _manager->setShiftState(false);
+                } else {
+                    auto boardToTrigger = _midiHandler->getBoardAssociatedWithTouchPin(i);
+                    _manager->triggerOffBoard(boardToTrigger);
+                    _midiHandler->sendMidiOffByTouchPin(i, _manager->getShiftState());
+                }
             }
         }
         // reset our state
@@ -88,7 +95,7 @@ public:
     }
 
 // Keeps track of the last pins touched
-// so we know when buttons are 'released'
+// so that we know when buttons are 'released'
     uint16_t lasttouched = 0;
     uint16_t currtouched = 0;
     Capacitive_Sensor *_touchSensor;

@@ -50,14 +50,6 @@ public:
         }
     };
 
-    virtual void handleBoardTouched(uint8_t boardIndex) {
-        triggerOnBoard(boardIndex);
-    }
-
-    virtual void handleBoardReleased(uint8_t boardIndex) {
-
-    }
-
     void giveAllBoardsReferenceOfManager() {
         for (auto board: _ledBoards) {
             board->giveReferenceManager(this);
@@ -82,10 +74,6 @@ public:
         } catch (std::exception &e) {
             showBlinkHighPriorityMessage(BlinkHighPriorityMessages::TRIGGER_BOARD_ERROR);
         }
-    }
-
-    virtual void setBoardBaseColor(uint8_t boardIndex, uint8_t r, uint8_t g, uint8_t b) {
-        _ledBoards.at(boardIndex)->setBoardColor(r, g, b);
     }
 
     virtual void setBoardBaseColor(uint8_t boardIndex, CRGB color) {
@@ -138,6 +126,7 @@ public:
     virtual void showBaseColor() = 0;
 
     virtual bool getShiftState() { return _isInShiftState; }
+
 
     virtual CRGB getShiftColor() { return _shiftColor; }
 

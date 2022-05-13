@@ -7,21 +7,26 @@
 
 LightStrategy::LightStrategy(LedBoard *context) {
     _context = context;
-    _boardLeds = _context->getBoardLeds();
+    _context->getBoardLeds();
     //
     _birthTime = _context->getCurrentTime();
     //
     _crgbStrategyColor = CRGB{
-        _context->getBoardBaseColor().r,
-        _context->getBoardBaseColor().g,
-        _context->getBoardBaseColor().b
+            _context->getBoardBaseColor().r,
+            _context->getBoardBaseColor().g,
+            _context->getBoardBaseColor().b
     };
+    //
+    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
+        _ledColorsInStrategy[i] = _crgbStrategyColor;
+    }
 
 }
 
+CRGB LightStrategy::getStrategyColor() {
+    return _crgbStrategyColor;
+}
 
-void LightStrategy::showNowThisStrategyInBoard() {
-    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-        _context->updateLedColorInBoard(i, _crgbStrategyColor);
-    }
+CRGB LightStrategy::getSpecificLedColor(uint8_t index) {
+    return _ledColorsInStrategy[index];
 }

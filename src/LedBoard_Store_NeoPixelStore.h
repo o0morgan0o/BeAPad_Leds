@@ -13,12 +13,6 @@ public:
     LedBoard_Store_NeoPixelStore() : LedBoard_Store_Interface() {
     }
 
-    void initAllBoards() override {
-        for (auto board: _ledBoards) {
-            board->initBoard();
-        }
-    }
-
 };
 
 #endif //PLATFORMIO_PROGRAM_LEDBOARD_STORE_NEOPIXELSTORE_H

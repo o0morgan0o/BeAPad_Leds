@@ -7,12 +7,12 @@
 
 #include <cstdint>
 #include "LightCommands.h"
-#include "IBoardLeds.h"
 #include "LightStrategy.h"
 #include "FullLightStrategy.h"
 #include "NoLightStrategy.h"
 #include "RGB_Color.h"
 #include "LightStrategy_Factory.h"
+#include "StrategyMixer.h"
 
 class LedBoardsManager;
 
@@ -26,9 +26,7 @@ class LedBoardsManager;
 
 class LedBoard {
 public:
-    explicit LedBoard(uint8_t pin, uint8_t nb_pixels, LightStrategy_Factory *lightStrategyFactory);
-
-    virtual void giveReferenceManager(CRGB *leds, LedBoardsManager *manager);
+    explicit LedBoard(uint8_t nb_pixels, LightStrategy_Factory *lightStrategyFactory);
 
     virtual void giveReferenceManager(LedBoardsManager* manager);
 
@@ -70,7 +68,7 @@ public:
 
     virtual void initBoard() {}
 
-    virtual void selectStrategyToShow();
+    virtual void mixStrategies();
 
     uint8_t NUM_PIXELS;
 public:

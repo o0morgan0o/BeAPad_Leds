@@ -18,6 +18,7 @@
 #include "CapacitiveTouch_Dispatcher.h"
 #include "Capacitive_Sensor.h"
 #include "MPR121_Sensor.h"
+#include "main_constants.h"
 
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_0 2
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_1 1
@@ -32,9 +33,6 @@
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_10 10
 
 APPLEMIDI_CREATE_INSTANCE(WiFiUDP, AppleMIDI, "AppleMIDI-ESP32", DEFAULT_CONTROL_PORT);
-#ifndef _BV
-#define _BV(bit) (1 << (bit))
-#endif
 AccessPoint *accessPoint;
 //
 Debug_Helper *debugHelper;

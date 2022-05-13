@@ -1,0 +1,15 @@
+//
+// Created by morgan on 5/13/2022.
+//
+
+#ifndef PLATFORMIO_PROGRAM_MAIN_CONSTANTS_H
+#define PLATFORMIO_PROGRAM_MAIN_CONSTANTS_H
+#endif //PLATFORMIO_PROGRAM_MAIN_CONSTANTS_H
+
+#ifndef _BV
+#define _BV(bit) (1 << (bit))
+#endif
+#define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11_SHIFT_PIN 9
+
+#define NO_MIDI_TRIGGER_FOR_BOARD 0
+#define ONE_PARTICIPANT

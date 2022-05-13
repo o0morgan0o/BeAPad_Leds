@@ -11,7 +11,7 @@
 class NeoPixelBoard : public LedBoard {
 public:
     NeoPixelBoard(uint8_t pin, uint8_t nb_pixels, LightStrategy_Factory *lightStrategyFactory) :
-            LedBoard(pin, nb_pixels, lightStrategyFactory) {
+            LedBoard(nb_pixels, lightStrategyFactory) {
         _strip = new Adafruit_NeoPixel{nb_pixels, pin, NEO_GRB + NEO_KHZ800};
 
     }

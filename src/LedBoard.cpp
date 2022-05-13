@@ -5,20 +5,15 @@
 #include "LedBoard.h"
 #include "LedBoardsManager.h"
 
-LedBoard::LedBoard(uint8_t pin, uint8_t nb_pixels, LightStrategy_Factory *lightStrategyFactory) {
+LedBoard::LedBoard(uint8_t nb_pixels, LightStrategy_Factory *lightStrategyFactory) {
     NUM_PIXELS = nb_pixels;
     _lightStrategyFactory = lightStrategyFactory;
     _mainLightStrategy = _lightStrategyFactory->makeDefaultStrategy(this);
     _shiftLightStrategy = _lightStrategyFactory->makeDefaultShiftStrategy(this);
 }
 
-void LedBoard::giveReferenceManager(CRGB *leds, LedBoardsManager *manager) {
-    _leds = leds;
-    _manager = manager;
-}
-
 void LedBoard::giveReferenceManager(LedBoardsManager *manager) {
-    _manager=manager;
+    _manager = manager;
 }
 
 LedBoardsManager *LedBoard::getManager() {
@@ -60,17 +55,13 @@ void LedBoard::reinitLightStrategy() {
 }
 
 void LedBoard::triggerOn() {
-    if(_manager->getShiftState()){
-        _shiftLightStrategy->triggerOn();
-    }else{
         _mainLightStrategy->triggerOn();
-    }
 }
 
 void LedBoard::triggerOff() {
-    if(_manager->getShiftState()){
-       _shiftLightStrategy->triggerOff();
-    }else{
+    if (_manager->getShiftState()) {
+        _shiftLightStrategy->triggerOff();
+    } else {
         _mainLightStrategy->triggerOff();
     }
 }
@@ -82,16 +73,18 @@ void LedBoard::updateValues(unsigned long newTime) {
     _shiftLightStrategy->updateValues();
 }
 
-void LedBoard::selectStrategyToShow() {
-    if(_manager->getShiftState()){
-        _shiftLightStrategy->showNowThisStrategyInBoard();
-    }else{
-        _mainLightStrategy->showNowThisStrategyInBoard();
+void LedBoard::mixStrategies() {
+    // TODO implements strategy per pixel
+    for (uint8_t i = 0; i < NUM_PIXELS; i++) {
+        auto mixedColor = StrategyMixer::mixStrategies(
+                _mainLightStrategy->getSpecificLedColor(i),
+                _shiftLightStrategy->getSpecificLedColor(i),
+                _manager->getShiftState());
+        updateLedColorInBoard(i, mixedColor);
     }
 }
 
 void LedBoard::setBoardColor(uint8_t r, uint8_t g, uint8_t b) {
-//        _boardBaseColor.setRGB(r,g,b);
     _boardBaseColor.r = r;
     _boardBaseColor.g = g;
     _boardBaseColor.b = b;

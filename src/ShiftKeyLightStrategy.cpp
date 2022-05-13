@@ -20,18 +20,19 @@ void ShiftKeyLightStrategy::reinit() {
     _birthTime = _context->getCurrentTime();
     //
     _crgbStrategyColor = CRGB::Blue;
+    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
+        _ledColorsInStrategy[i] = _crgbStrategyColor;
+    }
 
 }
 
 void ShiftKeyLightStrategy::triggerOn() {
-    auto manager = _context->getManager();
-    manager->setShiftState(true);
-//    _crgbStrategyColor = manager->getShiftColor();
+//    auto manager = _context->getManager();
+//    manager->setShiftState(true);
 
 }
 
 void ShiftKeyLightStrategy::triggerOff() {
-    auto manager = _context->getManager();
-    manager->setShiftState(false);
-//    _crgbStrategyColor = CRGB::Black;
+//    auto manager = _context->getManager();
+//    manager->setShiftState(false);
 }

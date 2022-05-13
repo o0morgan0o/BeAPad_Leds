@@ -14,9 +14,6 @@ void FullLightStrategy::reset() {
 
 void FullLightStrategy::updateValues() {
     _lifeSpan = _context->getCurrentTime() - _birthTime;
-    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-        _boardLeds[i] = _crgbStrategyColor;
-    }
 }
 
 void FullLightStrategy::triggerOn() {

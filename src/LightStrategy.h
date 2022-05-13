@@ -13,6 +13,7 @@
 
 #include <FastLED.h>
 
+#define MAX_NUMBER_OF_LEDS_PER_BOARD 20
 #endif
 
 class LedBoard;
@@ -42,24 +43,24 @@ public:
 
     virtual void reinit() = 0;
 
-    virtual void showNowThisStrategyInBoard();
-
-public:
     virtual unsigned long getLifeSpan() { return _lifeSpan; }
 
     virtual unsigned long getBirthTime() { return _birthTime; }
 
-    virtual CRGB getStrategyColor() { return _crgbStrategyColor; }
+    virtual CRGB getStrategyColor();
+
+    virtual CRGB getSpecificLedColor(uint8_t index);
+
 
 protected:
     unsigned long _lifeSpan{};
     unsigned long _currentLife{};
     unsigned long _birthTime{};
-    CRGB *_boardLeds{};
     CRGB _crgbStrategyColor{0, 0, 0};
     LedBoard *_context{};
     //
     bool isTouched = false;
+    CRGB _ledColorsInStrategy[MAX_NUMBER_OF_LEDS_PER_BOARD]{CRGB::Red};
 
 };
 
