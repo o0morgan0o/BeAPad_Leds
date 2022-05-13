@@ -31,7 +31,6 @@
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_8 8
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_9 11
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_10 10
-
 APPLEMIDI_CREATE_INSTANCE(WiFiUDP, AppleMIDI, "AppleMIDI-ESP32", DEFAULT_CONTROL_PORT);
 AccessPoint *accessPoint;
 //
@@ -84,23 +83,28 @@ void setup() {
     ledBoardStore->addBoard(new NeoPixelBoard(13, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
 
     // **************************
+    // DEFINE PALETTE
+
+    // **************************
     // INITIALIZE BOARD MANAGER
     ledBoardsManager = new NeoPixelBoardsManager(ledBoardStore, lightStrategyFactory);
     ledBoardsManager->init();
-    ledBoardsManager->setBoardBaseColor(0, CRGB::Yellow);
-    ledBoardsManager->setBoardBaseColor(1, CRGB::Yellow);
-    ledBoardsManager->setBoardBaseColor(2, CRGB::Yellow);
-    ledBoardsManager->setBoardBaseColor(3, CRGB::Yellow);
-    ledBoardsManager->setBoardBaseColor(4, CRGB::Yellow);
-    ledBoardsManager->setBoardBaseColor(5, CRGB::Yellow);
-    ledBoardsManager->setBoardBaseColor(6, CRGB::Yellow);
-    ledBoardsManager->setBoardBaseColor(7, CRGB::Yellow);
+    ledBoardsManager->setBoardBaseColor(0, CRGB::Amethyst);
+    ledBoardsManager->setBoardBaseColor(1, CRGB::Amethyst);
+    ledBoardsManager->setBoardBaseColor(2, CRGB::Aquamarine);
+    ledBoardsManager->setBoardBaseColor(3, CRGB::Aquamarine);
+    ledBoardsManager->setBoardBaseColor(4, CRGB::Brown);
+    ledBoardsManager->setBoardBaseColor(5, CRGB::Brown);
+    ledBoardsManager->setBoardBaseColor(6, CRGB::Chocolate);
+    ledBoardsManager->setBoardBaseColor(7, CRGB::Chocolate);
     ledBoardsManager->setBoardBaseColor(8, CRGB::Yellow);
     ledBoardsManager->setBoardBaseColor(9, CRGB::Yellow);
     ledBoardsManager->setBoardBaseColor(10, CRGB::Yellow);
     ledBoardsManager->setBoardBaseColor(11, CRGB::Yellow);
+    // Shift color
+    ledBoardsManager->setShiftColor(CRGB::Violet);
+    //
     ledBoardsManager->showBaseColor();
-    //    ledBoardsManager->reinitBoardsLightStrategies();
     ledBoardsManager->giveAllBoardsReferenceOfManager();
 
     // *************************

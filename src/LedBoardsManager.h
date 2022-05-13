@@ -127,6 +127,9 @@ public:
 
     virtual bool getShiftState() { return _isInShiftState; }
 
+    virtual void setShiftColor(CRGB color) {
+        _shiftColor = color;
+    }
 
     virtual CRGB getShiftColor() { return _shiftColor; }
 
@@ -136,7 +139,7 @@ public:
 
 
 protected:
-    CRGB _shiftColor = CRGB::Blue;
+    CRGB _shiftColor = CRGB::White;
     LedBoard_Store_Interface *_ledBoardStore;
     std::vector<LedBoard *> _ledBoards;
     LightStrategy_Factory *_lightStrategyFactory;
