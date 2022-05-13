@@ -10,19 +10,19 @@
 TEST(myTest, testFirst){
     EXPECT_EQ(1,1);
     auto factory = std::make_unique<LightStrategy_Factory>();
-    FakeLedBoard fakeBoard{0, 9, factory.get()};
+    FakeLedBoard fakeBoard{9, factory.get()};
 }
 
 TEST(BoardCreation, testManagerGetAllCreatedBoards){
     auto factory = std::make_unique<LightStrategy_Factory>();
     auto store = std::make_unique<FakeLedBoardStore>();
-    store->addBoard(new FakeLedBoard(0, 9,factory.get()));
-    store->addBoard(new FakeLedBoard(0, 9,factory.get()));
-    store->addBoard(new FakeLedBoard(0, 9,factory.get()));
-    store->addBoard(new FakeLedBoard(0, 9,factory.get()));
-    store->addBoard(new FakeLedBoard(0, 9,factory.get()));
-    store->addBoard(new FakeLedBoard(0, 9,factory.get()));
-    store->addBoard(new FakeLedBoard(0, 9,factory.get()));
-    store->addBoard(new FakeLedBoard(0, 9,factory.get()));
+    store->addBoard(new FakeLedBoard(9, factory.get()));
+    store->addBoard(new FakeLedBoard(9, factory.get()));
+    store->addBoard(new FakeLedBoard(9, factory.get()));
+    store->addBoard(new FakeLedBoard(9, factory.get()));
+    store->addBoard(new FakeLedBoard(9, factory.get()));
+    store->addBoard(new FakeLedBoard(9, factory.get()));
+    store->addBoard(new FakeLedBoard(9, factory.get()));
+    store->addBoard(new FakeLedBoard(9, factory.get()));
     EXPECT_EQ(store->getLedBoards().size(), 8);
 }

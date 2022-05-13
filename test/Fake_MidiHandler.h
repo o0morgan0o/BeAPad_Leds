@@ -19,13 +19,6 @@ public:
 
     }
 
-    void sendMidiNoteOn(uint8_t pinIndex) override {
-
-    }
-
-    void sendMidiNoteOff(uint8_t pinIndex) override {
-
-    }
 
     void sendMidiOnByTouchPin(uint8_t boardIndex, bool isInShiftState) override {
 

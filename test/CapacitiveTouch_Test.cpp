@@ -13,9 +13,8 @@
 #include "../src/CapacitiveTouch_Dispatcher.h"
 
 struct CapacitiveTest_Fixture : public testing::Test {
-
     struct CapacitiveTouch_Dispatcher_Mock : public CapacitiveTouch_Dispatcher {
-        CapacitiveTouch_Dispatcher_Mock(LedBoardsManager *manager, Midi_Handler *midiHandler, Debug_Helper *debugHelper, Capacitive_Sensor* touchSensor)
+        CapacitiveTouch_Dispatcher_Mock(LedBoardsManager *manager, Midi_Handler *midiHandler, Debug_Helper *debugHelper, Capacitive_Sensor *touchSensor)
                 : CapacitiveTouch_Dispatcher(manager, midiHandler, debugHelper, touchSensor) {
 
         }
@@ -28,11 +27,9 @@ struct CapacitiveTest_Fixture : public testing::Test {
 
         }
 
-
         void setTouchThreshold(uint8_t newThreshold) override {
 
         }
-
 
         uint8_t getTouchThreshold() const override {
             return 0;
@@ -58,8 +55,8 @@ protected:
 TEST_F(CapacitiveTest_Fixture, testConnectionPinToBoard) {
     auto store = std::make_unique<FakeLedBoardStore>();
     auto strategyFactory = std::make_unique<LightStrategy_Factory>();
-    auto fakeBoard = std::make_unique<FakeLedBoard>(0, 9, strategyFactory.get());
-    auto fakeBoard2 = std::make_unique<FakeLedBoard>(1, 9, strategyFactory.get());
+    auto fakeBoard = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
+    auto fakeBoard2 = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
     store->addBoard(fakeBoard.get());
     store->addBoard(fakeBoard2.get());
     auto manager = std::make_unique<FakeLedBoardManager>(store.get(), strategyFactory.get());
@@ -78,11 +75,11 @@ TEST_F(CapacitiveTest_Fixture, testConnectionPinToBoard) {
     EXPECT_EQ(fakeMidiHandler->getBoardAssociatedWithTouchPin(2), 1); // PIN 1 should be associated with board 0
 }
 
-TEST_F(CapacitiveTest_Fixture, testMidihandlerSendMidiFromPinToCorrectNote){
+TEST_F(CapacitiveTest_Fixture, testMidihandlerSendMidiFromPinToCorrectNote) {
     auto store = std::make_unique<FakeLedBoardStore>();
     auto strategyFactory = std::make_unique<LightStrategy_Factory>();
-    auto fakeBoard = std::make_unique<FakeLedBoard>(0, 9, strategyFactory.get());
-    auto fakeBoard2 = std::make_unique<FakeLedBoard>(1, 9, strategyFactory.get());
+    auto fakeBoard = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
+    auto fakeBoard2 = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
     store->addBoard(fakeBoard.get());
     store->addBoard(fakeBoard2.get());
     auto manager = std::make_unique<FakeLedBoardManager>(store.get(), strategyFactory.get());

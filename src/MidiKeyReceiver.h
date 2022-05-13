@@ -23,14 +23,25 @@ public:
         _debugHelper = debugHelper;
 
         // initialization of boardIndexReferences
-        for (unsigned char &_boardIndexReference: _boardIndexReferences) {
-            _boardIndexReference = INACTIVE_BOARD_INDEX;
+        for (unsigned char &boardIndexReference: _boardIndexReferences) {
+            boardIndexReference = INACTIVE_BOARD_INDEX;
+        }
+
+        // initialization of emptyStrategies
+        for (auto & midiNotesStrategy : _midiNotesStrategies) {
+            midiNotesStrategy = LIGHT_STRATEGIES::NO_LIGHT_STRATEGY;
         }
     }
 
-    virtual void connectBoardToReceiveMidiKey(uint8_t boardIndex, byte midiKey) {
+//    virtual void connectBoardToReceiveMidiKey(uint8_t boardIndex, byte midiKey) {
+//        // We store at {midiKey} location in the array, the corresponding board
+//        _boardIndexReferences[(uint8_t) midiKey] = boardIndex;
+//    }
+
+    virtual void connectBoardToReceiveMidiKey(uint8_t boardIndex, byte midiKey, LIGHT_STRATEGIES strategy) {
         // We store at {midiKey} location in the array, the corresponding board
         _boardIndexReferences[(uint8_t) midiKey] = boardIndex;
+        _midiNotesStrategies[(uint8_t) midiKey] = strategy;
 
     }
 
@@ -42,7 +53,7 @@ public:
             message += note;
             _debugHelper->add(message);
         } else {
-            _manager->triggerOnBoard(_boardIndexReferences[(uint8_t) note]);
+            _manager->triggerOnBoard(_boardIndexReferences[(uint8_t) note], _midiNotesStrategies[(uint8_t) note]);
         }
 
     }
@@ -64,6 +75,7 @@ protected:
     LedBoardsManager *_manager;
     Debug_Helper *_debugHelper;
     uint8_t _boardIndexReferences[128]{};
+    LIGHT_STRATEGIES _midiNotesStrategies[128]{};
 
 };
 

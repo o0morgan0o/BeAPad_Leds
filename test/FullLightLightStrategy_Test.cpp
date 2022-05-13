@@ -7,7 +7,7 @@
 TEST(FullLightTest, testOfBasicProperties) {
 //    auto factory = std::make_unique<LightStrategy_Factory>();
 //    auto board = std::make_unique<FakeLedBoard>(factory.get());
-//    auto strategy = board->getLightStrategy();
+//    auto strategy = board->getMainLightStrategy();
 //    //
 //    EXPECT_EQ(board->getBoardBaseColor().r, 100);
 //    EXPECT_EQ(board->getBoardBaseColor().g, 0);
@@ -22,7 +22,7 @@ TEST(FullLightTest, testOfBasicProperties) {
 //    board->changeLightStrategy(LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT);
 //    //
 //    auto color = board->getBoardBaseColor();
-//    auto newStrategy = board->getLightStrategy();
+//    auto newStrategy = board->getMainLightStrategy();
 //    EXPECT_NE(dynamic_cast<FullLightStrategy*>(newStrategy), nullptr);
 //    EXPECT_EQ(color.r, 100);
 //    EXPECT_EQ(color.g, 101);

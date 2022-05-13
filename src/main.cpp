@@ -129,18 +129,17 @@ void setup() {
     // it means when MidiNote 60 is received a triggerOnSignalIsSendOn board 0
     // TODO Try to handle things differently so that we can send a midi Message to multiple boards
     midiReceiver = new MidiKeyReceiver(ledBoardsManager, inactiveDebugHelper);
-    midiReceiver->connectBoardToReceiveMidiKey(0, 60);
-    midiReceiver->connectBoardToReceiveMidiKey(1, 61);
-    midiReceiver->connectBoardToReceiveMidiKey(2, 62);
-    midiReceiver->connectBoardToReceiveMidiKey(3, 63);
-    midiReceiver->connectBoardToReceiveMidiKey(4, 64);
-    midiReceiver->connectBoardToReceiveMidiKey(5, 65);
-    midiReceiver->connectBoardToReceiveMidiKey(6, 66);
-    midiReceiver->connectBoardToReceiveMidiKey(7, 67);
-    midiReceiver->connectBoardToReceiveMidiKey(8, 68);
-    midiReceiver->connectBoardToReceiveMidiKey(9, 69);
-    midiReceiver->connectBoardToReceiveMidiKey(10, 70);
-    midiReceiver->connectBoardToReceiveMidiKey(11, 71);
+    midiReceiver->connectBoardToReceiveMidiKey(0, 60, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
+    midiReceiver->connectBoardToReceiveMidiKey(1, 61, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    midiReceiver->connectBoardToReceiveMidiKey(2, 62, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    midiReceiver->connectBoardToReceiveMidiKey(3, 63, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    midiReceiver->connectBoardToReceiveMidiKey(4, 64, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    midiReceiver->connectBoardToReceiveMidiKey(5, 65, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    midiReceiver->connectBoardToReceiveMidiKey(6, 66, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    midiReceiver->connectBoardToReceiveMidiKey(7, 67, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    midiReceiver->connectBoardToReceiveMidiKey(8, 68, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    midiReceiver->connectBoardToReceiveMidiKey(9, 69, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    midiReceiver->connectBoardToReceiveMidiKey(10, 70, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
 
     // ***************************
     // MIDI KEY SENDER

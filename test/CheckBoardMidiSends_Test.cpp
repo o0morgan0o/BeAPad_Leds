@@ -51,8 +51,8 @@ protected:
 TEST_F(SendMidiKeys_Fixture, TestBoardSendCorrectNoteOn) {
     auto store = std::make_unique<FakeLedBoardStore>();
     auto strategyFactory = std::make_unique<LightStrategy_Factory>();
-    auto fakeBoard = std::make_unique<FakeLedBoard>(0, 9, strategyFactory.get());
-    auto fakeBoard2 = std::make_unique<FakeLedBoard>(1, 9, strategyFactory.get());
+    auto fakeBoard = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
+    auto fakeBoard2 = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
     store->addBoard(fakeBoard.get());
     store->addBoard(fakeBoard2.get());
     auto manager = std::make_unique<Mock_Manager>(store.get(), strategyFactory.get());
@@ -90,11 +90,11 @@ TEST_F(SendMidiKeys_Fixture, TestBoardSendCorrectNoteOn) {
 
 }
 
-TEST_F(SendMidiKeys_Fixture, testSet2PinsAtSameTime){
+TEST_F(SendMidiKeys_Fixture, testSet2PinsAtSameTime) {
     auto store = std::make_unique<FakeLedBoardStore>();
     auto strategyFactory = std::make_unique<LightStrategy_Factory>();
-    auto fakeBoard = std::make_unique<FakeLedBoard>(0, 9, strategyFactory.get());
-    auto fakeBoard2 = std::make_unique<FakeLedBoard>(1, 9, strategyFactory.get());
+    auto fakeBoard = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
+    auto fakeBoard2 = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
     store->addBoard(fakeBoard.get());
     store->addBoard(fakeBoard2.get());
     auto manager = std::make_unique<Mock_Manager>(store.get(), strategyFactory.get());

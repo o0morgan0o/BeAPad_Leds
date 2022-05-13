@@ -16,7 +16,13 @@ public:
 
     }
 
-    uint8_t *getBoardIndexReferences() { return _boardIndexReferences; }
+    uint8_t *getBoardIndexReferences() {
+        return _boardIndexReferences;
+    }
+
+    LIGHT_STRATEGIES* getLightStrategiesArray(){
+        return _midiNotesStrategies;
+    }
 
 };
 

@@ -34,14 +34,14 @@ TEST_F(LedBoardStore_Fixture, checkEmptyStateOfLedBoardStore) {
 TEST_F(LedBoardStore_Fixture, checkAddOfBoards){
     FakeLedBoardStore ledBoardStore{};
     for (uint8_t i = 0; i < 8; i++){
-        ledBoardStore.addBoard(new FakeLedBoard(0, 9, factory.get()));
+        ledBoardStore.addBoard(new FakeLedBoard(9, factory.get()));
     }
     EXPECT_EQ(ledBoardStore.getLedBoards().size(), 8);
 }
 
 TEST_F(LedBoardStore_Fixture, checkBoardShouldHaveAFactoryAndALightStrategy) {
     FakeLedBoardStore ledBoardStore{};
-    ledBoardStore.addBoard(new FakeLedBoard(0, 9, factory.get()));
+    ledBoardStore.addBoard(new FakeLedBoard(9, factory.get()));
     EXPECT_EQ(ledBoardStore.getLedBoards().size(), 1);
     auto board = ledBoardStore.getLedBoards().at(0);
     EXPECT_NE(board, nullptr);
@@ -50,7 +50,7 @@ TEST_F(LedBoardStore_Fixture, checkBoardShouldHaveAFactoryAndALightStrategy) {
     //
     EXPECT_EQ(factory.get(), boardStrategyFactory); // address of factory should be the same
     //
-    auto boardStrategy = fakeBoard->getLightStrategy();
+    auto boardStrategy = fakeBoard->getMainLightStrategy();
     EXPECT_NE(boardStrategy,nullptr);
     EXPECT_NE(dynamic_cast<NoLightStrategy*>(boardStrategy), nullptr);
 }

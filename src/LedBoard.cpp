@@ -55,7 +55,13 @@ void LedBoard::reinitLightStrategy() {
 }
 
 void LedBoard::triggerOn() {
-        _mainLightStrategy->triggerOn();
+    _mainLightStrategy->triggerOn();
+}
+
+void LedBoard::triggerOn(LIGHT_STRATEGIES strategy) {
+    changeLightStrategy(strategy);
+    _mainLightStrategy->reinit();
+    _mainLightStrategy->triggerOn();
 }
 
 void LedBoard::triggerOff() {

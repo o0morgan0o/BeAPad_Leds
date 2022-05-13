@@ -68,6 +68,14 @@ public:
         }
     }
 
+    virtual void triggerOnBoard(uint8_t boardIndex, LIGHT_STRATEGIES strategy) {
+        try {
+            _ledBoards.at(boardIndex)->triggerOn(strategy);
+        } catch (std::exception &e) {
+            showBlinkHighPriorityMessage(BlinkHighPriorityMessages::TRIGGER_BOARD_ERROR);
+        }
+    }
+
     virtual void triggerOffBoard(uint8_t boardIndex) {
         try {
             _ledBoards.at(boardIndex)->triggerOff();

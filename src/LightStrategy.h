@@ -10,11 +10,9 @@
 #ifdef IN_TESTING
 #include "../test/Fake_CRGB.h"
 #else
-
 #include <FastLED.h>
-
-#define MAX_NUMBER_OF_LEDS_PER_BOARD 20
 #endif
+#define MAX_NUMBER_OF_LEDS_PER_BOARD 20
 
 class LedBoard;
 
