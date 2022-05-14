@@ -6,6 +6,13 @@
 #define GONZYPROJECT_ILEDBOARD_H
 
 #include <cstdint>
+
+#ifdef IN_TESTING
+#include "../test/Fake_CRGB.h"
+#else
+#include <FastLED.h>
+#endif
+
 #include "LightCommands.h"
 #include "LightStrategy.h"
 #include "FullLightStrategy.h"
@@ -16,21 +23,13 @@
 
 class LedBoardsManager;
 
-#ifdef IN_TESTING
-#include "../test/Fake_CRGB.h"
-#else
-
-#include <FastLED.h>
-
-#endif
-
 class LedBoard {
 public:
     explicit LedBoard(uint8_t nb_pixels, LightStrategy_Factory *lightStrategyFactory);
 
-    virtual void giveReferenceManager(LedBoardsManager* manager);
+    virtual void giveReferenceManager(LedBoardsManager *manager);
 
-    virtual LedBoardsManager* getManager();
+    virtual LedBoardsManager *getManager();
 
     virtual void changeLightStrategy(LIGHT_STRATEGIES newStrategy);
 
@@ -47,6 +46,8 @@ public:
     virtual void show() = 0;;
 
     virtual void triggerOn();
+
+    virtual void triggerOn(LIGHT_STRATEGIES strategy);
 
     virtual void triggerOff();
 
@@ -66,7 +67,8 @@ public:
 
     virtual RGB_Color getBoardBaseColor();
 
-    virtual void initBoard() {}
+    virtual void initBoard() =0;
+
 
     virtual void mixStrategies();
 
@@ -77,7 +79,8 @@ public:
     unsigned long _currentTime{0};
 protected:
     LightStrategy_Factory *_lightStrategyFactory;
-    LightStrategy *_mainLightStrategy;
+    LightStrategy *_midiReceiveLightStrategy;
+//    LightStrategy *_touchSensorLightStrategy;
     LightStrategy *_shiftLightStrategy;
 protected:
     LedBoardsManager *_manager{};

@@ -35,8 +35,8 @@ public:
     }
 
     void logMidiMessage(const String &note_type, byte channel, byte note, byte velocity) override {
-        Serial.println("MidiMESSAGE :");
-        String message{note_type};
+        String message{"MIDI_MESSAGE: "};
+        message+= note_type;
         message+= " Channel: ";
         message += channel;
         message+= " Note: ";

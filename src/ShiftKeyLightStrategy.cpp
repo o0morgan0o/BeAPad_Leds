@@ -19,7 +19,8 @@ void ShiftKeyLightStrategy::updateValues() {
 void ShiftKeyLightStrategy::reinit() {
     _birthTime = _context->getCurrentTime();
     //
-    _crgbStrategyColor = CRGB::Blue;
+    auto manager = _context->getManager();
+    _crgbStrategyColor = manager->getShiftColor();
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
         _ledColorsInStrategy[i] = _crgbStrategyColor;
     }

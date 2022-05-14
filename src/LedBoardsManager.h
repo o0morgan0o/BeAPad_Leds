@@ -10,6 +10,7 @@
 #include "LedBoard_Store_Interface.h"
 #include "LightStrategy_Factory.h"
 #include "BlinkHighPriorityMessages.h"
+#include "Debug_Helper.h"
 #include <vector>
 
 #ifndef IN_TESTING
@@ -21,11 +22,12 @@ class LedBoardsManager {
 public:
     explicit LedBoardsManager(
             LedBoard_Store_Interface *ledBoardStore,
-            LightStrategy_Factory *lightStrategyFactory
+            LightStrategy_Factory *lightStrategyFactory,
+            Debug_Helper *debugHelper
     ) {
+        _debugHelper = debugHelper;
         _ledBoardStore = ledBoardStore;
         _ledBoards = _ledBoardStore->getLedBoards();
-        _lightStrategyFactory = lightStrategyFactory;
     }
 
     virtual void init() = 0;
@@ -38,10 +40,6 @@ public:
         for (auto ledBoard: _ledBoards) {
             ledBoard->reinitLightStrategy();
         }
-    }
-
-    virtual void changeStrategyOnBoard(uint8_t boardIndex, LIGHT_STRATEGIES strategy) {
-        _ledBoards.at(boardIndex)->changeLightStrategy(strategy);
     }
 
     virtual void update(unsigned long currentTime) {
@@ -60,9 +58,13 @@ public:
         _isInShiftState = newState;
     }
 
-    virtual void triggerOnBoard(uint8_t boardIndex) {
+//    virtual void triggerOnSpecialEffect(LIGHT_SPECIAL_EFFECT specialEffect){
+//
+//    }
+
+    virtual void triggerOnBoard( uint8_t boardIndex, LIGHT_STRATEGIES strategy) {
         try {
-            _ledBoards.at(boardIndex)->triggerOn();
+            _ledBoards.at(boardIndex)->triggerOn(strategy);
         } catch (std::exception &e) {
             showBlinkHighPriorityMessage(BlinkHighPriorityMessages::TRIGGER_BOARD_ERROR);
         }
@@ -95,8 +97,7 @@ public:
                 showIntermittentBlink(CRGB::Yellow);
                 break;
             case BlinkHighPriorityMessages::SHOW_END_OF_SETUP_MESSAGE:
-                showQuickBlink(CRGB::Yellow);
-                showQuickBlink(CRGB::Green);
+                showQuickBlink(CRGB::Orange);
                 break;
             default:
                 break;
@@ -107,28 +108,47 @@ public:
         uint8_t LOOPS = 2;
         for (int i = 0; i < LOOPS; i++) {
             showGlobally(color);
-            delay(200);
+            delay(100);
             showGlobally(CRGB::Black);
-            delay(200);
+            delay(100);
         }
     }
 
     virtual void showIntermittentBlink(CRGB color) {
-        uint8_t LOOPS = 4;
+        uint8_t LOOPS = 3;
         for (int i = 0; i < LOOPS; i++) {
             showGlobally(color);
-            delay(500);
+            delay(200);
             showGlobally(CRGB::Black);
-            delay(500);
+            delay(200);
         }
     }
 
     virtual void showBaseColor() = 0;
 
-    virtual bool getShiftState() { return _isInShiftState; }
+    virtual bool getShiftState() {
+        return _isInShiftState;
+    }
 
+    virtual void setShiftColor(CRGB color) {
+        _shiftColor = color;
+    }
 
-    virtual CRGB getShiftColor() { return _shiftColor; }
+    virtual CRGB getShiftColor() {
+        return _shiftColor;
+    }
+
+    Debug_Helper *getDebugHelper() {
+        return _debugHelper;
+    }
+
+    virtual void setLightStrategyForChannel(uint8_t channel, LIGHT_STRATEGIES strategy) {
+        _channelStrategies[channel] = strategy;
+    }
+
+    LIGHT_STRATEGIES getLightStrategyAssociatedWithChannel(uint8_t channel) {
+        return _channelStrategies[channel];
+    }
 
 //    virtual void setRandomColorForEachBoard() = 0;
 
@@ -136,10 +156,12 @@ public:
 
 
 protected:
-    CRGB _shiftColor = CRGB::Blue;
+//    LIGHT_STRATEGIES _touchTriggerLightStrategies[12]{LIGHT_STRATEGIES::NO_LIGHT_STRATEGY};
+    Debug_Helper *_debugHelper;
+    CRGB _shiftColor = CRGB::Green;
     LedBoard_Store_Interface *_ledBoardStore;
     std::vector<LedBoard *> _ledBoards;
-    LightStrategy_Factory *_lightStrategyFactory;
+    LIGHT_STRATEGIES _channelStrategies[17]{LIGHT_STRATEGIES::NO_LIGHT_STRATEGY};
     bool _isInShiftState = false;
 
 };

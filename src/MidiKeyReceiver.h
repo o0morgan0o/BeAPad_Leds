@@ -23,27 +23,21 @@ public:
         _debugHelper = debugHelper;
 
         // initialization of boardIndexReferences
-        for (unsigned char &_boardIndexReference: _boardIndexReferences) {
-            _boardIndexReference = INACTIVE_BOARD_INDEX;
+        for (unsigned char &boardIndexReference: _boardIndexReferences) {
+            boardIndexReference = INACTIVE_BOARD_INDEX;
         }
     }
 
     virtual void connectBoardToReceiveMidiKey(uint8_t boardIndex, byte midiKey) {
         // We store at {midiKey} location in the array, the corresponding board
         _boardIndexReferences[(uint8_t) midiKey] = boardIndex;
-
     }
 
-    virtual void handleNoteOn(byte note) {
+    virtual void handleNoteOn(byte channel, byte note) {
         // TODO Try to handle things differently so that we can send a midi Message to multiple boards
         // So store vector of bytes
-        if (_boardIndexReferences[(uint8_t) note] == INACTIVE_BOARD_INDEX) {
-            String message{"WARNING : No linked Board to note "};
-            message += note;
-            _debugHelper->add(message);
-        } else {
-            _manager->triggerOnBoard(_boardIndexReferences[(uint8_t) note]);
-        }
+        auto strategy = _manager->getLightStrategyAssociatedWithChannel(channel);
+        _manager->triggerOnBoard(_boardIndexReferences[(uint8_t) note], strategy);
 
     }
 
@@ -64,7 +58,6 @@ protected:
     LedBoardsManager *_manager;
     Debug_Helper *_debugHelper;
     uint8_t _boardIndexReferences[128]{};
-
 };
 
 #endif //PLATFORMIO_PROGRAM_MIDIKEYRECEIVER_H

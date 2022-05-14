@@ -5,6 +5,10 @@
 #ifndef PLATFORMIO_PROGRAM_MAIN_CONSTANTS_H
 #define PLATFORMIO_PROGRAM_MAIN_CONSTANTS_H
 #endif //PLATFORMIO_PROGRAM_MAIN_CONSTANTS_H
+#ifdef IN_TESTING
+#else
+#include <FastLED.h>
+#endif
 
 #ifndef _BV
 #define _BV(bit) (1 << (bit))

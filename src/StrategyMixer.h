@@ -5,7 +5,11 @@
 #ifndef PLATFORMIO_PROGRAM_STRATEGYMIXER_H
 #define PLATFORMIO_PROGRAM_STRATEGYMIXER_H
 
+#ifdef IN_TESTING
+#include "../test/Fake_CRGB.h"
+#else
 #include <FastLED.h>
+#endif
 #include "LightStrategy.h"
 
 class StrategyMixer {

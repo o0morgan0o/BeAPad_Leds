@@ -36,7 +36,7 @@ public:
             midiNoteToSend = _midiSender->getMidiKeyAssociatedWithPinIndex(touchPin);
         }
         // TODO Disable debug if in release mode
-        String message{"=> MIDI NOTE_ON: "};
+        String message{"\n[====>] SENDING MIDI NOTE_ON: "};
         message += midiNoteToSend;
         _debugHelper->add(message);
         _midiSession->sendNoteOn(midiNoteToSend, 120, 1);
@@ -50,7 +50,7 @@ public:
             midiNoteToSend = _midiSender->getMidiKeyAssociatedWithPinIndex(touchPin);
         }
         // TODO Disable debug if in release mode
-        String message{"=> MIDI NOTE_OFF: "};
+        String message{"[====>] SENDING MIDI NOTE_OFF: "};
         message += midiNoteToSend;
         _debugHelper->add(message);
         _midiSession->sendNoteOff(midiNoteToSend, 120, 1);

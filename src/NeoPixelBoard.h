@@ -17,36 +17,37 @@ public:
     }
 
     void showBaseColor() override {
-        for(uint8_t i =0; i < NUM_PIXELS; i++){
+        for (uint8_t i = 0; i < NUM_PIXELS; i++) {
             _strip->setPixelColor(i, _boardBaseColor.r, _boardBaseColor.g, _boardBaseColor.b);
         }
     }
 
     void showGlobalColor(CRGB color) override {
-        for(uint8_t i = 0; i < NUM_PIXELS; i++){
+        for (uint8_t i = 0; i < NUM_PIXELS; i++) {
             _strip->setPixelColor(i, color.r, color.g, color.b);
         }
         show();
     }
 
-    void updateLedColorInBoard(uint8_t ledIndexInBoard, CRGB updatedColor) override{
+    void updateLedColorInBoard(uint8_t ledIndexInBoard, CRGB updatedColor) override {
         _strip->setPixelColor(ledIndexInBoard, updatedColor.r, updatedColor.g, updatedColor.b);
     }
 
     void updateLedColorInBoard(uint8_t ledIndexInBoard, uint8_t r, uint8_t g, uint8_t b) override {
-        _strip->setPixelColor(ledIndexInBoard, r,g,b);
+        _strip->setPixelColor(ledIndexInBoard, r, g, b);
 
     }
 
     void initBoard() override {
         _strip->begin();
+        for(uint8_t i = 0 ; i < NUM_PIXELS; i++){
+            _strip->setPixelColor(i,0,0,0);
+        }
     }
-
 
     void show() override {
         _strip->show();
     }
-
 
     Adafruit_NeoPixel *_strip;
 };

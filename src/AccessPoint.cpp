@@ -24,7 +24,7 @@ void AccessPoint::init(LedBoardsManager *manager, Debug_Helper *debugHelper) {
         for (uint8_t i = 0; i < server.args(); i++) {
             if (server.argName(i) == "board") {
                 auto board = server.arg(i).toInt();
-                _manager->triggerOnBoard(board);
+//                _manager->triggerOnBoard(board);
                 String message = "parameter Board Found ! ";
                 message += board;
                 return server.send(200, "text/plain", message);

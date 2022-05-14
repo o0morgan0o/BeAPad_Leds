@@ -13,7 +13,7 @@
 
 struct LedBoard_Fixture : public testing::Test {
     struct LedBoard_Mock : public FakeLedBoard {
-        explicit LedBoard_Mock(uint8_t boardIndex, uint8_t nb_leds, LightStrategy_Factory *factory) : FakeLedBoard(boardIndex, nb_leds, factory) {}
+        explicit LedBoard_Mock(uint8_t nb_leds, LightStrategy_Factory *factory) : FakeLedBoard(nb_leds, factory) {}
 
         void show() override {
 
@@ -36,13 +36,13 @@ public:
 };
 
 TEST_F(LedBoard_Fixture, testInitialCreation) {
-    FakeLedBoard ledBoard{0, 9, factory.get()};
+    FakeLedBoard ledBoard{9, factory.get()};
 //    EXPECT_EQ(ledBoard.getCurrentTime(), 0.0);
 }
 
 TEST_F(LedBoard_Fixture, testUpdateTime) {
-    LedBoard_Mock ledBoard{0, 9, factory.get()};
-    ledBoard.update(120.0);
+    LedBoard_Mock ledBoard{9, factory.get()};
+    ledBoard.updateValues(120.0);
     EXPECT_EQ(ledBoard.getCurrentTime(), 120.0);
 }
 
@@ -54,11 +54,11 @@ TEST_F(LedBoard_Fixture, ledBoardShouldHaveTheLightStrategyFactory) {
 }
 
 TEST_F(LedBoard_Fixture, checkChangingStrategyInBoard) {
-    auto fakeBoard = std::make_unique<FakeLedBoard>(0, 9, factory.get());
-    auto boardStrategy = fakeBoard->getLightStrategy();
+    auto fakeBoard = std::make_unique<FakeLedBoard>( 9, factory.get());
+    auto boardStrategy = fakeBoard->getMainLightStrategy();
     EXPECT_NE(dynamic_cast<NoLightStrategy *>(boardStrategy), nullptr);
     fakeBoard->changeLightStrategy(LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT);
-    boardStrategy = fakeBoard->getLightStrategy();
+    boardStrategy = fakeBoard->getMainLightStrategy();
     //
     EXPECT_EQ(dynamic_cast<NoLightStrategy * >(boardStrategy), nullptr); // it should not be a noLightStrategy
     EXPECT_NE(dynamic_cast<FullLightStrategy * > (boardStrategy), nullptr); // it should be a fullLightStrategy
