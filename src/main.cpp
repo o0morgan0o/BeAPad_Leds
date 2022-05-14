@@ -104,51 +104,38 @@ void setup() {
     // Shift color
     ledBoardsManager->setShiftColor(CRGB::Blue);
     //
-//    ledBoardsManager->showBaseColor();
     ledBoardsManager->giveAllBoardsReferenceOfManager();
 
     // *************************
     // DEFINITIONS OF STRATEGY FOR EACH BOARD
-    // TODO be sure that when a user trigger a board this is this strategy which is used
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(0, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(1, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(3, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(4, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(5, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(6, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(7, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(8, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(9, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(10, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setTriggerOnTouchLightStrategyOnBoard(11, LIGHT_STRATEGIES::STRATEGY_SHIFT_KEY_STRATEGY);
-//    ledBoardsManager->setLightStrategyForChannel(1, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    ledBoardsManager->setLightStrategyForChannel(2, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
+    ledBoardsManager->setLightStrategyForChannel(1, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT);
+    ledBoardsManager->setLightStrategyForChannel(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+//    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_FADE_OUT_SLOW);
+//    ledBoardsManager->setLightStrategyForChannel(4, LIGHT_STRATEGIES::STRATEGY_SERPENTIN);
+//    ledBoardsManager->setLightStrategyForChannel(5, LIGHT_STRATEGIES::STRATEGY_EXPANSION);
 
     // ****************************
     // MIDI KEY RECEIVER
     // explanations: connectBoardToReceiveMidiKey(60, 0);
     // it means when MidiNote 60 is received a triggerOnSignalIsSendOn board 0
-    // TODO Try to handle things differently so that we can send a midi Message to multiple boards
     midiReceiver = new MidiKeyReceiver(ledBoardsManager, inactiveDebugHelper);
-//    midiReceiver->connectBoardToReceiveMidiKey(0, 60, LIGHT_STRATEGIES::STRATEGY_FADE_IN_AND_FADE_OUT);
-//    midiReceiver->connectBoardToReceiveMidiKey(1, 61, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    midiReceiver->connectBoardToReceiveMidiKey(2, 62, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    midiReceiver->connectBoardToReceiveMidiKey(3, 63, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    midiReceiver->connectBoardToReceiveMidiKey(4, 64, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    midiReceiver->connectBoardToReceiveMidiKey(5, 65, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    midiReceiver->connectBoardToReceiveMidiKey(6, 66, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    midiReceiver->connectBoardToReceiveMidiKey(7, 67, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    midiReceiver->connectBoardToReceiveMidiKey(8, 68, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    midiReceiver->connectBoardToReceiveMidiKey(9, 69, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-//    midiReceiver->connectBoardToReceiveMidiKey(10, 70, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    midiReceiver->connectBoardToReceiveMidiKey(0, 60);
+    midiReceiver->connectBoardToReceiveMidiKey(1, 61);
+    midiReceiver->connectBoardToReceiveMidiKey(2, 62);
+    midiReceiver->connectBoardToReceiveMidiKey(3, 63);
+    midiReceiver->connectBoardToReceiveMidiKey(4, 64);
+    midiReceiver->connectBoardToReceiveMidiKey(5, 65);
+    midiReceiver->connectBoardToReceiveMidiKey(6, 66);
+    midiReceiver->connectBoardToReceiveMidiKey(7, 67);
+    midiReceiver->connectBoardToReceiveMidiKey(8, 68);
+    midiReceiver->connectBoardToReceiveMidiKey(9, 69);
+    midiReceiver->connectBoardToReceiveMidiKey(10, 7);
 
     // ***************************
     // MIDI KEY SENDER
     // explanations : connectBoardToSendMidiKey(1, 4 ,87)
     // it means that touchPin1 (in MPR121) is connected to board 4
     // ,and it will send midiNote 87 when touched
-    // NOTE:
     // Last board (11 from index 0) is not connected to midiSend or touchPin because it acts as a shift button
     midiSender = new MidiKeySender(ledBoardsManager, debugHelper);
     midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_0, 0, 60, 80);
@@ -209,8 +196,8 @@ void setup() {
 
     // *************************
     // FINALIZE INITIALISATION
-//    ledBoardsManager->reinitBoardsLightStrategies();
-//    ledBoardsManager->showBlinkHighPriorityMessage(BlinkHighPriorityMessages::SHOW_END_OF_SETUP_MESSAGE);
+    ledBoardsManager->reinitBoardsLightStrategies();
+    ledBoardsManager->showBlinkHighPriorityMessage(BlinkHighPriorityMessages::SHOW_END_OF_SETUP_MESSAGE);
 
 }
 
@@ -219,14 +206,14 @@ void loop() {
     // can be deactivated if webServer Not Needed
     accessPoint->loop();
 
-//    // check midi Messages
-//    midiHandler->loop();
-//
-//    // capacitiveTouch loop
-//    capacitiveTouchDispatcher->loop();
-//
-//    // updateValues and show LedBoardManager
-//    ledBoardsManager->update(millis());
-//    ledBoardsManager->show();
+    // check midi Messages
+    midiHandler->loop();
+
+    // capacitiveTouch loop
+    capacitiveTouchDispatcher->loop();
+
+    // updateValues and show LedBoardManager
+    ledBoardsManager->update(millis());
+    ledBoardsManager->show();
 
 }

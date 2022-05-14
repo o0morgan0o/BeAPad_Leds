@@ -26,23 +26,11 @@ public:
         for (unsigned char &boardIndexReference: _boardIndexReferences) {
             boardIndexReference = INACTIVE_BOARD_INDEX;
         }
-
-        // initialization of emptyStrategies
-        for (auto &midiNotesStrategy: _midiNotesStrategies) {
-            midiNotesStrategy = LIGHT_STRATEGIES::NO_LIGHT_STRATEGY;
-        }
     }
 
-//    virtual void connectBoardToReceiveMidiKey(uint8_t boardIndex, byte midiKey) {
-//        // We store at {midiKey} location in the array, the corresponding board
-//        _boardIndexReferences[(uint8_t) midiKey] = boardIndex;
-//    }
-
-    virtual void connectBoardToReceiveMidiKey(uint8_t boardIndex, byte midiKey, LIGHT_STRATEGIES strategy) {
+    virtual void connectBoardToReceiveMidiKey(uint8_t boardIndex, byte midiKey) {
         // We store at {midiKey} location in the array, the corresponding board
         _boardIndexReferences[(uint8_t) midiKey] = boardIndex;
-        _midiNotesStrategies[(uint8_t) midiKey] = strategy;
-
     }
 
     virtual void handleNoteOn(byte channel, byte note) {
@@ -50,10 +38,6 @@ public:
         // So store vector of bytes
         auto strategy = _manager->getLightStrategyAssociatedWithChannel(channel);
         _manager->triggerOnBoard(_boardIndexReferences[(uint8_t) note], strategy);
-//        if (_boardIndexReferences[(uint8_t) note] == INACTIVE_BOARD_INDEX) {
-//            _debugHelper->add("WARNING : No linked Board to note");
-//        } else {
-//        }
 
     }
 
@@ -74,8 +58,6 @@ protected:
     LedBoardsManager *_manager;
     Debug_Helper *_debugHelper;
     uint8_t _boardIndexReferences[128]{};
-    LIGHT_STRATEGIES _midiNotesStrategies[128]{};
-
 };
 
 #endif //PLATFORMIO_PROGRAM_MIDIKEYRECEIVER_H
