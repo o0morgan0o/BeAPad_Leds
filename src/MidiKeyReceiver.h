@@ -28,7 +28,7 @@ public:
         }
 
         // initialization of emptyStrategies
-        for (auto & midiNotesStrategy : _midiNotesStrategies) {
+        for (auto &midiNotesStrategy: _midiNotesStrategies) {
             midiNotesStrategy = LIGHT_STRATEGIES::NO_LIGHT_STRATEGY;
         }
     }
@@ -45,16 +45,15 @@ public:
 
     }
 
-    virtual void handleNoteOn(byte note) {
+    virtual void handleNoteOn(byte channel, byte note) {
         // TODO Try to handle things differently so that we can send a midi Message to multiple boards
         // So store vector of bytes
-        if (_boardIndexReferences[(uint8_t) note] == INACTIVE_BOARD_INDEX) {
-            String message{"WARNING : No linked Board to note "};
-            message += note;
-            _debugHelper->add(message);
-        } else {
-            _manager->triggerOnBoard(_boardIndexReferences[(uint8_t) note], _midiNotesStrategies[(uint8_t) note]);
-        }
+        auto strategy = _manager->getLightStrategyAssociatedWithChannel(channel);
+        _manager->triggerOnBoard(_boardIndexReferences[(uint8_t) note], strategy);
+//        if (_boardIndexReferences[(uint8_t) note] == INACTIVE_BOARD_INDEX) {
+//            _debugHelper->add("WARNING : No linked Board to note");
+//        } else {
+//        }
 
     }
 

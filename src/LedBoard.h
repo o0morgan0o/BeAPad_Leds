@@ -67,7 +67,8 @@ public:
 
     virtual RGB_Color getBoardBaseColor();
 
-    virtual void initBoard() {}
+    virtual void initBoard() =0;
+
 
     virtual void mixStrategies();
 
@@ -78,7 +79,8 @@ public:
     unsigned long _currentTime{0};
 protected:
     LightStrategy_Factory *_lightStrategyFactory;
-    LightStrategy *_mainLightStrategy;
+    LightStrategy *_midiReceiveLightStrategy;
+//    LightStrategy *_touchSensorLightStrategy;
     LightStrategy *_shiftLightStrategy;
 protected:
     LedBoardsManager *_manager{};

@@ -55,8 +55,8 @@ public:
                     _manager->setShiftState(true);
                 } else {
                     auto boardToTrigger = _midiHandler->getBoardAssociatedWithTouchPin(i);
-                    _manager->triggerOnBoard(boardToTrigger);
                     _midiHandler->sendMidiOnByTouchPin(i, _manager->getShiftState());
+//                    _manager->triggerOnBoard(boardToTrigger, _touchTriggerLightStrategies[boardToTrigger]);
                 }
             }
             // if it *was* touched and now *isnt*, alert!
@@ -69,7 +69,7 @@ public:
                     _manager->setShiftState(false);
                 } else {
                     auto boardToTrigger = _midiHandler->getBoardAssociatedWithTouchPin(i);
-                    _manager->triggerOffBoard(boardToTrigger);
+//                    _manager->triggerOffBoard(boardToTrigger);
                     _midiHandler->sendMidiOffByTouchPin(i, _manager->getShiftState());
                 }
             }

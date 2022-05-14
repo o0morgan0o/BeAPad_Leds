@@ -11,15 +11,15 @@ class NeoPixelBoardsManager : public LedBoardsManager {
 public:
     NeoPixelBoardsManager(
             LedBoard_Store_Interface *ledBoardStore,
-            LightStrategy_Factory *lightStrategyFactory
-    ) : LedBoardsManager(ledBoardStore, lightStrategyFactory) {}
+            LightStrategy_Factory *lightStrategyFactory,
+            Debug_Helper* debugHelper
+    ) : LedBoardsManager(ledBoardStore, lightStrategyFactory, debugHelper) {}
 
     void init() override {
         for (auto board: _ledBoards) {
             board->initBoard();
         }
     }
-
 
     void show() override {
         for (auto board: _ledBoards) {

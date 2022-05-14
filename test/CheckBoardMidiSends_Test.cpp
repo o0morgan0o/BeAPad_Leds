@@ -25,7 +25,7 @@ protected:
         Mock_Manager(LedBoard_Store_Interface *store, LightStrategy_Factory *factory)
                 : FakeLedBoardManager(store, factory) {}
 
-        MOCK_METHOD((void), triggerOnBoard, (uint8_t), (override));
+        MOCK_METHOD((void), triggerOnBoard, (uint8_t, LIGHT_STRATEGIES), (override));
         MOCK_METHOD((void), triggerOffBoard, (uint8_t), (override));
 
     };
@@ -80,7 +80,7 @@ TEST_F(SendMidiKeys_Fixture, TestBoardSendCorrectNoteOn) {
     // now we set a touchValue
     fakeSensor->setFakeValue(0b0000000000000001);
     EXPECT_CALL(*midiHandler.get(), sendMidiOnByTouchPin(0, false)).Times(1);
-    EXPECT_CALL(*manager.get(), triggerOnBoard(3));
+    EXPECT_CALL(*manager.get(), triggerOnBoard(3, LIGHT_STRATEGIES::NO_LIGHT_STRATEGY));
     dispatcher->loop();
     // reset
     fakeSensor->setFakeValue(0b0000000000000000);
@@ -113,8 +113,8 @@ TEST_F(SendMidiKeys_Fixture, testSet2PinsAtSameTime) {
     fakeSensor->setFakeValue(0b0000000000000011);
     EXPECT_CALL(*manager.get(), triggerOffBoard(3)).Times(0);
     EXPECT_CALL(*manager.get(), triggerOffBoard(4)).Times(0);
-    EXPECT_CALL(*manager.get(), triggerOnBoard(3)).Times(1);
-    EXPECT_CALL(*manager.get(), triggerOnBoard(4)).Times(1);
+    EXPECT_CALL(*manager.get(), triggerOnBoard(3, LIGHT_STRATEGIES::NO_LIGHT_STRATEGY)).Times(1);
+    EXPECT_CALL(*manager.get(), triggerOnBoard(4, LIGHT_STRATEGIES::NO_LIGHT_STRATEGY)).Times(1);
     dispatcher->loop();
 
 }

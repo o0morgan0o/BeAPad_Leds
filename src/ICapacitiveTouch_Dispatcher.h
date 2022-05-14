@@ -20,6 +20,11 @@ public:
 
     virtual void loop() = 0;
 
+    virtual void setTriggerOnTouchLightStrategyOnBoard(uint8_t boardIndex, LIGHT_STRATEGIES strategy) {
+        _touchTriggerLightStrategies[boardIndex] = strategy;
+//        _ledBoards.at(boardIndex)->changeLightStrategy(strategy);
+    }
+
     virtual void setTouchThreshold(uint8_t newThreshold) = 0;
 
     virtual void setReleaseThreshold(uint8_t newThreshold) = 0;
@@ -29,10 +34,7 @@ public:
     virtual uint8_t getReleaseThreshold() const = 0;
 
 protected:
-    uint8_t _numberOfTouchPins = 12;
-    uint8_t _touchPins[12]{};
-
-    PinStateValidator _pinStateValidators[12]{};
+    LIGHT_STRATEGIES _touchTriggerLightStrategies[12]{LIGHT_STRATEGIES::NO_LIGHT_STRATEGY};
     //
     uint8_t TOUCH_THRESHOLD = 35;
     uint8_t RELEASE_THRESHOLD = 40;
@@ -40,12 +42,6 @@ protected:
     Midi_Handler *_midiHandler;
     LedBoardsManager *_manager;
     Debug_Helper *_debugHelper;
-    // Keeps track of the last pins touched
-    // so we know when buttons are 'released'
-    uint16_t lasttouched = 0;
-    uint16_t currtouched = 0;
-    //
-    uint8_t _boardIndexReferences[128]{};
 };
 
 #endif //PLATFORMIO_PROGRAM_ICAPACITIVETOUCH_DISPATCHER_H

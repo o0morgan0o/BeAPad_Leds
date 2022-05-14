@@ -21,8 +21,9 @@ void Midi_Handler::handleDisconnected() {
 }
 
 void Midi_Handler::handleOn(byte channel, byte note, byte velocity) {
-    _debugHelper->logMidiMessage(String{"NOTE_ON"}, channel, note, velocity);
-    _midiReceiver->handleNoteOn(note);
+    // TODO LIGHT_STRATEGY SHOULD BE HANDLE BY CHANNEL HERE
+    _debugHelper->logMidiMessage(String{"\n[<====] RECEIVING MIDI NOTE_ON"}, channel, note, velocity);
+    _midiReceiver->handleNoteOn(channel, note);
 }
 
 void Midi_Handler::handleNoteOff(byte channel, byte note, byte velocity) {

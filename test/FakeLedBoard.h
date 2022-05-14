@@ -12,6 +12,8 @@ class FakeLedBoard : public LedBoard {
 public:
     explicit FakeLedBoard(uint8_t nb_pixels, LightStrategy_Factory *factory);
 
+    void initBoard() override;
+
     void showGlobalColor(CRGB color) override {
 
     }
@@ -32,7 +34,7 @@ public:
 
     LightStrategy_Factory *getLightStrategyFactory() { return _lightStrategyFactory; }
 
-    LightStrategy *getMainLightStrategy() { return _mainLightStrategy; }
+    LightStrategy *getMainLightStrategy() { return _midiReceiveLightStrategy; }
 
 };
 
