@@ -58,6 +58,10 @@ public:
         _isInShiftState = newState;
     }
 
+//    virtual void triggerOnSpecialEffect(LIGHT_SPECIAL_EFFECT specialEffect){
+//
+//    }
+
     virtual void triggerOnBoard( uint8_t boardIndex, LIGHT_STRATEGIES strategy) {
         try {
             _ledBoards.at(boardIndex)->triggerOn(strategy);
