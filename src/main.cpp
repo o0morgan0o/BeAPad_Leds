@@ -112,9 +112,11 @@ void setup() {
     // *************************
     // DEFINITIONS OF STRATEGY FOR EACH BOARD
     // Channel musts be in range 1 - 8
+    // TODO Also put a color on a channel
     ledBoardsManager->setLightStrategyForChannel(1, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT);
     ledBoardsManager->setLightStrategyForChannel(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
     ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_SERPENTIN);
+    ledBoardsManager->setLightStrategyForChannel(4, LIGHT_STRATEGIES::STRATEGY_FLASH_TOWARDS_EXTERIOR);
 //    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_FADE_OUT_SLOW);
 //    ledBoardsManager->setLightStrategyForChannel(5, LIGHT_STRATEGIES::STRATEGY_EXPANSION);
 

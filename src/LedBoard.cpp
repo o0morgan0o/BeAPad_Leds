@@ -47,6 +47,10 @@ void LedBoard::changeLightStrategy(LIGHT_STRATEGIES newStrategy) {
             delete _midiReceiveLightStrategy;
             _midiReceiveLightStrategy = _lightStrategyFactory->makeSerpentinLightStrategy(this);
             break;
+        case LIGHT_STRATEGIES::STRATEGY_FLASH_TOWARDS_EXTERIOR:
+            delete _midiReceiveLightStrategy;
+            _midiReceiveLightStrategy = _lightStrategyFactory->makeFlashTowardsExteriorStrategy(this);
+            break;
         case LIGHT_STRATEGIES::STRATEGY_SHIFT_KEY_STRATEGY:
             delete _midiReceiveLightStrategy;
             _midiReceiveLightStrategy = _lightStrategyFactory->makeShiftKeyLightStrategy(this);
