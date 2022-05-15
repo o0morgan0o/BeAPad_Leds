@@ -16,7 +16,7 @@ class SerpentinSingleLed {
 public:
     explicit SerpentinSingleLed() = default;
 
-    void setDelayBeforeStartAndLifeExpectancy(double delayBeforeStart, double lifeExpectancy) {
+    void setDelayBeforeStartAndLifeExpectancy(unsigned long delayBeforeStart, unsigned long lifeExpectancy) {
         _delayBeforeStart = delayBeforeStart;
         _initialLifeExpectancy = lifeExpectancy;
     }
@@ -25,6 +25,7 @@ public:
         _birthTime = time;
         _startTime = _birthTime + _delayBeforeStart;
         _lifeExpectancy = _initialLifeExpectancy;
+        _endTime = _startTime + _lifeExpectancy;
     }
 
     CRGB getColorAtTime(unsigned long currentTime) const {
@@ -36,7 +37,7 @@ public:
     }
 
     bool getIsInLifeSpan(unsigned long currentTime) const {
-        if (currentTime >= _startTime && currentTime < _startTime + _lifeExpectancy) {
+        if (currentTime >= _startTime && currentTime <_endTime) {
             return true;
         } else {
             return false;
@@ -44,8 +45,9 @@ public:
 
     }
 
-    void forceDeath() {
-        _lifeExpectancy = 0;
+    void forceDeath(unsigned long currentTime) {
+        _endTime = currentTime;
+//        _lifeExpectancy = 0;
     }
 
     double getDelayBeforeStart() const {
@@ -64,6 +66,7 @@ public:
     CRGB _colorWhenOn{CRGB::FireBrick};
     CRGB _colorWhenOff{CRGB::Black};
 private:
+    unsigned long _endTime{0};
     unsigned long _delayBeforeStart{0};
     unsigned long _initialLifeExpectancy{0};
     unsigned long _lifeExpectancy{0};

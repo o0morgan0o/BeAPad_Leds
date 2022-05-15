@@ -7,11 +7,9 @@
 #include "LedBoardsManager.h"
 
 SerpentinLightStrategy::SerpentinLightStrategy(LedBoard *context) : LightStrategy(context) {
-    double DELAY_BEFORE_EACH_LED = 40;
-    double LIFE_EXPECTANCY = 300;
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
         _serpentinLeds[i] = SerpentinSingleLed();
-        _serpentinLeds[i].setDelayBeforeStartAndLifeExpectancy(DELAY_BEFORE_EACH_LED * i, LIFE_EXPECTANCY);
+        _serpentinLeds[i].setDelayBeforeStartAndLifeExpectancy(DELAY_BEFORE_EACH_LED * i, MAX_LIFE_EXPECTANCY);
     }
 
 }
@@ -48,11 +46,13 @@ void SerpentinLightStrategy::triggerOn() {
 }
 
 void SerpentinLightStrategy::triggerOff() {
-    _isActive = false;
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-        _serpentinLeds[i].forceDeath();
-        _ledColorsInStrategy[i] = CRGB::Black;
+        _serpentinLeds[i].forceDeath(_currentTime+ DELAY_BEFORE_EACH_LED*i);
+//        _ledColorsInStrategy[i] = CRGB::Black;
     }
+//    if (_serpentinLeds[_context->NUM_PIXELS - 1].getIsInLifeSpan(_currentTime) == false) {
+//        _isActive = false;
+//    }
 
 }
 

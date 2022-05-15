@@ -6,8 +6,8 @@
 #include "LedBoard.h"
 
 FlashTowardsExteriorStrategy::FlashTowardsExteriorStrategy(LedBoard *context) : LightStrategy(context){
-    double DELAY_BEFORE_EACH_LED = 40;
-    double LIFE_EXPECTANCY = 300;
+    unsigned long DELAY_BEFORE_EACH_LED = 40;
+    unsigned long LIFE_EXPECTANCY = 300;
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
         _serpentinLeds[i] = SerpentinSingleLed();
     }
@@ -49,7 +49,7 @@ void FlashTowardsExteriorStrategy::triggerOn() {
 void FlashTowardsExteriorStrategy::triggerOff() {
     _isActive = false;
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-        _serpentinLeds[i].forceDeath();
+        _serpentinLeds[i].forceDeath(_currentTime);
         _ledColorsInStrategy[i] = CRGB::Black;
     }
 

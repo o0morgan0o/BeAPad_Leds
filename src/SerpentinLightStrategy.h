@@ -27,6 +27,8 @@ protected:
     unsigned long _currentTime{0};
 
     SerpentinSingleLed _serpentinLeds[MAX_NUMBER_OF_LEDS_PER_BOARD];
+    unsigned long DELAY_BEFORE_EACH_LED = 40;
+    unsigned long MAX_LIFE_EXPECTANCY = 4000;
 
 };
 
