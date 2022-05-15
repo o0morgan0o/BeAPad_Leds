@@ -20,6 +20,6 @@ void FakeLedBoardManager::showBaseColor() {
 
 }
 
-LightStrategy_Factory *FakeLedBoardManager::getLightStrategyFactory() {
-    return _lightStrategyFactory;
-}
+//LightStrategy_Factory *FakeLedBoardManager::getLightStrategyFactory() {
+//    return _main;
+//}

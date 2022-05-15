@@ -7,15 +7,28 @@
 
 #include <cstdint>
 
+class CHSV {
+public:
+    CHSV(uint8_t _h, uint8_t _s, uint8_t _v) {
+        h=_h;
+        s=_s;
+        v=_v;
+    }
+
+    uint8_t h{};
+    uint8_t s{};
+    uint8_t v{};
+};
+
 class CRGB {
 public:
     CRGB() = default;
 
-//    CRGB(CRGB &a) {
-//        r = a.r;
-//        g = a.g;
-//        b = a.b;
-//    }
+     CRGB(CHSV chsv){
+        r = chsv.h;
+        g= chsv.s;
+        b=chsv.v;
+    }
 
     CRGB(const CRGB &a) {
         r = a.r;
@@ -23,16 +36,22 @@ public:
         b = a.b;
     }
 
+    CRGB(CRGB &a) {
+        r = a.r;
+        g = a.g;
+        b = a.b;
+    }
+
+    CRGB &operator=(const CRGB &a) = default;
+
+    CRGB &operator=(CRGB &a) = default;
+
     CRGB(uint8_t r, uint8_t g, uint8_t b) {
         r = r;
         g = g;
         b = b;
 
     }
-
-//    CRGB(const CRGB crgb) {
-//
-//    }
 
     uint8_t r{};
     uint8_t g{};
@@ -61,8 +80,6 @@ public:
         if (g < 0) g = 0;
         if (b < 0) b = 0;
     }
-
-
 
 };
 

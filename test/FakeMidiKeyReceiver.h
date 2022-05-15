@@ -20,9 +20,6 @@ public:
         return _boardIndexReferences;
     }
 
-    LIGHT_STRATEGIES* getLightStrategiesArray(){
-        return _midiNotesStrategies;
-    }
 
 };
 

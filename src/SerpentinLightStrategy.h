@@ -1,0 +1,16 @@
+//
+// Created by morgan on 5/15/2022.
+//
+
+#ifndef PLATFORMIO_PROGRAM_SERPENTINLIGHTSTRATEGY_H
+#define PLATFORMIO_PROGRAM_SERPENTINLIGHTSTRATEGY_H
+
+
+
+class SerpentinLightStrategy {
+
+};
+
+
+
+#endif //PLATFORMIO_PROGRAM_SERPENTINLIGHTSTRATEGY_H

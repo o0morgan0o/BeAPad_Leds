@@ -13,5 +13,5 @@ TEST(LightStrategyFactory, basicCreationTest){
     auto fakeBoard = std::make_unique<FakeLedBoard>( 9,factory.get());
     auto noLightStrategy = factory->makeNoLightStrategy(fakeBoard.get());
     EXPECT_NE(dynamic_cast<NoLightStrategy*>(noLightStrategy), nullptr);
-    noLightStrategy->updateValues();
+    noLightStrategy->updateValues(0);
 }

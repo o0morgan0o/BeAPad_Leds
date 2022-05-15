@@ -55,15 +55,17 @@ protected:
 TEST_F(CapacitiveTest_Fixture, testConnectionPinToBoard) {
     auto store = std::make_unique<FakeLedBoardStore>();
     auto strategyFactory = std::make_unique<LightStrategy_Factory>();
+    auto specialEffectFactory = std::make_unique<SpecialEffect_Factory>();
+    auto debugHelper = std::make_unique<Debug_Helper>();
     auto fakeBoard = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
     auto fakeBoard2 = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
     store->addBoard(fakeBoard.get());
     store->addBoard(fakeBoard2.get());
-    auto manager = std::make_unique<FakeLedBoardManager>(store.get(), strategyFactory.get());
-    auto debugHelper = make_unique<Debug_Helper>();
+
+    auto manager = std::make_unique<FakeLedBoardManager>(store.get(), strategyFactory.get(), specialEffectFactory.get(), debugHelper.get());
     //
-    auto midiReceiver = make_unique<FakeMidiKeyReceiver>(manager.get(), debugHelper.get());
-    auto midiSender = make_unique<MidiKeySender>(manager.get(), debugHelper.get());
+    auto midiReceiver = std::make_unique<FakeMidiKeyReceiver>(manager.get(), debugHelper.get());
+    auto midiSender = std::make_unique<MidiKeySender>(manager.get(), debugHelper.get());
     midiSender->connectBoardToSendMidiKey(1, 0, 60, 80);
     midiSender->connectBoardToSendMidiKey(2, 1, 61, 81);
     //
@@ -78,15 +80,16 @@ TEST_F(CapacitiveTest_Fixture, testConnectionPinToBoard) {
 TEST_F(CapacitiveTest_Fixture, testMidihandlerSendMidiFromPinToCorrectNote) {
     auto store = std::make_unique<FakeLedBoardStore>();
     auto strategyFactory = std::make_unique<LightStrategy_Factory>();
+    auto specialEffectFactory = std::make_unique<SpecialEffect_Factory>();
+    auto debugHelper = std::make_unique<Debug_Helper>();
     auto fakeBoard = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
     auto fakeBoard2 = std::make_unique<FakeLedBoard>(9, strategyFactory.get());
     store->addBoard(fakeBoard.get());
     store->addBoard(fakeBoard2.get());
-    auto manager = std::make_unique<FakeLedBoardManager>(store.get(), strategyFactory.get());
-    auto debugHelper = make_unique<Debug_Helper>();
+    auto manager = std::make_unique<FakeLedBoardManager>(store.get(), strategyFactory.get(), specialEffectFactory.get(), debugHelper.get());
     //
-    auto midiReceiver = make_unique<FakeMidiKeyReceiver>(manager.get(), debugHelper.get());
-    auto midiSender = make_unique<MidiKeySender>(manager.get(), debugHelper.get());
+    auto midiReceiver = std::make_unique<FakeMidiKeyReceiver>(manager.get(), debugHelper.get());
+    auto midiSender = std::make_unique<MidiKeySender>(manager.get(), debugHelper.get());
     midiSender->connectBoardToSendMidiKey(1, 0, 60, 80);
     midiSender->connectBoardToSendMidiKey(2, 1, 61, 81);
     //

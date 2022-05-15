@@ -17,8 +17,10 @@ struct LedBoardManager_Fixture : public testing::Test {
     struct LedBoardManager_Mock : public FakeLedBoardManager {
         explicit LedBoardManager_Mock(
                 LedBoard_Store_Interface *store,
-                LightStrategy_Factory *factory
-        ) : FakeLedBoardManager(store, factory) {}
+                LightStrategy_Factory *factory,
+                SpecialEffect_Factory *specialEffectFactory,
+                Debug_Helper *debugHelper
+        ) : FakeLedBoardManager(store, factory, specialEffectFactory, debugHelper) {}
 
         MOCK_METHOD(void, showGlobally, (CRGB), (override));
 
@@ -37,7 +39,9 @@ protected:
 TEST_F(LedBoardManager_Fixture, testShowGloablly) {
     auto factory = std::make_unique<LightStrategy_Factory>();
     auto store = std::make_unique<FakeLedBoardStore>();
-    auto manager = std::make_unique<LedBoardManager_Mock>(store.get(), factory.get());
+    auto specialEffectFactory = std::make_unique<SpecialEffect_Factory>();
+    auto debugHelper = std::make_unique<Debug_Helper>();
+    auto manager = std::make_unique<LedBoardManager_Mock>(store.get(), factory.get(), specialEffectFactory.get(), debugHelper.get());
     CRGB color{120, 0, 0};
     EXPECT_CALL(*manager, showGlobally(testing::_)).Times(1);
     manager->showGlobally(CRGB{120, 0, 0});
