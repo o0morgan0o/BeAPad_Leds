@@ -114,8 +114,8 @@ void setup() {
     // Channel musts be in range 1 - 8
     ledBoardsManager->setLightStrategyForChannel(1, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT);
     ledBoardsManager->setLightStrategyForChannel(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_SERPENTIN);
 //    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_FADE_OUT_SLOW);
-//    ledBoardsManager->setLightStrategyForChannel(4, LIGHT_STRATEGIES::STRATEGY_SERPENTIN);
 //    ledBoardsManager->setLightStrategyForChannel(5, LIGHT_STRATEGIES::STRATEGY_EXPANSION);
 
     // **************************
@@ -171,18 +171,12 @@ void setup() {
     AppleMIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
         // channels [1 - 8] are reserved for lightStrategies
         // channels [9 - 16] are reserved for special effects
-        if (channel <= 8) {
-            midiHandler->handleOn(channel, note, velocity);
-        } else {
-            midiHandler->handleOnSpecialEffect(channel, note, velocity);
-        }
+        if (channel <= 8) midiHandler->handleOn(channel, note, velocity);
+        else midiHandler->handleOnSpecialEffect(channel, note, velocity);
     });
     AppleMIDI.setHandleNoteOff([](byte channel, byte note, byte velocity) {
-        if (channel <= 8) {
-            midiHandler->handleNoteOff(channel, note, velocity);
-        } else {
-            midiHandler->handleOffSpecialEffect(channel, note, velocity);
-        }
+        if (channel <= 8) midiHandler->handleNoteOff(channel, note, velocity);
+        else midiHandler->handleOffSpecialEffect(channel, note, velocity);
     });
     AppleAppleMIDI.setHandleConnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc, const char *name) {
         ledBoardsManager->showBlinkHighPriorityMessage(BlinkHighPriorityMessages::RTP_CONNECTION_SUCCESS);

@@ -5,8 +5,11 @@
 #ifndef PLATFORMIO_PROGRAM_DEBUG_HELPER_H
 #define PLATFORMIO_PROGRAM_DEBUG_HELPER_H
 #ifdef IN_TESTING
+
 #include "../test/FakeString.h"
-using namespace std;
+    using byte = uint8_t;
+
+//using namespace std;
 #else
 
 #include <Arduino.h>

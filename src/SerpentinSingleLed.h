@@ -4,45 +4,71 @@
 
 #ifndef PLATFORMIO_PROGRAM_SERPENTINSINGLELED_H
 #define PLATFORMIO_PROGRAM_SERPENTINSINGLELED_H
+#ifdef IN_TESTING
+#include "../test/Fake_CRGB.h"
+#else
 
 #include <FastLED.h>
 
+#endif
+
 class SerpentinSingleLed {
 public:
-    explicit SerpentinSingleLed()= default;
+    explicit SerpentinSingleLed() = default;
 
-    void setDelayBeforeStartAndLifeExpectancy(double delayBeforeStart, double lifeExpectancy){
+    void setDelayBeforeStartAndLifeExpectancy(double delayBeforeStart, double lifeExpectancy) {
         _delayBeforeStart = delayBeforeStart;
-        _lifeExpectancy = lifeExpectancy;
+        _initialLifeExpectancy = lifeExpectancy;
     }
 
-    void reborn(double time){
+    void reborn(unsigned long time) {
         _birthTime = time;
         _startTime = _birthTime + _delayBeforeStart;
+        _lifeExpectancy = _initialLifeExpectancy;
     }
 
-
-    CRGB getColorAtTime(double currentTime){
-        if(currentTime >= _startTime && currentTime < _startTime+ _lifeExpectancy ){
+    CRGB getColorAtTime(unsigned long currentTime) const {
+        if (getIsInLifeSpan(currentTime))
             return _colorWhenOn;
-        }else{
+        else {
             return _colorWhenOff;
         }
     }
 
-    void forceDeath(){
-        _lifeExpectancy = 0;
+    bool getIsInLifeSpan(unsigned long currentTime) const {
+        if (currentTime >= _startTime && currentTime < _startTime + _lifeExpectancy) {
+            return true;
+        } else {
+            return false;
+        }
 
     }
 
-private:
-    double _delayBeforeStart{0};
-    double _lifeExpectancy{0};
-    double _birthTime{0};
-    double _startTime{0};
+    void forceDeath() {
+        _lifeExpectancy = 0;
+    }
 
-    CRGB _colorWhenOn{CRGB::Red};
+    double getDelayBeforeStart() const {
+        return _delayBeforeStart;
+    }
+
+    double getLifeExpectancy() const {
+        return _lifeExpectancy;
+    }
+
+    double getStartTime() const {
+        return _startTime;
+    }
+
+public:
+    CRGB _colorWhenOn{CRGB::FireBrick};
     CRGB _colorWhenOff{CRGB::Black};
+private:
+    unsigned long _delayBeforeStart{0};
+    unsigned long _initialLifeExpectancy{0};
+    unsigned long _lifeExpectancy{0};
+    unsigned long _birthTime{0};
+    unsigned long _startTime{0};
 
 };
 

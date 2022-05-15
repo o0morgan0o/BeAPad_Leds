@@ -148,7 +148,7 @@ public:
         _channelStrategies[channel] = strategy;
     }
 
-    virtual void setSpecialEffectStrategyForChannel(uint8_t channel, SPECIAL_EFFECT_STRATEGY specialEffectStrategy){
+    virtual void setSpecialEffectStrategyForChannel(uint8_t channel, SPECIAL_EFFECT_STRATEGY specialEffectStrategy) {
         _channelSpecialEffectsStrategies[channel] = specialEffectStrategy;
     }
 
@@ -156,7 +156,7 @@ public:
         return _channelStrategies[channel];
     }
 
-    SPECIAL_EFFECT_STRATEGY getSpecialEffectStrategyAssociatedWithChannel(uint8_t channel){
+    SPECIAL_EFFECT_STRATEGY getSpecialEffectStrategyAssociatedWithChannel(uint8_t channel) {
         return _channelSpecialEffectsStrategies[channel];
     }
 

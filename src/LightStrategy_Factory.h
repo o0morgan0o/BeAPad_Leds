@@ -11,6 +11,7 @@
 #include "FadeOutLightStrategy.h"
 #include "FadeInFadeOutLightStrategy.h"
 #include "ShiftKeyLightStrategy.h"
+#include "SerpentinLightStrategy.h"
 
 class LightStrategy_Factory {
 public:
@@ -40,9 +41,14 @@ public:
         return new FadeInFadeOutLightStrategy(context);
     }
 
+    LightStrategy *makeSerpentinLightStrategy(LedBoard *context){
+        return new SerpentinLightStrategy(context);
+    }
+
     LightStrategy *makeShiftKeyLightStrategy(LedBoard *context) {
         return new ShiftKeyLightStrategy(context);
     }
+
 
 };
 

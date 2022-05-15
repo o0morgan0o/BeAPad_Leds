@@ -21,7 +21,9 @@ enum class LIGHT_STRATEGIES {
     STRATEGY_FULL_LIGHT,
     STRATEGY_FADE_OUT,
     STRATEGY_FADE_IN_AND_FADE_OUT,
+    STRATEGY_SERPENTIN,
     STRATEGY_SHIFT_KEY_STRATEGY
+
 
 };
 
@@ -33,13 +35,13 @@ public:
 
     virtual void reset() = 0;
 
-    virtual void updateValues() = 0;
+    virtual void updateValues(unsigned long currentTime) = 0;
 
     virtual void triggerOn() = 0;
 
     virtual void triggerOff() = 0;
 
-    virtual void reinit() = 0;
+    virtual void reinit(unsigned long currentTime) = 0;
 
     virtual unsigned long getLifeSpan() { return _lifeSpan; }
 
@@ -56,7 +58,7 @@ protected:
     unsigned long _birthTime{};
     CRGB _crgbStrategyColor{0, 0, 0};
     LedBoard *_context{};
-    CRGB _ledColorsInStrategy[MAX_NUMBER_OF_LEDS_PER_BOARD]{CRGB::Red};
+    CRGB _ledColorsInStrategy[MAX_NUMBER_OF_LEDS_PER_BOARD]{CRGB::Black};
 
 };
 

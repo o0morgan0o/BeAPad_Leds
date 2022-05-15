@@ -17,14 +17,14 @@ void FadeOutLightStrategy::reset() {
     };
 }
 
-void FadeOutLightStrategy::updateValues() {
+void FadeOutLightStrategy::updateValues(unsigned long currentTime) {
     for(uint8_t i = 0 ; i < _context->NUM_PIXELS; i++){
         _ledColorsInStrategy[i].fadeToBlackBy(10);
     }
     _lifeSpan = _context->getCurrentTime() - _birthTime;
 }
 
-void FadeOutLightStrategy::reinit() {
+void FadeOutLightStrategy::reinit(unsigned long currentTime) {
     _birthTime = _context->getCurrentTime();
     //
     _crgbStrategyColor = CRGB{

@@ -17,7 +17,7 @@ void FadeInFadeOutLightStrategy::reset() {
 
 }
 
-void FadeInFadeOutLightStrategy::updateValues() {
+void FadeInFadeOutLightStrategy::updateValues(unsigned long currentTime) {
     fraction += 1;
     CRGB newColor = blend(CRGB::AliceBlue, CRGB::Red, fraction);
     _lifeSpan = _context->getCurrentTime() - _birthTime;
@@ -26,7 +26,7 @@ void FadeInFadeOutLightStrategy::updateValues() {
     }
 }
 
-void FadeInFadeOutLightStrategy::reinit() {
+void FadeInFadeOutLightStrategy::reinit(unsigned long currentTime) {
     fraction = 0;
     _birthTime = _context->getCurrentTime();
     //

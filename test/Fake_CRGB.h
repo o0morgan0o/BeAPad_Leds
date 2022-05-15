@@ -24,7 +24,7 @@ class CRGB {
 public:
     CRGB() = default;
 
-     CRGB(CHSV chsv){
+     explicit CRGB(CHSV chsv){
         r = chsv.h;
         g= chsv.s;
         b=chsv.v;
@@ -45,6 +45,10 @@ public:
     CRGB &operator=(const CRGB &a) = default;
 
     CRGB &operator=(CRGB &a) = default;
+
+    bool operator==(const CRGB& a) const{
+        return (r==a.r && g==a.g && b==a.b);
+    }
 
     CRGB(uint8_t r, uint8_t g, uint8_t b) {
         r = r;

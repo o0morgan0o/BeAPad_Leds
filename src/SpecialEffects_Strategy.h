@@ -5,7 +5,10 @@
 #ifndef PLATFORMIO_PROGRAM_SPECIALEFFECTS_STRATEGY_H
 #define PLATFORMIO_PROGRAM_SPECIALEFFECTS_STRATEGY_H
 #ifdef IN_TESTING
+
 #include "../test/Fake_CRGB.h"
+
+using byte = uint8_t;
 #else
 
 #include <FastLED.h>
@@ -39,7 +42,7 @@ public:
         return _fractionOfSpecialEffectToShow;
     };
 
-    virtual CRGB getSpecialEffectColor() {
+    virtual CRGB& getSpecialEffectColor()  {
         return _specialEffectColor;
     };
 protected:

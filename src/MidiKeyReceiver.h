@@ -8,10 +8,6 @@
 #include "LedBoardsManager.h"
 #include "Debug_Helper.h"
 
-enum class MIDI_NOTE_TYPE {
-    MIDI_NOTE_ON, MIDI_NOTE_OFF
-};
-
 /**
  * This class handle the midiEvents and pass it to the Board.
  *

@@ -12,7 +12,7 @@ void FullLightStrategy::reset() {
     _birthTime = _context->getCurrentTime();
 }
 
-void FullLightStrategy::updateValues() {
+void FullLightStrategy::updateValues(unsigned long currentTime) {
     _lifeSpan = _context->getCurrentTime() - _birthTime;
 }
 
@@ -29,7 +29,7 @@ void FullLightStrategy::triggerOff() {
 
 }
 
-void FullLightStrategy::reinit() {
+void FullLightStrategy::reinit(unsigned long currentTime) {
     _birthTime = _context->getCurrentTime();
     //
     _crgbStrategyColor = CRGB{

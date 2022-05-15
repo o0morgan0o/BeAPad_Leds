@@ -4,18 +4,20 @@
 
 #ifndef PLATFORMIO_PROGRAM_STRATEGYMIXER_H
 #define PLATFORMIO_PROGRAM_STRATEGYMIXER_H
-
 #ifdef IN_TESTING
+
 #include "../test/Fake_CRGB.h"
+
 #else
 #include <FastLED.h>
 #endif
+
 #include "LightStrategy.h"
 #include "SpecialEffects_Strategy.h"
 
 class StrategyMixer {
 public:
-    static CRGB mixStrategies(SpecialEffects_Strategy* specialEffectsStrategy, CRGB mainStrategyLedColor, CRGB shiftStrategyLedColor, bool isInShiftState) {
+    static CRGB mixStrategies(SpecialEffects_Strategy *specialEffectsStrategy, CRGB mainStrategyLedColor, CRGB shiftStrategyLedColor, bool isInShiftState) {
         // fract : 0 is the source color, 255 is the target color
         if (!isInShiftState) {
             return blend(mainStrategyLedColor, specialEffectsStrategy->getSpecialEffectColor(), specialEffectsStrategy->getFractOfSpecialEffectToShow());

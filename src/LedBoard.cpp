@@ -43,6 +43,10 @@ void LedBoard::changeLightStrategy(LIGHT_STRATEGIES newStrategy) {
             delete _midiReceiveLightStrategy;
             _midiReceiveLightStrategy = _lightStrategyFactory->makeFadeInAndFadeOutLightStrategy(this);
             break;
+        case LIGHT_STRATEGIES::STRATEGY_SERPENTIN:
+            delete _midiReceiveLightStrategy;
+            _midiReceiveLightStrategy = _lightStrategyFactory->makeSerpentinLightStrategy(this);
+            break;
         case LIGHT_STRATEGIES::STRATEGY_SHIFT_KEY_STRATEGY:
             delete _midiReceiveLightStrategy;
             _midiReceiveLightStrategy = _lightStrategyFactory->makeShiftKeyLightStrategy(this);
@@ -54,8 +58,8 @@ void LedBoard::changeLightStrategy(LIGHT_STRATEGIES newStrategy) {
 }
 
 void LedBoard::reinitLightStrategy() {
-    _midiReceiveLightStrategy->reinit();
-    _shiftLightStrategy->reinit();
+    _midiReceiveLightStrategy->reinit(0);
+    _shiftLightStrategy->reinit(0);
 }
 
 void LedBoard::triggerOn() {
@@ -64,7 +68,7 @@ void LedBoard::triggerOn() {
 
 void LedBoard::triggerOn(LIGHT_STRATEGIES strategy) {
     changeLightStrategy(strategy);
-    _midiReceiveLightStrategy->reinit();
+    _midiReceiveLightStrategy->reinit(_currentTime);
     _midiReceiveLightStrategy->triggerOn();
 }
 
@@ -78,9 +82,9 @@ void LedBoard::triggerOff() {
 
 void LedBoard::updateValues(unsigned long newTime) {
     _currentTime = newTime;
-    _midiReceiveLightStrategy->updateValues();
+    _midiReceiveLightStrategy->updateValues(newTime);
     // TODO Check if the 2 updates don't delay anything.
-    _shiftLightStrategy->updateValues();
+    _shiftLightStrategy->updateValues(newTime);
 }
 
 void LedBoard::mixStrategies() {

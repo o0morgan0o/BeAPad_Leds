@@ -13,10 +13,10 @@ void ShiftKeyLightStrategy::reset() {
 
 }
 
-void ShiftKeyLightStrategy::updateValues() {
+void ShiftKeyLightStrategy::updateValues(unsigned long currentTime) {
 }
 
-void ShiftKeyLightStrategy::reinit() {
+void ShiftKeyLightStrategy::reinit(unsigned long currentTime) {
     _birthTime = _context->getCurrentTime();
     //
     auto manager = _context->getManager();

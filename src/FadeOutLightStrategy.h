@@ -15,11 +15,11 @@ public:
 
     void reset() override;
 
-    void updateValues() override;
+    void updateValues(unsigned long currentTime) override;
 
     void triggerOff() override;
 
-    void reinit() override;
+    void reinit(unsigned long currentTime) override;
 
 };
 

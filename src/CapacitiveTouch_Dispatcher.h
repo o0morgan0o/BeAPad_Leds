@@ -55,10 +55,10 @@ public:
                     _manager->setShiftState(true);
                 } else {
                     auto boardToTrigger = _midiHandler->getBoardAssociatedWithTouchPin(i);
-                    _midiHandler->sendMidiOnByTouchPin(i, _manager->getShiftState());
                     // the triggerOnBoard is not necessary, but if not present, the board don't light if not connected to midi
                     // that's why we put a strategy per default
                     _manager->triggerOnBoard(boardToTrigger, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
+                    _midiHandler->sendMidiOnByTouchPin(i, _manager->getShiftState());
                 }
             }
             // if it *was* touched and now *isnt*, alert!

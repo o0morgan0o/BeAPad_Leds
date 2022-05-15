@@ -7,6 +7,7 @@
 
 #include "Debug_Helper.h"
 
+
 class Debug_Helper_Inactive : public Debug_Helper{
 public:
     Debug_Helper_Inactive() : Debug_Helper(){
