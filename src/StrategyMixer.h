@@ -11,14 +11,15 @@
 #include <FastLED.h>
 #endif
 #include "LightStrategy.h"
+#include "SpecialEffects_Strategy.h"
 
 class StrategyMixer {
 public:
-    static CRGB mixStrategies(CRGB mainStrategyLedColor, CRGB shiftStrategyLedColor, bool isInShiftState) {
+    static CRGB mixStrategies(SpecialEffects_Strategy* specialEffectsStrategy, CRGB mainStrategyLedColor, CRGB shiftStrategyLedColor, bool isInShiftState) {
+        // fract : 0 is the source color, 255 is the target color
         if (!isInShiftState) {
-            return mainStrategyLedColor;
+            return blend(mainStrategyLedColor, specialEffectsStrategy->getSpecialEffectColor(), specialEffectsStrategy->getFractOfSpecialEffectToShow());
         } else {
-            // fract : 0 is the source color, 255 is the target color
             return blend(mainStrategyLedColor, shiftStrategyLedColor, 170);
         }
 

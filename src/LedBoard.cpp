@@ -84,12 +84,11 @@ void LedBoard::updateValues(unsigned long newTime) {
 }
 
 void LedBoard::mixStrategies() {
-    // TODO implements strategy per pixel
     for (uint8_t i = 0; i < NUM_PIXELS; i++) {
         auto mixedColor = StrategyMixer::mixStrategies(
+                _manager->getSpecialEffectStrategy(),
                 _midiReceiveLightStrategy->getSpecificLedColor(i),
                 _manager->getShiftColor(),
-//                _shiftLightStrategy->getSpecificLedColor(i),
                 _manager->getShiftState());
         updateLedColorInBoard(i, mixedColor);
     }

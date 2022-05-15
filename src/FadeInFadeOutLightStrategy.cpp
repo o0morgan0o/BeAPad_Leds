@@ -46,6 +46,5 @@ void FadeInFadeOutLightStrategy::triggerOn() {
 }
 
 void FadeInFadeOutLightStrategy::triggerOff() {
-    isTouched = false;
 
 }

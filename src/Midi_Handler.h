@@ -12,8 +12,7 @@
 
 class Midi_Handler {
 public:
-    Midi_Handler(MidiKeyReceiver *receiver,MidiKeySender* sender, Debug_Helper *debugHelper);
-
+    Midi_Handler(MidiKeyReceiver *receiver, MidiKeySender *sender, Debug_Helper *debugHelper);
 
     virtual void init() = 0;
 
@@ -24,6 +23,10 @@ public:
     virtual void handleOn(byte channel, byte note, byte velocity);
 
     virtual void handleNoteOff(byte channel, byte note, byte velocity);
+
+    virtual void handleOnSpecialEffect(byte channel, byte note, byte velocity);;
+
+    virtual void handleOffSpecialEffect(byte channel, byte note, byte velocity);;
 
     virtual void sendMidiOnByTouchPin(uint8_t boardIndex, bool isInShiftState) = 0;
 

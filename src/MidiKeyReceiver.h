@@ -34,20 +34,20 @@ public:
     }
 
     virtual void handleNoteOn(byte channel, byte note) {
-        // TODO Try to handle things differently so that we can send a midi Message to multiple boards
-        // So store vector of bytes
         auto strategy = _manager->getLightStrategyAssociatedWithChannel(channel);
         _manager->triggerOnBoard(_boardIndexReferences[(uint8_t) note], strategy);
-
     }
 
     virtual void handleNoteOff(byte note) {
-//        if (_boardIndexReferences[note] == UNDEFINED_NOTE) {
-//            String message{"WARNING : No linked Board to note "};
-//            message += note;
-//            _debugHelper->add(message);
-//        }
+        _manager->triggerOffBoard(_boardIndexReferences[(uint8_t) note]);
+    }
 
+    virtual void handleOnSpecialEffect(byte channel, byte note , byte velocity) {
+        _manager->triggerOnSpecialEffect(channel, note, velocity);
+    }
+
+    virtual void handleOffSpecialEffect(byte channel, byte note, byte velocity) {
+        _manager->triggerOffSpecialEffect(channel, note, velocity);
     }
 
 public:

@@ -17,10 +17,15 @@ void FullLightStrategy::updateValues() {
 }
 
 void FullLightStrategy::triggerOn() {
-
+    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
+        _ledColorsInStrategy[i] = _crgbStrategyColor;
+    }
 }
 
 void FullLightStrategy::triggerOff() {
+    for(uint8_t i = 0 ; i < _context->NUM_PIXELS; i++){
+        _ledColorsInStrategy[i] = CRGB::Black;
+    }
 
 }
 

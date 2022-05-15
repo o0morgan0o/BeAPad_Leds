@@ -32,13 +32,14 @@
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_9 11
 #define MPR_TOUCH_PIN_CONNECTED_TO_BOARD_10 10
 APPLEMIDI_CREATE_INSTANCE(WiFiUDP, AppleMIDI, "AppleMIDI-ESP32", DEFAULT_CONTROL_PORT);
-AccessPoint *accessPoint;
 //
+AccessPoint *accessPoint;
 Debug_Helper *debugHelper;
 Debug_Helper *inactiveDebugHelper;
 LedBoard_Store_Interface *ledBoardStore;
 LedBoardsManager *ledBoardsManager;
 LightStrategy_Factory *lightStrategyFactory;
+SpecialEffect_Factory *specialEffectFactory;
 MidiKeyReceiver *midiReceiver;
 MidiKeySender *midiSender;
 ICapacitiveTouch_Dispatcher *capacitiveTouchDispatcher;
@@ -60,8 +61,10 @@ void setup() {
     accessPoint = new AccessPoint();
 
     // **************************
-    // CREATION LOF LIGHT STRATEGY FACTORY
+    // CREATION OF LIGHT STRATEGY AND SPECIAL EFFECTS FACTORY
     lightStrategyFactory = new LightStrategy_Factory();
+    specialEffectFactory = new SpecialEffect_Factory();
+
 
     // **************************
     // ADD BOARDS TO STORE
@@ -87,7 +90,7 @@ void setup() {
 
     // **************************
     // INITIALIZE BOARD MANAGER
-    ledBoardsManager = new NeoPixelBoardsManager(ledBoardStore, lightStrategyFactory, debugHelper);
+    ledBoardsManager = new NeoPixelBoardsManager(ledBoardStore, lightStrategyFactory, specialEffectFactory, debugHelper);
     ledBoardsManager->init();
     ledBoardsManager->setBoardBaseColor(0, CRGB::Amethyst);
     ledBoardsManager->setBoardBaseColor(1, CRGB::Amethyst);
@@ -108,11 +111,19 @@ void setup() {
 
     // *************************
     // DEFINITIONS OF STRATEGY FOR EACH BOARD
+    // Channel musts be in range 1 - 8
     ledBoardsManager->setLightStrategyForChannel(1, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT);
     ledBoardsManager->setLightStrategyForChannel(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
 //    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_FADE_OUT_SLOW);
 //    ledBoardsManager->setLightStrategyForChannel(4, LIGHT_STRATEGIES::STRATEGY_SERPENTIN);
 //    ledBoardsManager->setLightStrategyForChannel(5, LIGHT_STRATEGIES::STRATEGY_EXPANSION);
+
+    // **************************
+    // DEFINITIONS OF SPECIAL EFFECTS STRATEGY
+    // Channel must be in range 9 - 16
+    ledBoardsManager->setSpecialEffectStrategyForChannel(9, SPECIAL_EFFECT_STRATEGY::SPECIAL_EFFECT_STROMBOSCOPE);
+
+
 
     // ****************************
     // MIDI KEY RECEIVER
@@ -158,10 +169,20 @@ void setup() {
     // set eventListeners
     // TODO implements MIDI_CC change (maybe for controlling the colors)
     AppleMIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
-        midiHandler->handleOn(channel, note, velocity);
+        // channels [1 - 8] are reserved for lightStrategies
+        // channels [9 - 16] are reserved for special effects
+        if (channel <= 8) {
+            midiHandler->handleOn(channel, note, velocity);
+        } else {
+            midiHandler->handleOnSpecialEffect(channel, note, velocity);
+        }
     });
     AppleMIDI.setHandleNoteOff([](byte channel, byte note, byte velocity) {
-        midiHandler->handleNoteOff(channel, note, velocity);
+        if (channel <= 8) {
+            midiHandler->handleNoteOff(channel, note, velocity);
+        } else {
+            midiHandler->handleOffSpecialEffect(channel, note, velocity);
+        }
     });
     AppleAppleMIDI.setHandleConnected([](const APPLEMIDI_NAMESPACE::ssrc_t &ssrc, const char *name) {
         ledBoardsManager->showBlinkHighPriorityMessage(BlinkHighPriorityMessages::RTP_CONNECTION_SUCCESS);
@@ -185,8 +206,6 @@ void setup() {
     capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(5, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
     capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(6, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
     capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(7, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-    capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(8, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-    capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(9, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
     capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(10, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
     capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(11, LIGHT_STRATEGIES::STRATEGY_SHIFT_KEY_STRATEGY);
 

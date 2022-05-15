@@ -12,8 +12,9 @@ public:
     NeoPixelBoardsManager(
             LedBoard_Store_Interface *ledBoardStore,
             LightStrategy_Factory *lightStrategyFactory,
+            SpecialEffect_Factory * specialEffectFactory,
             Debug_Helper* debugHelper
-    ) : LedBoardsManager(ledBoardStore, lightStrategyFactory, debugHelper) {}
+    ) : LedBoardsManager(ledBoardStore, lightStrategyFactory, specialEffectFactory, debugHelper) {}
 
     void init() override {
         for (auto board: _ledBoards) {

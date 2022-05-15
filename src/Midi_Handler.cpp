@@ -21,14 +21,25 @@ void Midi_Handler::handleDisconnected() {
 }
 
 void Midi_Handler::handleOn(byte channel, byte note, byte velocity) {
-    // TODO LIGHT_STRATEGY SHOULD BE HANDLE BY CHANNEL HERE
     _debugHelper->logMidiMessage(String{"\n[<====] RECEIVING MIDI NOTE_ON"}, channel, note, velocity);
     _midiReceiver->handleNoteOn(channel, note);
 }
 
 void Midi_Handler::handleNoteOff(byte channel, byte note, byte velocity) {
-    _debugHelper->logMidiMessage(String{"NOTE_OFF"}, channel, note, velocity);
-//        _midiReceiver->
+    _debugHelper->logMidiMessage(String{"\n[<====] RECEIVING NOTE_OFF"}, channel, note, velocity);
+    _midiReceiver->handleNoteOff(note);
+}
+
+void Midi_Handler::handleOnSpecialEffect(byte channel, byte note, byte velocity) {
+    _debugHelper->logMidiMessage(String{"\n[<====] RECEIVING SPECIAL EFFECT NOTE_ON"}, channel, note, velocity);
+    _midiReceiver->handleOnSpecialEffect(channel, note, velocity);
+
+}
+
+void Midi_Handler::handleOffSpecialEffect(byte channel, byte note, byte velocity) {
+    _debugHelper->logMidiMessage(String{"\n[<====] RECEIVING SPECIAL EFFECT NOTE_OFF"}, channel, note, velocity);
+    _midiReceiver->handleOffSpecialEffect(channel, note, velocity);
+
 }
 
 uint8_t Midi_Handler::getBoardAssociatedWithTouchPin(uint8_t touchPin) {

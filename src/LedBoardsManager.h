@@ -9,6 +9,7 @@
 #include "LedStrip_Holder_Interface.h"
 #include "LedBoard_Store_Interface.h"
 #include "LightStrategy_Factory.h"
+#include "SpecialEffect_Factory.h"
 #include "BlinkHighPriorityMessages.h"
 #include "Debug_Helper.h"
 #include <vector>
@@ -23,11 +24,15 @@ public:
     explicit LedBoardsManager(
             LedBoard_Store_Interface *ledBoardStore,
             LightStrategy_Factory *lightStrategyFactory,
+            SpecialEffect_Factory *specialEffectFactory,
             Debug_Helper *debugHelper
     ) {
         _debugHelper = debugHelper;
         _ledBoardStore = ledBoardStore;
         _ledBoards = _ledBoardStore->getLedBoards();
+        _specialEffectFactory = specialEffectFactory;
+        _specialEffectStrategy = _specialEffectFactory->makeStromboscopeSpecialEffect_Strategy(this);
+
     }
 
     virtual void init() = 0;
@@ -43,6 +48,7 @@ public:
     }
 
     virtual void update(unsigned long currentTime) {
+        _specialEffectStrategy->updateValues(currentTime);
         for (auto ledBoard: _ledBoards) {
             ledBoard->updateValues(currentTime);
         }
@@ -58,11 +64,7 @@ public:
         _isInShiftState = newState;
     }
 
-//    virtual void triggerOnSpecialEffect(LIGHT_SPECIAL_EFFECT specialEffect){
-//
-//    }
-
-    virtual void triggerOnBoard( uint8_t boardIndex, LIGHT_STRATEGIES strategy) {
+    virtual void triggerOnBoard(uint8_t boardIndex, LIGHT_STRATEGIES strategy) {
         try {
             _ledBoards.at(boardIndex)->triggerOn(strategy);
         } catch (std::exception &e) {
@@ -146,21 +148,71 @@ public:
         _channelStrategies[channel] = strategy;
     }
 
+    virtual void setSpecialEffectStrategyForChannel(uint8_t channel, SPECIAL_EFFECT_STRATEGY specialEffectStrategy){
+        _channelSpecialEffectsStrategies[channel] = specialEffectStrategy;
+    }
+
     LIGHT_STRATEGIES getLightStrategyAssociatedWithChannel(uint8_t channel) {
         return _channelStrategies[channel];
+    }
+
+    SPECIAL_EFFECT_STRATEGY getSpecialEffectStrategyAssociatedWithChannel(uint8_t channel){
+        return _channelSpecialEffectsStrategies[channel];
     }
 
 //    virtual void setRandomColorForEachBoard() = 0;
 
 //    virtual const CRGB &getCurrentGlobalColor() = 0;
 
+    virtual void triggerOnSpecialEffect(byte channel, byte note, byte velocity) {
+        // we get the special effect corresponding to the channel
+        auto specialEffectStrategy = getSpecialEffectStrategyAssociatedWithChannel(channel);
+        //
+        String message{">ACTIVATION of Special Effect Id: "};
+        message += (int) specialEffectStrategy;
+        _debugHelper->add(message);
+        //
+        changeSpecialEffectStrategy(specialEffectStrategy);
+        _specialEffectStrategy->reinit();
+        _specialEffectStrategy->triggerOn(note, velocity);
+    }
+
+    virtual void triggerOffSpecialEffect(byte channel, byte note, byte velocity) {
+        _specialEffectStrategy->triggerOff(note, velocity);
+
+    }
+
+    virtual void changeSpecialEffectStrategy(SPECIAL_EFFECT_STRATEGY newSpecialEffect) {
+        switch (newSpecialEffect) {
+            case SPECIAL_EFFECT_STRATEGY::NO_SPECIAL_EFFECT:
+                delete _specialEffectStrategy;
+                _specialEffectStrategy = _specialEffectFactory->makeNoSpecialEffect_Strategy(this);
+                break;
+            case SPECIAL_EFFECT_STRATEGY::SPECIAL_EFFECT_STROMBOSCOPE:
+                delete _specialEffectStrategy;
+                _specialEffectStrategy = _specialEffectFactory->makeStromboscopeSpecialEffect_Strategy(this);
+                break;
+            default:
+                _debugHelper->add("ERROR ! Unknown special effect strategy");
+                break;
+        }
+
+    }
+
+    virtual SpecialEffects_Strategy *getSpecialEffectStrategy() {
+        return _specialEffectStrategy;
+    }
 
 protected:
-//    LIGHT_STRATEGIES _touchTriggerLightStrategies[12]{LIGHT_STRATEGIES::NO_LIGHT_STRATEGY};
+    SpecialEffect_Factory *_specialEffectFactory;
+    SpecialEffects_Strategy *_specialEffectStrategy;
+    //
     Debug_Helper *_debugHelper;
     CRGB _shiftColor = CRGB::Green;
     LedBoard_Store_Interface *_ledBoardStore;
     std::vector<LedBoard *> _ledBoards;
+
+    SPECIAL_EFFECT_STRATEGY _channelSpecialEffectsStrategies[17]{SPECIAL_EFFECT_STRATEGY::NO_SPECIAL_EFFECT};
     LIGHT_STRATEGIES _channelStrategies[17]{LIGHT_STRATEGIES::NO_LIGHT_STRATEGY};
     bool _isInShiftState = false;
 

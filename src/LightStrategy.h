@@ -56,8 +56,6 @@ protected:
     unsigned long _birthTime{};
     CRGB _crgbStrategyColor{0, 0, 0};
     LedBoard *_context{};
-    //
-    bool isTouched = false;
     CRGB _ledColorsInStrategy[MAX_NUMBER_OF_LEDS_PER_BOARD]{CRGB::Red};
 
 };
