@@ -62,16 +62,17 @@ void LedBoard::changeLightStrategy(LIGHT_STRATEGIES newStrategy) {
 }
 
 void LedBoard::reinitLightStrategy() {
-    _midiReceiveLightStrategy->reinit(0);
-    _shiftLightStrategy->reinit(0);
+    _midiReceiveLightStrategy->reinit(_currentTime);
+    _shiftLightStrategy->reinit(_currentTime);
 }
 
 void LedBoard::triggerOn() {
     _midiReceiveLightStrategy->triggerOn();
 }
 
-void LedBoard::triggerOn(LIGHT_STRATEGIES strategy) {
+void LedBoard::triggerOn(LIGHT_STRATEGIES strategy, CRGB color) {
     changeLightStrategy(strategy);
+    _midiReceiveLightStrategy->setBaseColor(color);
     _midiReceiveLightStrategy->reinit(_currentTime);
     _midiReceiveLightStrategy->triggerOn();
 }

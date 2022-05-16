@@ -20,9 +20,9 @@ void ShiftKeyLightStrategy::reinit(unsigned long currentTime) {
     _birthTime = _context->getCurrentTime();
     //
     auto manager = _context->getManager();
-    _crgbStrategyColor = manager->getShiftColor();
+    _channelBaseColor = manager->getShiftColor();
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-        _ledColorsInStrategy[i] = _crgbStrategyColor;
+        _ledColorsInStrategy[i] = _channelBaseColor;
     }
 
 }

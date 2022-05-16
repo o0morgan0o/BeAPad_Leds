@@ -10,7 +10,9 @@
 #ifdef IN_TESTING
 #include "../test/Fake_CRGB.h"
 #else
+
 #include <FastLED.h>
+
 #endif
 #define MAX_NUMBER_OF_LEDS_PER_BOARD 20
 
@@ -24,7 +26,6 @@ enum class LIGHT_STRATEGIES {
     STRATEGY_SERPENTIN,
     STRATEGY_FLASH_TOWARDS_EXTERIOR,
     STRATEGY_SHIFT_KEY_STRATEGY
-
 
 };
 
@@ -48,16 +49,17 @@ public:
 
     virtual unsigned long getBirthTime() { return _birthTime; }
 
-    virtual CRGB getStrategyColor();
+    virtual void setBaseColor(CRGB color);
+
+    virtual CRGB getBaseColor();
 
     virtual CRGB getSpecificLedColor(uint8_t index);
-
 
 protected:
     unsigned long _lifeSpan{};
     unsigned long _currentLife{};
     unsigned long _birthTime{};
-    CRGB _crgbStrategyColor{0, 0, 0};
+    CRGB _channelBaseColor{0, 0, 0};
     LedBoard *_context{};
     CRGB _ledColorsInStrategy[MAX_NUMBER_OF_LEDS_PER_BOARD]{CRGB::Black};
 

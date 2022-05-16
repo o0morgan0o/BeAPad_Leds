@@ -7,7 +7,7 @@
 #include "LedBoard.h"
 
 void NoLightStrategy::reset() {
-    _crgbStrategyColor = CRGB::Black;
+    _channelBaseColor = CRGB::Black;
 }
 
 void NoLightStrategy::updateValues(unsigned long currentTime) {
@@ -27,7 +27,7 @@ void NoLightStrategy::triggerOff() {
 }
 
 void NoLightStrategy::reinit(unsigned long currentTime) {
-    _crgbStrategyColor = CRGB::Black;
+    _channelBaseColor = CRGB::Black;
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
         _ledColorsInStrategy[i] = CRGB::Black;
     }

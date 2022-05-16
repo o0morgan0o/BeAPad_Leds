@@ -5,11 +5,13 @@
 #include "FlashTowardsExteriorStrategy.h"
 #include "LedBoard.h"
 
-FlashTowardsExteriorStrategy::FlashTowardsExteriorStrategy(LedBoard *context) : LightStrategy(context){
+FlashTowardsExteriorStrategy::FlashTowardsExteriorStrategy(LedBoard *context) : LightStrategy(context) {
     unsigned long DELAY_BEFORE_EACH_LED = 40;
     unsigned long LIFE_EXPECTANCY = 300;
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
         _serpentinLeds[i] = SerpentinSingleLed();
+//        _serpentinLeds[i].setColors(_channelBaseColor, CRGB::Black);
+//        _serpentinLeds[i].setColors(CRGB::Red, CRGB::Black);
     }
     // CUSTOM ORDER TO HAVE THE EFFECT OF A FLASH TOWARDS EXTERIOR
     _serpentinLeds[6].setDelayBeforeStartAndLifeExpectancy(DELAY_BEFORE_EACH_LED * 0, LIFE_EXPECTANCY);
@@ -21,6 +23,10 @@ FlashTowardsExteriorStrategy::FlashTowardsExteriorStrategy(LedBoard *context) : 
     _serpentinLeds[8].setDelayBeforeStartAndLifeExpectancy(DELAY_BEFORE_EACH_LED * 4, LIFE_EXPECTANCY);
     _serpentinLeds[2].setDelayBeforeStartAndLifeExpectancy(DELAY_BEFORE_EACH_LED * 5, LIFE_EXPECTANCY);
     _serpentinLeds[3].setDelayBeforeStartAndLifeExpectancy(DELAY_BEFORE_EACH_LED * 5, LIFE_EXPECTANCY);
+
+    for(uint8_t i =0 ; i <_context->NUM_PIXELS; i++){
+        _serpentinLeds[i].setColors(_channelBaseColor, CRGB::Black);
+    }
 
 }
 
@@ -43,20 +49,22 @@ void FlashTowardsExteriorStrategy::triggerOn() {
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
         _serpentinLeds[i].reborn(_currentTime);
     }
-
 }
 
 void FlashTowardsExteriorStrategy::triggerOff() {
-    _isActive = false;
-    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-        _serpentinLeds[i].forceDeath(_currentTime);
-        _ledColorsInStrategy[i] = CRGB::Black;
-    }
+//    _isActive = false;
+//    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
+//        _serpentinLeds[i].forceDeath(_currentTime);
+//        _ledColorsInStrategy[i] = CRGB::Black;
+//    }
 
 }
 
 void FlashTowardsExteriorStrategy::reinit(unsigned long currentTime) {
     // needed to have the correct time at the first trigger (after changeLightStrategy)
     _currentTime = currentTime;
+    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
+        _serpentinLeds[i].setColors(_channelBaseColor, CRGB::Black);
+    }
 
 }

@@ -8,3 +8,11 @@
 SpecialEffects_Strategy::SpecialEffects_Strategy(LedBoardsManager *context) {
     _context = context;
 }
+
+uint8_t SpecialEffects_Strategy::getFractOfSpecialEffectToShow() {
+    return _fractionOfSpecialEffectToShow;
+}
+
+CRGB &SpecialEffects_Strategy::getSpecialEffectColor() {
+    return _specialEffectBaseColor;
+}

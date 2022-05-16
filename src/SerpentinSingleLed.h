@@ -37,7 +37,7 @@ public:
     }
 
     bool getIsInLifeSpan(unsigned long currentTime) const {
-        if (currentTime >= _startTime && currentTime <_endTime) {
+        if (currentTime >= _startTime && currentTime < _endTime) {
             return true;
         } else {
             return false;
@@ -48,6 +48,11 @@ public:
     void forceDeath(unsigned long currentTime) {
         _endTime = currentTime;
 //        _lifeExpectancy = 0;
+    }
+
+    void setColors(CRGB colorWhenOn, CRGB colorWhenOff) {
+        _colorWhenOn = colorWhenOn;
+        _colorWhenOff = colorWhenOff;
     }
 
     double getDelayBeforeStart() const {
@@ -63,7 +68,7 @@ public:
     }
 
 public:
-    CRGB _colorWhenOn{CRGB::FireBrick};
+    CRGB _colorWhenOn{CRGB::White};
     CRGB _colorWhenOff{CRGB::Black};
 private:
     unsigned long _endTime{0};

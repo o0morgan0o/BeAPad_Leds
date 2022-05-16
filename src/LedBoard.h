@@ -47,7 +47,7 @@ public:
 
     virtual void triggerOn();
 
-    virtual void triggerOn(LIGHT_STRATEGIES strategy);
+    virtual void triggerOn(LIGHT_STRATEGIES strategy, CRGB color);
 
     virtual void triggerOff();
 

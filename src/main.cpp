@@ -53,8 +53,10 @@ void setup() {
     //    debugHelper = new Debug_Helper();
     //    debugHelper = new Debug_Helper_Inactive();
     //    debugHelper = new DebugHelper_WebSocket();
-    debugHelper = new Debug_Helper_Serial();
+    //    debugHelper = new Debug_Helper_Serial();
+    // COMMENT FOLLOWING 2 LINES TO REACTIVATE DEBUG MODE
     inactiveDebugHelper = new Debug_Helper_Inactive();
+    debugHelper = inactiveDebugHelper;
 
     // *************************
     // ACCESS POINT
@@ -64,7 +66,6 @@ void setup() {
     // CREATION OF LIGHT STRATEGY AND SPECIAL EFFECTS FACTORY
     lightStrategyFactory = new LightStrategy_Factory();
     specialEffectFactory = new SpecialEffect_Factory();
-
 
     // **************************
     // ADD BOARDS TO STORE
@@ -86,46 +87,33 @@ void setup() {
     ledBoardStore->addBoard(new NeoPixelBoard(13, NUM_PIXELS_PER_BOARD, lightStrategyFactory));
 
     // **************************
-    // DEFINE PALETTE
-
-    // **************************
     // INITIALIZE BOARD MANAGER
     ledBoardsManager = new NeoPixelBoardsManager(ledBoardStore, lightStrategyFactory, specialEffectFactory, debugHelper);
     ledBoardsManager->init();
-    ledBoardsManager->setBoardBaseColor(0, CRGB::Amethyst);
-    ledBoardsManager->setBoardBaseColor(1, CRGB::Amethyst);
-    ledBoardsManager->setBoardBaseColor(2, CRGB::Aquamarine);
-    ledBoardsManager->setBoardBaseColor(3, CRGB::Aquamarine);
-    ledBoardsManager->setBoardBaseColor(4, CRGB::Brown);
-    ledBoardsManager->setBoardBaseColor(5, CRGB::Brown);
-    ledBoardsManager->setBoardBaseColor(6, CRGB::Chocolate);
-    ledBoardsManager->setBoardBaseColor(7, CRGB::Chocolate);
-    ledBoardsManager->setBoardBaseColor(8, CRGB::Yellow);
-    ledBoardsManager->setBoardBaseColor(9, CRGB::Yellow);
-    ledBoardsManager->setBoardBaseColor(10, CRGB::Yellow);
-    ledBoardsManager->setBoardBaseColor(11, CRGB::Yellow);
-    // Shift color
-    ledBoardsManager->setShiftColor(CRGB::Blue);
-    //
     ledBoardsManager->giveAllBoardsReferenceOfManager();
 
     // *************************
     // DEFINITIONS OF STRATEGY FOR EACH BOARD
     // Channel musts be in range 1 - 8
-    // TODO Also put a color on a channel
-    ledBoardsManager->setLightStrategyForChannel(1, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT);
-    ledBoardsManager->setLightStrategyForChannel(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
-    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_SERPENTIN);
-    ledBoardsManager->setLightStrategyForChannel(4, LIGHT_STRATEGIES::STRATEGY_FLASH_TOWARDS_EXTERIOR);
-//    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_FADE_OUT_SLOW);
-//    ledBoardsManager->setLightStrategyForChannel(5, LIGHT_STRATEGIES::STRATEGY_EXPANSION);
+    ledBoardsManager->setLightStrategyForChannel(1, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT, CRGB::Red);
+    ledBoardsManager->setLightStrategyForChannel(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT, CRGB::Green);
+    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_SERPENTIN, CRGB::Yellow);
+    ledBoardsManager->setLightStrategyForChannel(4, LIGHT_STRATEGIES::STRATEGY_FLASH_TOWARDS_EXTERIOR, CRGB::Red);
+    ledBoardsManager->setShiftColor(CRGB::ForestGreen); // Shift Color
+
+    // TODO : Make Strategies
+    // STRATEGY_FADE_OUT_SLOW
+    // STRATEGY_EXPANSION FROM CENTER TO EXTERIOR
+    // SPECIAL_EFFECTS WAVE GLOBALE
 
     // **************************
     // DEFINITIONS OF SPECIAL EFFECTS STRATEGY
     // Channel must be in range 9 - 16
+    // Special Effects Strategy don't need color. Special Effects handled HSV Colors, where:
+    // H (color tone) is set by noteNumber
+    // S (color saturation) is fixed at arbitrary value
+    // V (color luminosity) is set by velocity
     ledBoardsManager->setSpecialEffectStrategyForChannel(9, SPECIAL_EFFECT_STRATEGY::SPECIAL_EFFECT_STROMBOSCOPE);
-
-
 
     // ****************************
     // MIDI KEY RECEIVER
@@ -191,6 +179,7 @@ void setup() {
 
     // **************************
     // TOUCH SENSORS INIT (MPR121)
+    // Following strategies are chosen arbitrarily (except for the shift_key_strategy). They can be used when the device is not midi connected
     touchSensor = new MPR121_Sensor();
     capacitiveTouchDispatcher = new CapacitiveTouch_Dispatcher(ledBoardsManager, midiHandler, debugHelper, touchSensor);
     capacitiveTouchDispatcher->begin();
@@ -219,7 +208,7 @@ void setup() {
 void loop() {
 
     // can be deactivated if webServer Not Needed
-    accessPoint->loop();
+    //    accessPoint->loop();
 
     // check midi Messages
     midiHandler->loop();

@@ -38,18 +38,13 @@ public:
 
     virtual void reinit() = 0;
 
-    virtual uint8_t getFractOfSpecialEffectToShow() {
-        return _fractionOfSpecialEffectToShow;
-    };
+    virtual uint8_t getFractOfSpecialEffectToShow();;
 
-    virtual CRGB& getSpecialEffectColor()  {
-        return _specialEffectColor;
-    };
+    virtual CRGB& getSpecialEffectColor();;
 protected:
-    CRGB _specialEffectColor{CRGB::White};
+    CRGB _specialEffectBaseColor{CRGB::White};
     int _fractionOfSpecialEffectToShow{0};
     LedBoardsManager *_context{};
-
 };
 
 #endif //PLATFORMIO_PROGRAM_SPECIALEFFECTS_STRATEGY_H

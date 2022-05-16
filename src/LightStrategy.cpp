@@ -11,22 +11,22 @@ LightStrategy::LightStrategy(LedBoard *context) {
     //
     _birthTime = _context->getCurrentTime();
     //
-    _crgbStrategyColor = CRGB{
-            _context->getBoardBaseColor().r,
-            _context->getBoardBaseColor().g,
-            _context->getBoardBaseColor().b
-    };
-    //
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-        _ledColorsInStrategy[i] = _crgbStrategyColor;
+        _ledColorsInStrategy[i] = _channelBaseColor;
     }
-
 }
 
-CRGB LightStrategy::getStrategyColor() {
-    return _crgbStrategyColor;
+
+
+CRGB LightStrategy::getBaseColor() {
+    return _channelBaseColor;
 }
 
 CRGB LightStrategy::getSpecificLedColor(uint8_t index) {
     return _ledColorsInStrategy[index];
+}
+
+void LightStrategy::setBaseColor(CRGB color) {
+    _channelBaseColor = color;
+
 }

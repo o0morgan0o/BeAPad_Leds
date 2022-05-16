@@ -32,7 +32,7 @@ public:
 
     void reinit() override {
         _fractionOfSpecialEffectToShow = 0;
-        _specialEffectColor = CRGB::Black;
+        _specialEffectBaseColor = CRGB::Black;
 
     }
 

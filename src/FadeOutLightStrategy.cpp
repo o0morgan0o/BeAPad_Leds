@@ -10,15 +10,10 @@ FadeOutLightStrategy::FadeOutLightStrategy(LedBoard *context) : LightStrategy(co
 
 void FadeOutLightStrategy::reset() {
     _birthTime = _context->getCurrentTime();
-    _crgbStrategyColor = CRGB{
-            _context->getBoardBaseColor().r,
-            _context->getBoardBaseColor().g,
-            _context->getBoardBaseColor().b
-    };
 }
 
 void FadeOutLightStrategy::updateValues(unsigned long currentTime) {
-    for(uint8_t i = 0 ; i < _context->NUM_PIXELS; i++){
+    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
         _ledColorsInStrategy[i].fadeToBlackBy(10);
     }
     _lifeSpan = _context->getCurrentTime() - _birthTime;
@@ -26,18 +21,11 @@ void FadeOutLightStrategy::updateValues(unsigned long currentTime) {
 
 void FadeOutLightStrategy::reinit(unsigned long currentTime) {
     _birthTime = _context->getCurrentTime();
-    //
-    _crgbStrategyColor = CRGB{
-            _context->getBoardBaseColor().r,
-            _context->getBoardBaseColor().g,
-            _context->getBoardBaseColor().b
-    };
-
 }
 
 void FadeOutLightStrategy::triggerOn() {
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-        _ledColorsInStrategy[i]= _crgbStrategyColor;
+        _ledColorsInStrategy[i] = _channelBaseColor;
     }
 }
 

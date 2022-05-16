@@ -5,8 +5,9 @@
 #include <WiFiClient.h>
 #include "LedBoardsManager.h"
 #include "Debug_Helper.h"
-//#include <WiFiServer.h>
 #include <WebServer.h>
+
+
 
 struct AccessPoint {
 public:
@@ -25,8 +26,8 @@ public:
     }
 
 private:
-    Debug_Helper *_debugHelper;
-    LedBoardsManager *_manager;
+    Debug_Helper *_debugHelper{};
+    LedBoardsManager *_manager{};
     const char *_ssid = "gonzyProject";
     const char *_password = "password";
 

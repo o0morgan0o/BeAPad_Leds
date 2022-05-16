@@ -4,6 +4,7 @@
 
 #include "StromboscopeSpecialEffect_Strategy.h"
 #include "LedBoardsManager.h"
+#include "main_constants.h"
 
 void StromboscopeSpecialEffect_Strategy::reset() {
 
@@ -35,7 +36,11 @@ void StromboscopeSpecialEffect_Strategy::updateValues(unsigned long currentTime)
 
 void StromboscopeSpecialEffect_Strategy::triggerOn(byte note, byte velocity) {
     INTENSITY_WHEN_ON = (int) velocity;
-    _specialEffectColor = CRGB(CHSV((uint8_t) (note)*2, 200,  255));
+    _specialEffectBaseColor = CRGB(CHSV(
+            (uint8_t) (note) * 2, // h
+            SPECIAL_EFFECT_CHANNEL_COLOR_SATURATION, // s
+            (uint8_t) (velocity) * 2) // v
+                    );
     _isPlaying = true;
     _frameCounter = 0;
     _isFlashing = false;

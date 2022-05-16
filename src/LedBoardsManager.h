@@ -48,9 +48,10 @@ public:
     }
 
     virtual void update(unsigned long currentTime) {
-        _specialEffectStrategy->updateValues(currentTime);
+        _currentTime = currentTime;
+        _specialEffectStrategy->updateValues(_currentTime);
         for (auto ledBoard: _ledBoards) {
-            ledBoard->updateValues(currentTime);
+            ledBoard->updateValues(_currentTime);
         }
     };
 
@@ -64,9 +65,9 @@ public:
         _isInShiftState = newState;
     }
 
-    virtual void triggerOnBoard(uint8_t boardIndex, LIGHT_STRATEGIES strategy) {
+    virtual void triggerOnBoard(uint8_t boardIndex, LIGHT_STRATEGIES strategy, CRGB color) {
         try {
-            _ledBoards.at(boardIndex)->triggerOn(strategy);
+            _ledBoards.at(boardIndex)->triggerOn(strategy, color);
         } catch (std::exception &e) {
             showBlinkHighPriorityMessage(BlinkHighPriorityMessages::TRIGGER_BOARD_ERROR);
         }
@@ -126,8 +127,6 @@ public:
         }
     }
 
-    virtual void showBaseColor() = 0;
-
     virtual bool getShiftState() {
         return _isInShiftState;
     }
@@ -144,8 +143,9 @@ public:
         return _debugHelper;
     }
 
-    virtual void setLightStrategyForChannel(uint8_t channel, LIGHT_STRATEGIES strategy) {
+    virtual void setLightStrategyForChannel(uint8_t channel, LIGHT_STRATEGIES strategy, CRGB channelColor) {
         _channelStrategies[channel] = strategy;
+        _channelColors[channel] = channelColor;
     }
 
     virtual void setSpecialEffectStrategyForChannel(uint8_t channel, SPECIAL_EFFECT_STRATEGY specialEffectStrategy) {
@@ -156,13 +156,13 @@ public:
         return _channelStrategies[channel];
     }
 
+    CRGB getColorAssociatedWithChannel(uint8_t channel){
+        return _channelColors[channel];
+    }
+
     SPECIAL_EFFECT_STRATEGY getSpecialEffectStrategyAssociatedWithChannel(uint8_t channel) {
         return _channelSpecialEffectsStrategies[channel];
     }
-
-//    virtual void setRandomColorForEachBoard() = 0;
-
-//    virtual const CRGB &getCurrentGlobalColor() = 0;
 
     virtual void triggerOnSpecialEffect(byte channel, byte note, byte velocity) {
         // we get the special effect corresponding to the channel
@@ -204,6 +204,8 @@ public:
     }
 
 protected:
+    unsigned long _currentTime;
+    //
     SpecialEffect_Factory *_specialEffectFactory;
     SpecialEffects_Strategy *_specialEffectStrategy;
     //
@@ -214,6 +216,7 @@ protected:
 
     SPECIAL_EFFECT_STRATEGY _channelSpecialEffectsStrategies[17]{SPECIAL_EFFECT_STRATEGY::NO_SPECIAL_EFFECT};
     LIGHT_STRATEGIES _channelStrategies[17]{LIGHT_STRATEGIES::NO_LIGHT_STRATEGY};
+    CRGB _channelColors[17]{CRGB::Black};
     bool _isInShiftState = false;
 
 };

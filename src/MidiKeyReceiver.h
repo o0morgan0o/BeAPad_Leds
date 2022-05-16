@@ -30,15 +30,16 @@ public:
     }
 
     virtual void handleNoteOn(byte channel, byte note) {
-        auto strategy = _manager->getLightStrategyAssociatedWithChannel(channel);
-        _manager->triggerOnBoard(_boardIndexReferences[(uint8_t) note], strategy);
+        auto channelStrategy = _manager->getLightStrategyAssociatedWithChannel(channel);
+        auto channelColor = _manager->getColorAssociatedWithChannel(channel);
+        _manager->triggerOnBoard(_boardIndexReferences[(uint8_t) note], channelStrategy, channelColor);
     }
 
     virtual void handleNoteOff(byte note) {
         _manager->triggerOffBoard(_boardIndexReferences[(uint8_t) note]);
     }
 
-    virtual void handleOnSpecialEffect(byte channel, byte note , byte velocity) {
+    virtual void handleOnSpecialEffect(byte channel, byte note, byte velocity) {
         _manager->triggerOnSpecialEffect(channel, note, velocity);
     }
 

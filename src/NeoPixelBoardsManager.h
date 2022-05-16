@@ -30,13 +30,6 @@ public:
 
     }
 
-    void showBaseColor() override {
-        for (auto ledBoard: _ledBoards) {
-            ledBoard->showBaseColor();
-            ledBoard->show();
-        }
-    }
-
     void showGlobally(CRGB color) override {
         for (auto board: _ledBoards) {
             board->showGlobalColor(color);

@@ -18,7 +18,7 @@ void FullLightStrategy::updateValues(unsigned long currentTime) {
 
 void FullLightStrategy::triggerOn() {
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-        _ledColorsInStrategy[i] = _crgbStrategyColor;
+        _ledColorsInStrategy[i] = _channelBaseColor;
     }
 }
 
@@ -32,10 +32,4 @@ void FullLightStrategy::triggerOff() {
 void FullLightStrategy::reinit(unsigned long currentTime) {
     _birthTime = _context->getCurrentTime();
     //
-    _crgbStrategyColor = CRGB{
-            _context->getBoardBaseColor().r,
-            _context->getBoardBaseColor().g,
-            _context->getBoardBaseColor().b
-    };
-
 }

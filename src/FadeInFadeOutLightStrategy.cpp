@@ -9,17 +9,12 @@ void FadeInFadeOutLightStrategy::reset() {
     _birthTime = _context->getCurrentTime();
     _currentLife = 0;
     fraction = 0;
-    _crgbStrategyColor = CRGB{
-            _context->getBoardBaseColor().r,
-            _context->getBoardBaseColor().g,
-            _context->getBoardBaseColor().b
-    };
 
 }
 
 void FadeInFadeOutLightStrategy::updateValues(unsigned long currentTime) {
     fraction += 1;
-    CRGB newColor = blend(CRGB::AliceBlue, CRGB::Red, fraction);
+    CRGB newColor = blend(_channelBaseColor, CRGB::Red, fraction);
     _lifeSpan = _context->getCurrentTime() - _birthTime;
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
         _ledColorsInStrategy[i] = newColor;
@@ -29,19 +24,13 @@ void FadeInFadeOutLightStrategy::updateValues(unsigned long currentTime) {
 void FadeInFadeOutLightStrategy::reinit(unsigned long currentTime) {
     fraction = 0;
     _birthTime = _context->getCurrentTime();
-    //
-    _crgbStrategyColor = CRGB{
-            _context->getBoardBaseColor().r,
-            _context->getBoardBaseColor().g,
-            _context->getBoardBaseColor().b
-    };
 
 }
 
 void FadeInFadeOutLightStrategy::triggerOn() {
     fraction = 0;
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
-        _ledColorsInStrategy[i] = _crgbStrategyColor;
+        _ledColorsInStrategy[i] = _channelBaseColor;
     }
 }
 

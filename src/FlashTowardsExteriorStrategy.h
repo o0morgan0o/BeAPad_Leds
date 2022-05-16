@@ -22,7 +22,7 @@ public:
 
     void reinit(unsigned long currentTime) override;
 
-protected:
+private:
     bool _isActive{false};
     unsigned long _currentTime{0};
     SerpentinSingleLed _serpentinLeds[MAX_NUMBER_OF_LEDS_PER_BOARD];

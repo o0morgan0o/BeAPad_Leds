@@ -22,7 +22,7 @@ public:
 
     void reinit(unsigned long currentTime) override;
 
-protected:
+private:
     bool _isActive{false};
     unsigned long _currentTime{0};
 
