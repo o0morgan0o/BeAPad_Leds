@@ -8,8 +8,6 @@
 
 #include "../test/FakeString.h"
     using byte = uint8_t;
-
-//using namespace std;
 #else
 
 #include <Arduino.h>
@@ -17,7 +15,6 @@
 #endif
 
 #include <cstring>
-#include "LogMessages_Store.h"
 
 class Debug_Helper {
 public:

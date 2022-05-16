@@ -6,7 +6,6 @@
 #define PLATFORMIO_PROGRAM_ICAPACITIVETOUCH_DISPATCHER_H
 
 #include "Midi_Handler.h"
-#include "PinStateValidator.h"
 
 class ICapacitiveTouch_Dispatcher {
 public:
@@ -22,7 +21,6 @@ public:
 
     virtual void setTriggerOnTouchLightStrategyOnBoard(uint8_t boardIndex, LIGHT_STRATEGIES strategy) {
         _touchTriggerLightStrategies[boardIndex] = strategy;
-//        _ledBoards.at(boardIndex)->changeLightStrategy(strategy);
     }
 
     virtual void setTouchThreshold(uint8_t newThreshold) = 0;

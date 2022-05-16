@@ -6,7 +6,6 @@
 #define GONZYPROJECT_ILEDBOARDSMANAGER_H
 
 #include "LedBoard.h"
-#include "LedStrip_Holder_Interface.h"
 #include "LedBoard_Store_Interface.h"
 #include "LightStrategy_Factory.h"
 #include "SpecialEffect_Factory.h"
@@ -204,7 +203,7 @@ public:
     }
 
 protected:
-    unsigned long _currentTime;
+    unsigned long _currentTime{};
     //
     SpecialEffect_Factory *_specialEffectFactory;
     SpecialEffects_Strategy *_specialEffectStrategy;

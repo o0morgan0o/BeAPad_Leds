@@ -10,10 +10,11 @@
 #ifdef IN_TESTING
 #include "../test/Fake_CRGB.h"
 #else
+
 #include <FastLED.h>
+
 #endif
 
-#include "LightCommands.h"
 #include "LightStrategy.h"
 #include "FullLightStrategy.h"
 #include "NoLightStrategy.h"
@@ -67,8 +68,7 @@ public:
 
     virtual RGB_Color getBoardBaseColor();
 
-    virtual void initBoard() =0;
-
+    virtual void initBoard() = 0;
 
     virtual void mixStrategies();
 
@@ -80,7 +80,6 @@ public:
 protected:
     LightStrategy_Factory *_lightStrategyFactory;
     LightStrategy *_midiReceiveLightStrategy;
-//    LightStrategy *_touchSensorLightStrategy;
     LightStrategy *_shiftLightStrategy;
 protected:
     LedBoardsManager *_manager{};

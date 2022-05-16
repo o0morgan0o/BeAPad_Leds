@@ -97,7 +97,7 @@ void setup() {
     // Channel musts be in range 1 - 8
     ledBoardsManager->setLightStrategyForChannel(1, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT, CRGB::Red);
     ledBoardsManager->setLightStrategyForChannel(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT, CRGB::Green);
-    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_SERPENTIN, CRGB::Yellow);
+    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_SERPENTIN, CRGB{255,0,255});
     ledBoardsManager->setLightStrategyForChannel(4, LIGHT_STRATEGIES::STRATEGY_FLASH_TOWARDS_EXTERIOR, CRGB::Red);
     ledBoardsManager->setShiftColor(CRGB::ForestGreen); // Shift Color
 
