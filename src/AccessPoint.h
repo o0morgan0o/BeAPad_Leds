@@ -28,8 +28,8 @@ public:
 private:
     Debug_Helper *_debugHelper{};
     LedBoardsManager *_manager{};
-    const char *_ssid = "gonzyProject";
-    const char *_password = "password";
+    const char *_ssid = "SFR_BAP_8900";
+    const char *_password = "zwd84sf3w2swud48";
 
     // set server port number to 80
     WebServer server{80};

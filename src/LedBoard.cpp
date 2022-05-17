@@ -80,6 +80,7 @@ void LedBoard::triggerOn(LIGHT_STRATEGIES strategy, CRGB color) {
 void LedBoard::triggerOff() {
     if (_manager->getShiftState()) {
         _shiftLightStrategy->triggerOff();
+        _midiReceiveLightStrategy->triggerOff();
     } else {
         _midiReceiveLightStrategy->triggerOff();
     }

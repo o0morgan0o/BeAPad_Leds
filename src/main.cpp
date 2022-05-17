@@ -130,7 +130,7 @@ void setup() {
     midiReceiver->connectBoardToReceiveMidiKey(7, 67);
     midiReceiver->connectBoardToReceiveMidiKey(8, 68);
     midiReceiver->connectBoardToReceiveMidiKey(9, 69);
-    midiReceiver->connectBoardToReceiveMidiKey(10, 7);
+    midiReceiver->connectBoardToReceiveMidiKey(10, 70);
 
     // ***************************
     // MIDI KEY SENDER
