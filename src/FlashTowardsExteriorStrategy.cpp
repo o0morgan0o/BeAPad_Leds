@@ -10,8 +10,6 @@ FlashTowardsExteriorStrategy::FlashTowardsExteriorStrategy(LedBoard *context) : 
     unsigned long LIFE_EXPECTANCY = 300;
     for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
         _serpentinLeds[i] = SerpentinSingleLed();
-//        _serpentinLeds[i].setColors(_channelBaseColor, CRGB::Black);
-//        _serpentinLeds[i].setColors(CRGB::Red, CRGB::Black);
     }
     // CUSTOM ORDER TO HAVE THE EFFECT OF A FLASH TOWARDS EXTERIOR
     _serpentinLeds[6].setDelayBeforeStartAndLifeExpectancy(DELAY_BEFORE_EACH_LED * 0, LIFE_EXPECTANCY);
@@ -23,8 +21,7 @@ FlashTowardsExteriorStrategy::FlashTowardsExteriorStrategy(LedBoard *context) : 
     _serpentinLeds[8].setDelayBeforeStartAndLifeExpectancy(DELAY_BEFORE_EACH_LED * 4, LIFE_EXPECTANCY);
     _serpentinLeds[2].setDelayBeforeStartAndLifeExpectancy(DELAY_BEFORE_EACH_LED * 5, LIFE_EXPECTANCY);
     _serpentinLeds[3].setDelayBeforeStartAndLifeExpectancy(DELAY_BEFORE_EACH_LED * 5, LIFE_EXPECTANCY);
-
-    for(uint8_t i =0 ; i <_context->NUM_PIXELS; i++){
+    for (uint8_t i = 0; i < _context->NUM_PIXELS; i++) {
         _serpentinLeds[i].setColors(_channelBaseColor, CRGB::Black);
     }
 

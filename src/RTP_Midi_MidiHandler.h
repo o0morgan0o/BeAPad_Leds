@@ -20,7 +20,6 @@ public:
                          MidiInterface<appleMidi::AppleMIDISession<WiFiUDP>, appleMidi::AppleMIDISettings> *midiSession,
                          appleMidi::AppleMIDISession<WiFiUDP> *appleMidi
     ) : Midi_Handler(receiver, sender, debugHelper) {
-        //    APPLEMIDI_CREATE_DEFAULTSESSION_INSTANCE();
         _midiSession = midiSession;
         _appleMidi = appleMidi;
         _midiSessionName = appleMidi->getName();

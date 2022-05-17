@@ -18,6 +18,11 @@
 #include "../test/Fake_Arduino.h"
 #endif
 
+/**
+ * @brief   Class which contains the references of store.
+ *          Any trigger of board or change lightStrategy should be passed in this class
+ *
+ */
 class LedBoardsManager {
 public:
     explicit LedBoardsManager(
@@ -46,6 +51,10 @@ public:
         }
     }
 
+    /**
+     * Update the current time value and store the value. This will serve for updating all strategies which need a specific timing.
+     * @param currentTime
+     */
     virtual void update(unsigned long currentTime) {
         _currentTime = currentTime;
         _specialEffectStrategy->updateValues(_currentTime);
@@ -54,6 +63,9 @@ public:
         }
     };
 
+    /**
+     * Boards often need to call methods inside the manager, so we pass a reference of the manager to the boards
+     */
     void giveAllBoardsReferenceOfManager() {
         for (auto board: _ledBoards) {
             board->giveReferenceManager(this);
@@ -84,6 +96,10 @@ public:
         _ledBoards.at(boardIndex)->setBoardColor(color);
     }
 
+    /**
+     * Show a blocking blink. No other operation can be made during this, so use carefully, and avoid in loop.
+     * @param errorMessage
+     */
     virtual void showBlinkHighPriorityMessage(BlinkHighPriorityMessages errorMessage) {
         switch (errorMessage) {
             case BlinkHighPriorityMessages::MPR121_SENSOR_NOT_FOUND:
@@ -106,6 +122,10 @@ public:
         }
     }
 
+    /**
+     * QuickBlink can be useful for debugging purposes
+     * @param color
+     */
     virtual void showQuickBlink(CRGB color) {
         uint8_t LOOPS = 2;
         for (int i = 0; i < LOOPS; i++) {
@@ -155,7 +175,7 @@ public:
         return _channelStrategies[channel];
     }
 
-    CRGB getColorAssociatedWithChannel(uint8_t channel){
+    CRGB getColorAssociatedWithChannel(uint8_t channel) {
         return _channelColors[channel];
     }
 

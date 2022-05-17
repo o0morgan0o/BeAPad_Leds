@@ -40,8 +40,8 @@ public:
 
     void initBoard() override {
         _strip->begin();
-        for(uint8_t i = 0 ; i < NUM_PIXELS; i++){
-            _strip->setPixelColor(i,0,0,0);
+        for (uint8_t i = 0; i < NUM_PIXELS; i++) {
+            _strip->setPixelColor(i, 0, 0, 0);
         }
     }
 

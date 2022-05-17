@@ -14,6 +14,8 @@ public:
 
     virtual bool begin() = 0;
 
+    virtual void setThresholds(uint8_t touch, uint8_t release) =0;
+
     virtual uint16_t getTouched() = 0;
 
 };

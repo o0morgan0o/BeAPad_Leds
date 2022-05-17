@@ -15,3 +15,8 @@ bool MPR121_Sensor::begin() {
 uint16_t MPR121_Sensor::getTouched() {
     return _cap->touched();
 }
+
+void MPR121_Sensor::setThresholds(uint8_t touch, uint8_t release) {
+    _cap->setThresholds(touch, release);
+
+}

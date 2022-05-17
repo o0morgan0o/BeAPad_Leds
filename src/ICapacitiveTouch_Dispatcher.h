@@ -23,19 +23,10 @@ public:
         _touchTriggerLightStrategies[boardIndex] = strategy;
     }
 
-    virtual void setTouchThreshold(uint8_t newThreshold) = 0;
-
-    virtual void setReleaseThreshold(uint8_t newThreshold) = 0;
-
-    virtual uint8_t getTouchThreshold() const = 0;
-
-    virtual uint8_t getReleaseThreshold() const = 0;
+    virtual void setThresholds(uint8_t touch, uint8_t release) = 0;
 
 protected:
     LIGHT_STRATEGIES _touchTriggerLightStrategies[12]{LIGHT_STRATEGIES::NO_LIGHT_STRATEGY};
-    //
-    uint8_t TOUCH_THRESHOLD = 35;
-    uint8_t RELEASE_THRESHOLD = 40;
     //
     Midi_Handler *_midiHandler;
     LedBoardsManager *_manager;

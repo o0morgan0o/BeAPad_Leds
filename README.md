@@ -13,12 +13,22 @@ Project for touch sensors combined to Neopixels and RTP Midi for controlling Lig
 - Steel plates
 - Optional : Power Supply 5V 10A or 4 AA Batteries
 
-## Hardware
+## Usage
 
-#TODO: put some photos and schematics 
-#TODO: put 3d models 3d printing
+Use RTP-Midi software in windows to listen for midi signals over Wi-Fi.
+(software : https://www.tobias-erichsen.de/software/rtpmidi/rtpmidi-tutorial.html)
 
-## Mapping MidiReceive
+Set RTP-Midi device to address `192.168.0.4` (address set to client by ESP32 DHCP)
+
+## Ableton Setup
+
+In order to send midi towards the controller, on each midi track, set an instrument rack with:
+- External instrument to RTP_Midi Receiver session
+- Your drum rack with active notes mentioned in next section
+
+![ableton](img/Ableton-midiTrack.png)
+
+### Mapping MidiReceive
 
 ```
 Each MidiNote Receveid is connected to a specific light effect on board
@@ -89,6 +99,32 @@ SPECIAL EFFECTS
 
 ```
 
-## Ableton Setup
 
-#TODO: describe briefly ableton setup
+## Hardware
+
+### LedBoards:
+
+(See EasyEDA project in "Resources_PCB_Schematics")
+
+![schematic](img/led_boards_nets.png)
+![pcb](img/led_boards_pcb.png)
+
+**Warning: Orientation of led change across the board (see real reference below)**
+
+![real](img/led_board.jpg)
+
+### Controller Board
+
+(See KiCad project in "Resources_PCB_Schematics")
+
+![schematic](img/controller_board_nets.png)
+![pcb](img/controller_board_pcb.png)
+
+**Real prototype**
+
+![real](img/controller_board_recto.jpg)
+![real](img/controller_board_verso.jpg)
+
+### 3D Models
+
+Very basic holders can be found in Resources_3D_printing.

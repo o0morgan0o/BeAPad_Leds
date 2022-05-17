@@ -81,23 +81,11 @@ public:
         lasttouched = currtouched;
     }
 
-    void setTouchThreshold(uint8_t newThreshold) override {
-
+    void setThresholds(uint8_t touch, uint8_t release) override{
+        _touchSensor->setThresholds(touch, release);
     }
 
-    void setReleaseThreshold(uint8_t newThreshold) override {
-
-    }
-
-    uint8_t getTouchThreshold() const override {
-        return 0;
-    }
-
-    uint8_t getReleaseThreshold() const override {
-        return 0;
-    }
-
-// Keeps track of the last pins touched
+    // Keeps track of the last pins touched
 // so that we know when buttons are 'released'
     uint16_t lasttouched = 0;
     uint16_t currtouched = 0;

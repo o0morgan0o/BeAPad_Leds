@@ -1,3 +1,12 @@
+/**
+ * BeAPadProject
+ * Morgan Thibert - 2022
+ *
+ * MidiController with with communication via RTP-Midi on Wifi controlled by capacitive sensors
+ *
+ * Interesting resources:
+ * http://ww1.microchip.com/downloads/en/Appnotes/Capacitive-Touch-Sensor-Design-Guide-DS00002934-B.pdf
+ */
 
 #include <AppleMidi.h>
 #include <WiFiUdp.h>
@@ -95,16 +104,22 @@ void setup() {
     // *************************
     // DEFINITIONS OF STRATEGY FOR EACH BOARD
     // Channel musts be in range 1 - 8
+
+        // *************************************************************************
+        // *************************************************************************
+        // Colors can be changed here
     ledBoardsManager->setLightStrategyForChannel(1, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT, CRGB::Red);
     ledBoardsManager->setLightStrategyForChannel(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT, CRGB::Green);
     ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_SERPENTIN, CRGB{255,0,255});
     ledBoardsManager->setLightStrategyForChannel(4, LIGHT_STRATEGIES::STRATEGY_FLASH_TOWARDS_EXTERIOR, CRGB::Red);
     ledBoardsManager->setShiftColor(CRGB::ForestGreen); // Shift Color
+        // *************************************************************************
+        // *************************************************************************
 
-    // TODO : Make Strategies
+    // TODO : Make more Strategies
     // STRATEGY_FADE_OUT_SLOW
     // STRATEGY_EXPANSION FROM CENTER TO EXTERIOR
-    // SPECIAL_EFFECTS WAVE GLOBALE
+    // SPECIAL_EFFECTS GLOBAL WAVE
 
     // **************************
     // DEFINITIONS OF SPECIAL EFFECTS STRATEGY
@@ -181,8 +196,15 @@ void setup() {
     // TOUCH SENSORS INIT (MPR121)
     // Following strategies are chosen arbitrarily (except for the shift_key_strategy). They can be used when the device is not midi connected
     touchSensor = new MPR121_Sensor();
+
+    // **************************
+    // CAPACITIVE TOUCH DISPATCHER
     capacitiveTouchDispatcher = new CapacitiveTouch_Dispatcher(ledBoardsManager, midiHandler, debugHelper, touchSensor);
     capacitiveTouchDispatcher->begin();
+    // THRESHOLD: read documentation of MPR121 about the handling of thresholds
+    // helpful thread about this : https://forums.adafruit.com/viewtopic.php?t=72025
+    // If default values ard OK, comment following line
+    // capacitiveTouchDispatcher->setThresholds(20, 10);
     capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(0, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
     capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(1, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
     capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);

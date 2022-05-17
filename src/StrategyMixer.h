@@ -9,7 +9,9 @@
 #include "../test/Fake_CRGB.h"
 
 #else
+
 #include <FastLED.h>
+
 #endif
 
 #include "LightStrategy.h"

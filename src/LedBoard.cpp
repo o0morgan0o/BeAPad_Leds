@@ -21,7 +21,6 @@ LedBoardsManager *LedBoard::getManager() {
 }
 
 void LedBoard::changeLightStrategy(LIGHT_STRATEGIES newStrategy) {
-    // TODO remove debugger if not needed
     auto debugHelper = _manager->getDebugHelper();
     String message{"DEBUG: Changing Light Strategy : strategy Number "};
     message += (int) newStrategy;
