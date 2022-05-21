@@ -97,7 +97,8 @@ void setup() {
 
     // **************************
     // INITIALIZE BOARD MANAGER
-    ledBoardsManager = new NeoPixelBoardsManager(ledBoardStore, lightStrategyFactory, specialEffectFactory, debugHelper);
+    ledBoardsManager = new NeoPixelBoardsManager(ledBoardStore, lightStrategyFactory, specialEffectFactory,
+                                                 debugHelper);
     ledBoardsManager->init();
     ledBoardsManager->giveAllBoardsReferenceOfManager();
 
@@ -105,16 +106,17 @@ void setup() {
     // DEFINITIONS OF STRATEGY FOR EACH BOARD
     // Channel musts be in range 1 - 8
 
-        // *************************************************************************
-        // *************************************************************************
-        // Colors can be changed here
-    ledBoardsManager->setLightStrategyForChannel(1, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT, CRGB::Red);
-    ledBoardsManager->setLightStrategyForChannel(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT, CRGB::Green);
-    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_SERPENTIN, CRGB{255,0,255});
-    ledBoardsManager->setLightStrategyForChannel(4, LIGHT_STRATEGIES::STRATEGY_FLASH_TOWARDS_EXTERIOR, CRGB::Red);
-    ledBoardsManager->setShiftColor(CRGB::ForestGreen); // Shift Color
-        // *************************************************************************
-        // *************************************************************************
+    // *************************************************************************
+    // *************************************************************************
+    // List of Predefined color names : https://github.com/FastLED/FastLED/wiki/Pixel-reference
+    // Colors can be changed here by hexValue CRGB{0xffffff}, or by predefined Colors CRGB::Red, or by rgb values CRGB{255,255,0};
+    ledBoardsManager->setLightStrategyForChannel(1, LIGHT_STRATEGIES::STRATEGY_FULL_LIGHT, CRGB{0x3f1651});
+    ledBoardsManager->setLightStrategyForChannel(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT, CRGB{0x653780});
+    ledBoardsManager->setLightStrategyForChannel(3, LIGHT_STRATEGIES::STRATEGY_SERPENTIN, CRGB{0x9c3587});
+    ledBoardsManager->setLightStrategyForChannel(4, LIGHT_STRATEGIES::STRATEGY_FLASH_TOWARDS_EXTERIOR, CRGB{0xe53f71});
+    ledBoardsManager->setShiftColor(CRGB{0xf89f5b}); // Shift Color
+    // *************************************************************************
+    // *************************************************************************
 
     // TODO : Make more Strategies
     // STRATEGY_FADE_OUT_SLOW
@@ -165,7 +167,8 @@ void setup() {
     midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_8, 8, 68, 88);
     midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_9, 9, 69, 89);
     midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_10, 10, 70, 90);
-    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11_SHIFT_PIN, 11, NO_MIDI_TRIGGER_FOR_BOARD, NO_MIDI_TRIGGER_FOR_BOARD);
+    midiSender->connectBoardToSendMidiKey(MPR_TOUCH_PIN_CONNECTED_TO_BOARD_11_SHIFT_PIN, 11, NO_MIDI_TRIGGER_FOR_BOARD,
+                                          NO_MIDI_TRIGGER_FOR_BOARD);
 
     // **************************
     // RTP_MIDI
@@ -205,6 +208,7 @@ void setup() {
     // helpful thread about this : https://forums.adafruit.com/viewtopic.php?t=72025
     // If default values ard OK, comment following line
     // capacitiveTouchDispatcher->setThresholds(20, 10);
+    // the following strategies can be ignored because are for use only if no rtp midi is connected
     capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(0, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
     capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(1, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
     capacitiveTouchDispatcher->setTriggerOnTouchLightStrategyOnBoard(2, LIGHT_STRATEGIES::STRATEGY_FADE_OUT);
